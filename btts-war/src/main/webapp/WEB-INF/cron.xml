@@ -3,6 +3,6 @@
     <cron>
         <url>/fixtures</url>
         <description>Get Fixtures</description>
-        <schedule>every 10 minutes</schedule>
+        <schedule>every 240 minutes</schedule>
     </cron>
 </cronentries>

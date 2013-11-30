@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -45,6 +46,7 @@ public class WeeksFixturesServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
         Document doc = Jsoup.connect("http://www.bbc.co.uk/sport/football/premier-league/fixtures").get();
+        response.setContentType("text/plain");
 
         Elements elements = doc.getElementsByClass("match-details");
 
@@ -61,7 +63,9 @@ public class WeeksFixturesServlet extends HttpServlet {
 
         try {
             Message msg = new MimeMessage(session);
-            msg.setFrom(new InternetAddress("admin@broughty.com", "Broughty.com Admin"));
+
+
+            msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
             msg.addRecipient(Message.RecipientType.TO,
                     new InternetAddress("mat@broughty.com", "Mr. Broughton"));
             msg.setSubject("Fixture lists stuff.");
@@ -69,12 +73,13 @@ public class WeeksFixturesServlet extends HttpServlet {
             Transport.send(msg);
 
         } catch (AddressException e) {
-            log.severe("An email AddressException error message.");
-            log.throwing(WeeksFixturesServlet.class.getName(),"doGet",e);
+            log.log(Level.SEVERE, "An email AddressException error message.", e);
         } catch (MessagingException e) {
-            log.severe("An email MessagingException error message.");
-            log.throwing(WeeksFixturesServlet.class.getName(),"doGet",e);
+            log.log(Level.SEVERE, "An email MessagingException error message.", e);
         }
+
+        response.getWriter().println("Email contents.");
+        response.getWriter().println(stringBuilder.toString());
 
 
 
