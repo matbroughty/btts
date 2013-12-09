@@ -32,8 +32,9 @@ import java.util.logging.Logger;
 public class WeeksFixturesServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(WeeksFixturesServlet.class.getName());
+
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-       doGet(request, response);
+        doGet(request, response);
     }
 
 
@@ -52,7 +53,7 @@ public class WeeksFixturesServlet extends HttpServlet {
 
 
         StringBuilder stringBuilder = new StringBuilder();
-        for (Element element : elements){
+        for (Element element : elements) {
             stringBuilder.append(element.text());
 
         }
@@ -80,7 +81,6 @@ public class WeeksFixturesServlet extends HttpServlet {
 
         response.getWriter().println("Email contents.");
         response.getWriter().println(stringBuilder.toString());
-
 
 
     }
