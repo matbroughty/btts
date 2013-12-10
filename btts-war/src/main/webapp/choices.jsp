@@ -32,7 +32,7 @@
         </ul>
     </nav>
 </header>
-<section class="dashboard">
+<section class="dashboard clearfix">
             <form action="/choices" method="post" class="pure-form pure-form-aligned">
                 <fieldset>
                     <div class="pure-control-group">

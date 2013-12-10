@@ -29,7 +29,18 @@
 </head>
 
 <body>
-
+<header>
+    <nav class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
+        <a href="#" class="pure-menu-heading">Both teams to score.</a>
+        <ul>
+            <li class="pure-menu-selected"><a href="/summary.jsp">Summary</a></li>
+            <li><a href="#">User Picks</a></li>
+            <li><a href="#">Graphs</a></li>
+            <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
+        </ul>
+    </nav>
+</header>
+<section class="dashboard clearfix">
 <%
     String playerName = request.getParameter("player");
     String weekNumber = request.getParameter("week");
@@ -75,4 +86,14 @@ Hello!  Player <%= playerName %>
         }
     }
 %>
+</section>
+<footer>
+    &copy; 2013 Broughty Com
+</footer>
+<script src="//ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script>window.jQuery || document.write('<script src="js/vendor/jquery-1.9.1.min.js"><\/script>')</script>
+<script src="js/plugins.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>
 
