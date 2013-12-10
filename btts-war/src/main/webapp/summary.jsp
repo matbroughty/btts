@@ -10,6 +10,8 @@
 <%@ page import="com.google.appengine.api.datastore.FetchOptions" %>
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.Map" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -26,12 +28,13 @@
     <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=fontawesome">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="js/Chart.js"></script>
 </head>
 
 <body>
 <header>
     <nav class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-        <a href="#" class="pure-menu-heading">Both teams to score.</a>
+        <a href="choices.jsp" class="pure-menu-heading">Both teams to score.</a>
         <ul>
             <li class="pure-menu-selected"><a href="/summary.jsp">Summary</a></li>
             <li><a href="#">User Picks</a></li>
@@ -40,53 +43,111 @@
         </ul>
     </nav>
 </header>
-<section class="dashboard clearfix">
+
 <%
+
+    StringBuilder playerTable = new StringBuilder();
+
+    Map<String, Integer> teamCount = new HashMap<String, Integer>();
+
+    StringBuilder graphTable = new StringBuilder();
+
     String playerName = request.getParameter("player");
     String weekNumber = request.getParameter("week");
-%>
 
-Hello!  Player <%= playerName %>
-
-    <%
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
     Key weekKey = KeyFactory.createKey("Week", weekNumber);
     // Run an ancestor query to ensure we see the most up-to-date
     // view of the Greetings belonging to the selected Guestbook.
     Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
-    List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(15));
+    List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
     if (choices.isEmpty()) {
-        %>
-<p>Choices '${fn:escapeXml(weekNumber)}' has none .</p>
-    <%
     } else {
-        %>
-<p>Choices for <%= weekNumber %></p>
-    <%
+
+
+
+        playerTable.append("<table class=\"pure-table\">");
+        playerTable.append("<thead><tr><th>Player</th> <th>Choice1</th> <th>Choice2</th> <th>Choice3</th> <th>Choice4</th>  </tr> </thead> ");
+        playerTable.append("<tbody>");
         for (Entity choice : choices) {
 
-               String player = (String)choice.getProperty("player");
-               String choice1  = (String)choice.getProperty("choice1");
-               String choice2  = (String)choice.getProperty("choice2");
-               String choice3  = (String)choice.getProperty("choice3");
-               String choice4  = (String)choice.getProperty("choice4");
-                %>
+            String choice1 = (String) choice.getProperty("choice1");
+            if(teamCount.containsKey(choice1)){
+                teamCount.put(choice1, new Integer(teamCount.get(choice1).intValue() + 1));
+            }else{
+                teamCount.put(choice1, new Integer(1));
+            }
 
 
-<section>
-    <h3>Player <%= player %></h3>
-           <OL>
-               <LI><%= choice1 %></LI>
-               <LI><%= choice2 %></LI>
-               <LI><%= choice3 %></LI>
-               <LI><%= choice4 %></LI>
-           </OL>
-    </section>
-    <%
+            String choice2 = (String) choice.getProperty("choice2");
+
+            if(teamCount.containsKey(choice2)){
+                teamCount.put(choice2, new Integer(teamCount.get(choice2).intValue() + 1));
+            }else{
+                teamCount.put(choice2, new Integer(1));
+            }
+
+
+            String choice3 = (String) choice.getProperty("choice3");
+
+            if(teamCount.containsKey(choice3)){
+                teamCount.put(choice3, new Integer(teamCount.get(choice3).intValue() + 1));
+            }else{
+                teamCount.put(choice3, new Integer(1));
+            }
+
+
+
+            String choice4 = (String) choice.getProperty("choice4");
+
+            if(teamCount.containsKey(choice4)){
+                teamCount.put(choice4, new Integer(teamCount.get(choice4).intValue() + 1));
+            }else{
+                teamCount.put(choice4, new Integer(1));
+            }
+
+
+            playerTable.append("<tr>");
+            playerTable.append("<td>").append((String)choice.getProperty("player")).append("</td>");
+            playerTable.append("<td>").append(choice1).append("</td>");
+            playerTable.append("<td>").append(choice2).append("</td>");
+            playerTable.append("<td>").append(choice3).append("</td>");
+            playerTable.append("<td>").append(choice4).append("</td>");
+
+            playerTable.append("</tr>");
+
         }
+        playerTable.append("</tbody></table>");
+
     }
+
+    graphTable.append("<table class=\"pure-table\">");
+    graphTable.append("<thead><tr><th>Team</th> <th>Score</th> </tr> </thead> ");
+    graphTable.append("<tbody>");
+    for(String team : teamCount.keySet()){
+        graphTable.append("<tr>");
+        graphTable.append("<td>").append(team).append("</td>");
+        graphTable.append("<td>").append(teamCount.get(team)).append("</td>");
+        graphTable.append("</tr>");
+    }
+    graphTable.append("</tbody></table>");
+
 %>
+
+
+<section class="dashboard clearfix">
+    <div class="pure-u-1-2 dashboard-piece">
+        <div class="dashboard-content">
+            <%= playerTable.toString() %>
+        </div>
+    </div>
+    <div class="pure-u-1-2 dashboard-piece">
+        <div class="dashboard-content">
+            <%= graphTable.toString() %>
+        </div>
+    </div>
 </section>
+
 <footer>
     &copy; 2013 Broughty Com
 </footer>

@@ -23,9 +23,9 @@
 <body>
 <header>
     <nav class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-        <a href="#" class="pure-menu-heading">Both teams to score.</a>
+        <a href="choices.jsp" class="pure-menu-heading">Both teams to score.</a>
         <ul>
-            <li class="pure-menu-selected"><a href="/summary.jsp">Summary</a></li>
+            <li class="pure-menu-selected"><a href="/summary.jsp?Mat">Summary</a></li>
             <li><a href="#">User Picks</a></li>
             <li><a href="#">Graphs</a></li>
             <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
@@ -49,17 +49,18 @@
                     <div class="pure-control-group">
                         <label for="player">Player</label>
                         <select id="player" name="player">
-                            <option>Mat</option>
+                            <option>Bhavesh</option>
+                            <option>Charles</option>
+                            <option>Dave</option>
                             <option>Frank</option>
-                            <option>Pia</option>
                             <option>Jason</option>
                             <option>Jonathon</option>
-                            <option>Dave</option>
-                            <option>Tim</option>
                             <option>Jose</option>
-                            <option>Charles</option>
+                            <option>Mat</option>
+                            <option>Pia</option>
                             <option>Stu</option>
-                            <option>Toby</option>
+                            <option>Tim</option>
+                           <option>Toby</option>
                         </select>
                     </div>
                     <div class="pure-control-group">

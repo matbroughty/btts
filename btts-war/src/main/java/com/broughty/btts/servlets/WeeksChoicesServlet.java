@@ -33,15 +33,33 @@ public class WeeksChoicesServlet extends HttpServlet {
         log.info(choice4);
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
         Date date = new Date();
-        Entity choices = new Entity("Choices", weekKey);
+
+        Query query = new Query("Choices");
+        query.setAncestor(weekKey).addFilter("player", Query.FilterOperator.EQUAL, playerName);
+        PreparedQuery pq = datastore.prepare(query);
+        Entity choices = pq.asSingleEntity();
+
+        // if user has already entered a choice for this week then stuff it back.
+        if(choices != null){
+            choices.setProperty("date", date);
+            choices.setProperty("choice1", choice1);
+            choices.setProperty("choice2", choice2);
+            choices.setProperty("choice3", choice3);
+            choices.setProperty("choice4", choice4);
+        }else{
+
+        choices = new Entity("Choices", weekKey);
         choices.setProperty("player", playerName);
         choices.setProperty("date", date);
         choices.setProperty("choice1", choice1);
         choices.setProperty("choice2", choice2);
         choices.setProperty("choice3", choice3);
         choices.setProperty("choice4", choice4);
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        }
+
         datastore.put(choices);
 
 
