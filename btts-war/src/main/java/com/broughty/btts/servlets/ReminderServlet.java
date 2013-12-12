@@ -2,7 +2,6 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
-import org.jsoup.nodes.Element;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

@@ -1,9 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
-<%@ page import="com.google.appengine.api.users.User" %>
-<%@ page import="com.google.appengine.api.users.UserService" %>
-<%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
 <%@ page import="com.google.appengine.api.datastore.*" %>
+<%@ page import="com.broughty.util.PlayerEnum" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -34,6 +31,17 @@
     if (currentWeek != null) {
         week = (String) currentWeek.getProperty("week");
     }
+
+    StringBuilder playerListOption = new StringBuilder();
+
+    for(PlayerEnum playerEnum : PlayerEnum.values()){
+        playerListOption.append("<option>");
+        playerListOption.append(playerEnum.getName());
+        playerListOption.append("</option>");
+
+    }
+
+
 %>
 
 
@@ -65,19 +73,7 @@
 <div class="pure-control-group">
     <label for="player">Player</label>
     <select id="player" name="player">
-        <option>Bhavesh</option>
-        <option>Charles</option>
-        <option>Dave</option>
-        <option>Frank</option>
-        <option>Gerald</option>
-        <option>Jason</option>
-        <option>Jonathon</option>
-        <option>Jose</option>
-        <option>Mat</option>
-        <option>Pia</option>
-        <option>Stu</option>
-        <option>Tim</option>
-        <option>Toby</option>
+        <%= playerListOption.toString()%>
     </select>
 </div>
 <div class="pure-control-group">

@@ -3,7 +3,6 @@ package com.broughty.btts.servlets;
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
-import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -18,7 +17,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 

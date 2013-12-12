@@ -112,7 +112,7 @@
         // most poulare first
         teamCount = MapUtil.sortByValue(teamCount);
 
-        StringBuilder graphData = new StringBuilder("google.visualization.arrayToDataTable([['Team', 'Count',{ role: 'style' } ],");
+        StringBuilder graphData = new StringBuilder("google.visualization.arrayToDataTable([['Team', 'Votes',{ role: 'style' } ],");
 
         graphTable.append("<table class=\"pure-table pure-table-bordered\">");
         graphTable.append("<thead><tr><th>Team</th> <th>Score</th> </tr> </thead> ");
@@ -161,10 +161,12 @@
             var options = {
                 title: 'Combined choices',
                 vAxis: {title: 'Team',  titleTextStyle: {color: 'black'}},
+                ledgend: {position: 'top', textStyle: {color: 'black', fontSize: 16}},
+                colors:['black'],
                 hAxis: {minValue:0,format:'0'}
             };
 
-            var chart = new google.visualization.BarChart(document.getElementById('chart_div'));
+            var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
             chart.draw(data, options);
         }
     </script>
@@ -194,13 +196,13 @@
         </div>
     </div>
 
-    <div class="pure-g l-box">
-        <div class="pure-u-1-2 l-box">
+    <div class="pure-g">
+        <div class="pure-u-1-2">
             <h2 class="content-subhead">Week <%= weekNumber%> combined table</h2>
             <%= graphTable.toString() %>
         </div>
-        <div class="pure-u-1-2 l-box">
-            <div id="chart_div" style="width: 900px; height: 500px;"></div>
+        <div class="pure-u-1-2">
+           <div id="chart_div" style="width: 800px; height: 500px;"></div>
         </div>
     </div>
 
