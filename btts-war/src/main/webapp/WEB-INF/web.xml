@@ -15,6 +15,18 @@
         <servlet-name>WeeksChoicesServlet</servlet-name>
         <servlet-class>com.broughty.btts.servlets.WeeksChoicesServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>ReminderServlet</servlet-name>
+        <servlet-class>com.broughty.btts.servlets.ReminderServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>FinalSelectionsServlet</servlet-name>
+        <servlet-class>com.broughty.btts.servlets.FinalSelectionsServlet</servlet-class>
+    </servlet>
+    <servlet>
+        <servlet-name>MaintenanceServlet</servlet-name>
+        <servlet-class>com.broughty.btts.servlets.MaintenanceServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>hello</servlet-name>
         <url-pattern>/hello</url-pattern>
@@ -27,7 +39,18 @@
         <servlet-name>WeeksChoicesServlet</servlet-name>
         <url-pattern>/choices</url-pattern>
     </servlet-mapping>
-
+    <servlet-mapping>
+        <servlet-name>ReminderServlet</servlet-name>
+        <url-pattern>/reminders</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>FinalSelectionsServlet</servlet-name>
+        <url-pattern>/selections</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>MaintenanceServlet</servlet-name>
+        <url-pattern>/maintenance</url-pattern>
+    </servlet-mapping>
     <welcome-file-list>
         <welcome-file>choices.jsp</welcome-file>
     </welcome-file-list>

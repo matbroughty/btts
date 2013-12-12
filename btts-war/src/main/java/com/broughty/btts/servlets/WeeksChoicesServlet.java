@@ -33,7 +33,12 @@ public class WeeksChoicesServlet extends HttpServlet {
         log.info(choice3);
         log.info(choice4);
 
+
+
+
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
+
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
         Date date = new Date();

@@ -24,7 +24,9 @@
     <ul>
         <li><a href="/viewchoices.jsp">Selections</a></li>
         <li><a href="#">User Picks</a></li>
-        <li><a href="#">Graphs</a></li>
+        <li><a href="/maintenance.jsp">Maintenance</a></li>
+        <li><a href="/reminders">Reminder</a></li>
+        <li><a href="/selections">Selections</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
     </ul>
 </div>

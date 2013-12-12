@@ -1,5 +1,4 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.util.List" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
 <%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
 <%@ page import="com.google.appengine.api.datastore.Query" %>
@@ -7,9 +6,9 @@
 <%@ page import="com.google.appengine.api.datastore.FetchOptions" %>
 <%@ page import="com.google.appengine.api.datastore.Key" %>
 <%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
-<%@ page import="java.util.HashMap" %>
-<%@ page import="java.util.Map" %>
 <%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.*" %>
+<%@ page import="com.broughty.util.MapUtil" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -36,9 +35,11 @@
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
     <a class="pure-menu-heading" href="/">BTTS</a>
     <ul>
-        <li><a href="/viewchoices.jsp">Summary</a></li>
+        <li><a href="/viewchoices.jsp">Selections</a></li>
         <li><a href="#">User Picks</a></li>
-        <li><a href="#">Graphs</a></li>
+        <li><a href="/maintenance.jsp">Maintenance</a></li>
+        <li><a href="/reminders">Reminder</a></li>
+        <li><a href="/selections">Selections</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
     </ul>
 </div>
@@ -64,7 +65,7 @@
 
 
         playerTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerTable.append("<thead><tr><th>Player</th> <th>Date</th> <th>Choice1</th> <th>Choice2</th> <th>Choice3</th> <th>Choice4</th>  </tr> </thead> ");
+        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th> <th>Choice Two</th> <th>Choice Three</th> <th>Choice Four</th>  </tr> </thead> ");
         playerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
@@ -131,14 +132,22 @@
 
     }
 
-    graphTable.append("<table class=\"pure-table\">");
+    teamCount = MapUtil.sortByValue(teamCount);
+
+    graphTable.append("<table class=\"pure-table pure-table-bordered\">");
     graphTable.append("<thead><tr><th>Team</th> <th>Score</th> </tr> </thead> ");
     graphTable.append("<tbody>");
+    int i = 1;
     for(String team : teamCount.keySet()){
-        graphTable.append("<tr>");
+        if(i % 2 == 0){
+            graphTable.append("<tr class=\"pure-table-odd\">");
+        }else{
+            graphTable.append("<tr>");
+        }
         graphTable.append("<td>").append(team).append("</td>");
         graphTable.append("<td>").append(teamCount.get(team)).append("</td>");
         graphTable.append("</tr>");
+        i++;
     }
     graphTable.append("</tbody></table>");
 

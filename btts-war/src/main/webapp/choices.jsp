@@ -3,6 +3,7 @@
 <%@ page import="com.google.appengine.api.users.User" %>
 <%@ page import="com.google.appengine.api.users.UserService" %>
 <%@ page import="com.google.appengine.api.users.UserServiceFactory" %>
+<%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -22,13 +23,29 @@
 </head>
 <body>
 
+<%
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+    Query q = new Query("CurrentWeek");
+    PreparedQuery pq = datastore.prepare(q);
+
+    Entity currentWeek = pq.asSingleEntity();
+    String week = "N/A";
+    if (currentWeek != null) {
+        week = (String) currentWeek.getProperty("week");
+    }
+%>
+
+
 <div class="pure-u-1" id="main">
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
     <a class="pure-menu-heading" href="/">BTTS</a>
     <ul>
-        <li><a href="/viewchoices.jsp">Summary</a></li>
+        <li><a href="/viewchoices.jsp">Selections</a></li>
         <li><a href="#">User Picks</a></li>
-        <li><a href="#">Graphs</a></li>
+        <li><a href="/maintenance.jsp">Maintenance</a></li>
+        <li><a href="/reminders">Reminder</a></li>
+        <li><a href="/selections">Selections</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
     </ul>
 </div>
@@ -41,9 +58,8 @@
 <div class="pure-control-group">
     <label for="week">Week</label>
     <select id="week" name="week">
-        <option>18</option>
-        <option>19</option>
-        <option>20</option>
+        <option selected><%= week %>
+        </option>
     </select>
 </div>
 <div class="pure-control-group">
