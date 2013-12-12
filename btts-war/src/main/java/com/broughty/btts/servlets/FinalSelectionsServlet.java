@@ -3,6 +3,7 @@ package com.broughty.btts.servlets;
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -51,7 +52,18 @@ public class FinalSelectionsServlet extends HttpServlet {
         String weekNumber = "N/A";
         if (currentWeek != null) {
             weekNumber = (String) currentWeek.getProperty("week");
+        }else{
+            log.warning("Week not set " + weekNumber);
+            return;
         }
+
+
+        // Update the week number so no more changes can be made.
+        currentWeek.setProperty("week", Integer.toString(Integer.valueOf(weekNumber) + 1));
+        datastore.put(currentWeek);
+        log.info("Incremented current week to " + Integer.toString(Integer.valueOf(weekNumber) + 1));
+
+
 
         log.info("Processing Final Selections for week " + weekNumber);
 
@@ -178,6 +190,9 @@ public class FinalSelectionsServlet extends HttpServlet {
         } catch (MessagingException e) {
             log.log(Level.SEVERE, "An email MessagingException error message.", e);
         }
+
+
+
 
 
         response.sendRedirect("/emailresponse.jsp?message=" + selections.toString());
