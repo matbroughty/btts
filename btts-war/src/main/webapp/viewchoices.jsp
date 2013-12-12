@@ -22,7 +22,7 @@
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
     <a class="pure-menu-heading" href="/">BTTS</a>
     <ul>
-        <li><a href="/summary.jsp">Summary</a></li>
+        <li><a href="/viewchoices.jsp">Selections</a></li>
         <li><a href="#">User Picks</a></li>
         <li><a href="#">Graphs</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
@@ -43,8 +43,7 @@
     </select>
 </div>
 <div class="pure-controls">
-    <button type="submit" class="pure-button" value="Post Choices">Post Choices
-    </button>
+    <button type="submit" class="pure-button" value="Get selections">Get Selections</button>
 </div>
 </fieldset>
 </form>

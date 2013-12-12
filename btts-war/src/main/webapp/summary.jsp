@@ -36,7 +36,7 @@
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
     <a class="pure-menu-heading" href="/">BTTS</a>
     <ul>
-        <li><a href="/summary.jsp">Summary</a></li>
+        <li><a href="/viewchoices.jsp">Summary</a></li>
         <li><a href="#">User Picks</a></li>
         <li><a href="#">Graphs</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>

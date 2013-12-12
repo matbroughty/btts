@@ -26,7 +26,7 @@
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
     <a class="pure-menu-heading" href="/">BTTS</a>
     <ul>
-        <li><a href="/choices.jsp">Summary</a></li>
+        <li><a href="/viewchoices.jsp">Summary</a></li>
         <li><a href="#">User Picks</a></li>
         <li><a href="#">Graphs</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
@@ -167,6 +167,56 @@
             <option>Wycombe Wanderers</option>
             <option>York City</option>
         </optgroup>
+        <optgroup label="Scottish Premiership">
+            <option>Aberdeen</option>
+            <option>Celtic</option>
+            <option>Dundee United</option>
+            <option>Heart of Midlothian</option>
+            <option>Hibernian</option>
+            <option>Inverness Caledonian Thistle</option>
+            <option>Kilmarnock</option>
+            <option>Motherwell</option>
+            <option>Partick Thistle</option>
+            <option>Ross County</option>
+            <option>St. Johnstone</option>
+            <option>St. Mirren</option>
+        </optgroup>
+        <optgroup label="Scottish Championship">
+            <option>Alloa Athletic</option>
+            <option>Cowdenbeath</option>
+            <option>Dumbarton</option>
+            <option>Dundee</option>
+            <option>Falkirk</option>
+            <option>Greenock Morton</option>
+            <option>Hamilton Academical</option>
+            <option>Livingston</option>
+            <option>Queen of the South</option>
+            <option>Raith Rovers</option>
+        </optgroup>
+        <optgroup label="Scottish League One">
+            <option>Airdrieonians</option>
+            <option>Arbroath</option>
+            <option>Ayr United</option>
+            <option>Brechin City</option>
+            <option>Dunfermline Athletic</option>
+            <option>East Fife</option>
+            <option>Forfar Athletic</option>
+            <option>Rangers</option>
+            <option>Stenhousemuir</option>
+            <option>Stranraer</option>
+        </optgroup>
+        <optgroup label="Scottish League Two">
+            <option>Albion Rovers</option>
+            <option>Annan Athletic</option>
+            <option>Berwick Rangers</option>
+            <option>Clyde</option>
+            <option>East Stirlingshire</option>
+            <option>Elgin City</option>
+            <option>Montrose</option>
+            <option>Peterhead</option>
+            <option>Queen's Park</option>
+            <option>Stirling Albion</option>
+        </optgroup>
     </select>
 </div>
 <div class="pure-control-group">
@@ -271,6 +321,56 @@
             <option>Torquay United</option>
             <option>Wycombe Wanderers</option>
             <option>York City</option>
+        </optgroup>
+        <optgroup label="Scottish Premiership">
+            <option>Aberdeen</option>
+            <option>Celtic</option>
+            <option>Dundee United</option>
+            <option>Heart of Midlothian</option>
+            <option>Hibernian</option>
+            <option>Inverness Caledonian Thistle</option>
+            <option>Kilmarnock</option>
+            <option>Motherwell</option>
+            <option>Partick Thistle</option>
+            <option>Ross County</option>
+            <option>St. Johnstone</option>
+            <option>St. Mirren</option>
+        </optgroup>
+        <optgroup label="Scottish Championship">
+            <option>Alloa Athletic</option>
+            <option>Cowdenbeath</option>
+            <option>Dumbarton</option>
+            <option>Dundee</option>
+            <option>Falkirk</option>
+            <option>Greenock Morton</option>
+            <option>Hamilton Academical</option>
+            <option>Livingston</option>
+            <option>Queen of the South</option>
+            <option>Raith Rovers</option>
+        </optgroup>
+        <optgroup label="Scottish League One">
+            <option>Airdrieonians</option>
+            <option>Arbroath</option>
+            <option>Ayr United</option>
+            <option>Brechin City</option>
+            <option>Dunfermline Athletic</option>
+            <option>East Fife</option>
+            <option>Forfar Athletic</option>
+            <option>Rangers</option>
+            <option>Stenhousemuir</option>
+            <option>Stranraer</option>
+        </optgroup>
+        <optgroup label="Scottish League Two">
+            <option>Albion Rovers</option>
+            <option>Annan Athletic</option>
+            <option>Berwick Rangers</option>
+            <option>Clyde</option>
+            <option>East Stirlingshire</option>
+            <option>Elgin City</option>
+            <option>Montrose</option>
+            <option>Peterhead</option>
+            <option>Queen's Park</option>
+            <option>Stirling Albion</option>
         </optgroup>
     </select>
 </div>
@@ -377,6 +477,56 @@
             <option>Wycombe Wanderers</option>
             <option>York City</option>
         </optgroup>
+        <optgroup label="Scottish Premiership">
+            <option>Aberdeen</option>
+            <option>Celtic</option>
+            <option>Dundee United</option>
+            <option>Heart of Midlothian</option>
+            <option>Hibernian</option>
+            <option>Inverness Caledonian Thistle</option>
+            <option>Kilmarnock</option>
+            <option>Motherwell</option>
+            <option>Partick Thistle</option>
+            <option>Ross County</option>
+            <option>St. Johnstone</option>
+            <option>St. Mirren</option>
+        </optgroup>
+        <optgroup label="Scottish Championship">
+            <option>Alloa Athletic</option>
+            <option>Cowdenbeath</option>
+            <option>Dumbarton</option>
+            <option>Dundee</option>
+            <option>Falkirk</option>
+            <option>Greenock Morton</option>
+            <option>Hamilton Academical</option>
+            <option>Livingston</option>
+            <option>Queen of the South</option>
+            <option>Raith Rovers</option>
+        </optgroup>
+        <optgroup label="Scottish League One">
+            <option>Airdrieonians</option>
+            <option>Arbroath</option>
+            <option>Ayr United</option>
+            <option>Brechin City</option>
+            <option>Dunfermline Athletic</option>
+            <option>East Fife</option>
+            <option>Forfar Athletic</option>
+            <option>Rangers</option>
+            <option>Stenhousemuir</option>
+            <option>Stranraer</option>
+        </optgroup>
+        <optgroup label="Scottish League Two">
+            <option>Albion Rovers</option>
+            <option>Annan Athletic</option>
+            <option>Berwick Rangers</option>
+            <option>Clyde</option>
+            <option>East Stirlingshire</option>
+            <option>Elgin City</option>
+            <option>Montrose</option>
+            <option>Peterhead</option>
+            <option>Queen's Park</option>
+            <option>Stirling Albion</option>
+        </optgroup>
     </select>
 </div>
 <div class="pure-control-group">
@@ -481,6 +631,56 @@
             <option>Torquay United</option>
             <option>Wycombe Wanderers</option>
             <option>York City</option>
+        </optgroup>
+        <optgroup label="Scottish Premiership">
+            <option>Aberdeen</option>
+            <option>Celtic</option>
+            <option>Dundee United</option>
+            <option>Heart of Midlothian</option>
+            <option>Hibernian</option>
+            <option>Inverness Caledonian Thistle</option>
+            <option>Kilmarnock</option>
+            <option>Motherwell</option>
+            <option>Partick Thistle</option>
+            <option>Ross County</option>
+            <option>St. Johnstone</option>
+            <option>St. Mirren</option>
+        </optgroup>
+        <optgroup label="Scottish Championship">
+            <option>Alloa Athletic</option>
+            <option>Cowdenbeath</option>
+            <option>Dumbarton</option>
+            <option>Dundee</option>
+            <option>Falkirk</option>
+            <option>Greenock Morton</option>
+            <option>Hamilton Academical</option>
+            <option>Livingston</option>
+            <option>Queen of the South</option>
+            <option>Raith Rovers</option>
+        </optgroup>
+        <optgroup label="Scottish League One">
+            <option>Airdrieonians</option>
+            <option>Arbroath</option>
+            <option>Ayr United</option>
+            <option>Brechin City</option>
+            <option>Dunfermline Athletic</option>
+            <option>East Fife</option>
+            <option>Forfar Athletic</option>
+            <option>Rangers</option>
+            <option>Stenhousemuir</option>
+            <option>Stranraer</option>
+        </optgroup>
+        <optgroup label="Scottish League Two">
+            <option>Albion Rovers</option>
+            <option>Annan Athletic</option>
+            <option>Berwick Rangers</option>
+            <option>Clyde</option>
+            <option>East Stirlingshire</option>
+            <option>Elgin City</option>
+            <option>Montrose</option>
+            <option>Peterhead</option>
+            <option>Queen's Park</option>
+            <option>Stirling Albion</option>
         </optgroup>
     </select>
 </div>

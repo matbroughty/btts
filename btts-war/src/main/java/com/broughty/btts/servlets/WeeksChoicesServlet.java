@@ -1,6 +1,7 @@
 package com.broughty.btts.servlets;
 
 import com.google.appengine.api.datastore.*;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -43,24 +44,29 @@ public class WeeksChoicesServlet extends HttpServlet {
         Entity choices = pq.asSingleEntity();
 
         // if user has already entered a choice for this week then stuff it back.
-        if(choices != null){
+        if (choices != null) {
             choices.setProperty("date", date);
             choices.setProperty("choice1", choice1);
             choices.setProperty("choice2", choice2);
             choices.setProperty("choice3", choice3);
             choices.setProperty("choice4", choice4);
-        }else{
+        } else {
 
-        choices = new Entity("Choices", weekKey);
-        choices.setProperty("player", playerName);
-        choices.setProperty("date", date);
-        choices.setProperty("choice1", choice1);
-        choices.setProperty("choice2", choice2);
-        choices.setProperty("choice3", choice3);
-        choices.setProperty("choice4", choice4);
+            // if we don't have a user then this is just a request for info
+            if (StringUtils.isNotBlank(playerName)) {
+                choices = new Entity("Choices", weekKey);
+                choices.setProperty("player", playerName);
+                choices.setProperty("date", date);
+                choices.setProperty("choice1", choice1);
+                choices.setProperty("choice2", choice2);
+                choices.setProperty("choice3", choice3);
+                choices.setProperty("choice4", choice4);
+            }
         }
 
-        datastore.put(choices);
+        if (choices != null) {
+            datastore.put(choices);
+        }
 
 
         resp.sendRedirect("/summary.jsp?player=" + playerName + "&week=" + weekNumber);
