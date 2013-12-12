@@ -8,11 +8,11 @@
     <cron>
         <url>/reminders</url>
         <description>Friday Reminders</description>
-        <schedule>every Friday 9:30</schedule>
+        <schedule>every friday 09:30</schedule>
     </cron>
     <cron>
         <url>/selections</url>
         <description>Friday Final Selections</description>
-        <schedule>every Friday 11:00</schedule>
+        <schedule>every friday 11:00</schedule>
     </cron>
 </cronentries>

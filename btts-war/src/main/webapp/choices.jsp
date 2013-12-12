@@ -39,13 +39,13 @@
 
 <div class="pure-u-1" id="main">
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-    <a class="pure-menu-heading" href="/">BTTS</a>
+    <a class="pure-menu-heading" class="pure-menu-selected"  href="/">BTTS Choose</a>
     <ul>
-        <li><a href="/viewchoices.jsp">Selections</a></li>
+        <li><a href="/viewchoices.jsp">View</a></li>
         <li><a href="#">User Picks</a></li>
-        <li><a href="/maintenance.jsp">Maintenance</a></li>
         <li><a href="/reminders">Reminder</a></li>
         <li><a href="/selections">Selections</a></li>
+        <li><a href="/maintenance.jsp">Maintenance</a></li>
         <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
     </ul>
 </div>

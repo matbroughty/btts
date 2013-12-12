@@ -1,6 +1,7 @@
 package com.broughty.btts.servlets;
 
 import com.google.appengine.api.datastore.*;
+import com.sun.org.apache.xpath.internal.operations.Bool;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.servlet.http.HttpServlet;
@@ -55,6 +56,10 @@ public class WeeksChoicesServlet extends HttpServlet {
             choices.setProperty("choice2", choice2);
             choices.setProperty("choice3", choice3);
             choices.setProperty("choice4", choice4);
+            choices.setProperty("choice1Result", Boolean.FALSE);
+            choices.setProperty("choice2Result", Boolean.FALSE);
+            choices.setProperty("choice3Result", Boolean.FALSE);
+            choices.setProperty("choice4Result", Boolean.FALSE);
         } else {
 
             // if we don't have a user then this is just a request for info
@@ -66,6 +71,10 @@ public class WeeksChoicesServlet extends HttpServlet {
                 choices.setProperty("choice2", choice2);
                 choices.setProperty("choice3", choice3);
                 choices.setProperty("choice4", choice4);
+                choices.setProperty("choice1Result", Boolean.FALSE);
+                choices.setProperty("choice2Result", Boolean.FALSE);
+                choices.setProperty("choice3Result", Boolean.FALSE);
+                choices.setProperty("choice4Result", Boolean.FALSE);
             }
         }
 

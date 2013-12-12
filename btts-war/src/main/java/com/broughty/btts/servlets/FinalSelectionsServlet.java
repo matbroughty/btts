@@ -59,6 +59,17 @@ public class FinalSelectionsServlet extends HttpServlet {
         Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
+        Entity primeSelections = datastore.prepare(new Query("PrimeSelections", weekKey)).asSingleEntity();
+        if(primeSelections == null){
+            primeSelections = new Entity("PrimeSelections", weekKey);
+        }
+
+        Entity secondarySelections = datastore.prepare(new Query("SecondarySelections", weekKey)).asSingleEntity();
+        if(secondarySelections == null){
+            secondarySelections = new Entity("SecondarySelections", weekKey);
+        }
+
+
         Map<String, Integer> teamCount = new HashMap<String, Integer>();
         for (Entity choice : choices) {
 
@@ -104,6 +115,7 @@ public class FinalSelectionsServlet extends HttpServlet {
 
         StringBuilder selections = new StringBuilder();
         int count = 1;
+        int secondarySelectionsCount = 1;
         for (String team : teamCount.keySet()) {
             if(count == 1){
                 selections.append("Prime Selections Start:  \n");
@@ -113,6 +125,7 @@ public class FinalSelectionsServlet extends HttpServlet {
                 selections.append("Secondary Selections Start: \n");
             }
 
+            // end of processing - single selection teams don't get a look in.
             if(teamCount.get(team).intValue() == 1){
                 selections.append("Secondary Selections End: \n");
                 break;
@@ -124,6 +137,17 @@ public class FinalSelectionsServlet extends HttpServlet {
             selections.append(teamCount.get(team));
             selections.append("' times. \n");
 
+            if(count >= 1 && count < 5){
+                primeSelections.setProperty("choice" + count, team);
+                primeSelections.setProperty("choice"+count+"count", teamCount.get(team));
+                primeSelections.setProperty("choice"+count+"success", Boolean.FALSE);
+            }else{
+                secondarySelections.setProperty("choice" + secondarySelectionsCount, team);
+                secondarySelections.setProperty("choice"+secondarySelectionsCount+"count", teamCount.get(team));
+                secondarySelections.setProperty("choice"+secondarySelectionsCount+"success", Boolean.FALSE);
+                secondarySelectionsCount ++;
+            }
+
             if(count == 4){
                 selections.append("Prime Selections End. \n");
             }
@@ -131,6 +155,9 @@ public class FinalSelectionsServlet extends HttpServlet {
             count ++;
 
         }
+
+        datastore.put(primeSelections);
+        datastore.put(secondarySelections);
 
 
         try {
