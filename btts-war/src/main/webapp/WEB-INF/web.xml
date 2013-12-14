@@ -52,6 +52,6 @@
         <url-pattern>/maintenance</url-pattern>
     </servlet-mapping>
     <welcome-file-list>
-        <welcome-file>viewchoices.jsp</welcome-file>
+        <welcome-file>summary.jsp</welcome-file>
     </welcome-file-list>
 </web-app>

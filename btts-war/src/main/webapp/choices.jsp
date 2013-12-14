@@ -17,6 +17,25 @@
     <link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=fontawesome">
     <link rel="stylesheet" href="css/main.css">
     <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+    <script src="http://yui.yahooapis.com/3.14.0/build/yui/yui-min.js"></script>
+    <script>
+        YUI({
+            classNamePrefix: 'pure'
+        }).use('gallery-sm-menu', function (Y) {
+
+                    var horizontalMenu = new Y.Menu({
+                        container         : '#demo-horizontal-menu',
+                        sourceNode        : '#std-menu-items',
+                        orientation       : 'horizontal',
+                        hideOnOutsideClick: false,
+                        hideOnClick       : false
+                    });
+
+                    horizontalMenu.render();
+                    horizontalMenu.show();
+
+                });
+    </script>
 </head>
 <body>
 
@@ -46,15 +65,25 @@
 
 
 <div class="pure-u-1" id="main">
-<div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-    <a class="pure-menu-heading" class="pure-menu-selected"  href="/choices.jsp">BTTS Choose</a>
-    <ul>
-        <li><a href="/viewchoices.jsp">View</a></li>
-        <li><a href="#">User Picks</a></li>
-        <li><a href="/reminders">Reminder</a></li>
-        <li><a href="/selections">Selections</a></li>
-        <li><a href="/maintenance.jsp">Maintenance</a></li>
-        <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
+<div id="demo-horizontal-menu" class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
+    <a class="pure-menu-heading" href="/choices.jsp">BTTS Choose</a>
+    <ul id="std-menu-items">
+        <li><a href="/summary.jsp">Current Week</a></li>
+        <li><a href="/viewchoices.jsp">Previous Weeks</a></li>
+
+        <li>
+            <a href="">Maintenance</a>
+            <ul>
+                <li class="pure-menu-heading">Maintenance Stuff - Keep Out!</li>
+                <li class="pure-menu-separator"></li>
+                <li><a href="/maintenance.jsp">Maintenance</a></li>
+                <li><a href="/reminders">Reminder</a></li>
+                <li><a href="/selections">Selections</a></li>
+                <li>
+                    <a href="mailto:mat@broughty.com?Subject=Shit Hot">Email Me</a>
+                </li>
+            </ul>
+        </li>
     </ul>
 </div>
 

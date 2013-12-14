@@ -1,14 +1,9 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.google.appengine.api.datastore.DatastoreServiceFactory" %>
-<%@ page import="com.google.appengine.api.datastore.DatastoreService" %>
-<%@ page import="com.google.appengine.api.datastore.Query" %>
-<%@ page import="com.google.appengine.api.datastore.Entity" %>
-<%@ page import="com.google.appengine.api.datastore.FetchOptions" %>
-<%@ page import="com.google.appengine.api.datastore.Key" %>
-<%@ page import="com.google.appengine.api.datastore.KeyFactory" %>
 <%@ page import="java.text.SimpleDateFormat" %>
 <%@ page import="java.util.*" %>
 <%@ page import="com.broughty.util.MapUtil" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -18,18 +13,48 @@
     <title></title>
     <meta name="description" content="">
     <meta name="viewport" content="width=device-width">
+    <script src="http://yui.yahooapis.com/3.14.0/build/yui/yui-min.js"></script>
+    <script>
+        YUI({
+            classNamePrefix: 'pure'
+        }).use('gallery-sm-menu', function (Y) {
 
+                    var horizontalMenu = new Y.Menu({
+                        container         : '#demo-horizontal-menu',
+                        sourceNode        : '#std-menu-items',
+                        orientation       : 'horizontal',
+                        hideOnOutsideClick: false,
+                        hideOnClick       : false
+                    });
+
+                    horizontalMenu.render();
+                    horizontalMenu.show();
+
+                });
+    </script>
     <%
 
         StringBuilder playerTable = new StringBuilder();
 
         Map<String, Integer> teamCount = new HashMap<String, Integer>();
 
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
         StringBuilder graphTable = new StringBuilder();
         String weekNumber = request.getParameter("week");
+        if(StringUtils.isBlank(weekNumber)){
+
+            Query q = new Query("CurrentWeek");
+            PreparedQuery pq = datastore.prepare(q);
+
+            Entity currentWeek = pq.asSingleEntity();
+            weekNumber = "N/A";
+            if (currentWeek != null) {
+                weekNumber = (String) currentWeek.getProperty("week");
+            }
+        }
 
 
-        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
         Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
@@ -177,15 +202,25 @@
 
 <div class="pure-u-1" id="main">
 
-    <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-        <a class="pure-menu-heading" class="pure-menu-selected" href="/choices.jsp">BTTS Choose</a>
-        <ul>
-            <li><a href="/viewchoices.jsp">View</a></li>
-            <li><a href="#">User Picks</a></li>
-            <li><a href="/maintenance.jsp">Maintenance</a></li>
-            <li><a href="/reminders">Reminder</a></li>
-            <li><a href="/selections">Selections</a></li>
-            <li><a href="mailto:mat@broughty.com?Subject=Shit Hot">Email</a></li>
+    <div id="demo-horizontal-menu" class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
+        <a class="pure-menu-heading" href="/choices.jsp">BTTS Choose</a>
+        <ul id="std-menu-items">
+            <li><a href="/summary.jsp">Current Week</a></li>
+            <li><a href="/viewchoices.jsp">Previous Weeks</a></li>
+
+            <li>
+                <a href="">Maintenance</a>
+                <ul>
+                    <li class="pure-menu-heading">Maintenance Stuff - Keep Out!</li>
+                    <li class="pure-menu-separator"></li>
+                    <li><a href="/maintenance.jsp">Maintenance</a></li>
+                    <li><a href="/reminders">Reminder</a></li>
+                    <li><a href="/selections">Selections</a></li>
+                    <li>
+                        <a href="mailto:mat@broughty.com?Subject=Shit Hot">Email Me</a>
+                    </li>
+                </ul>
+            </li>
         </ul>
     </div>
 

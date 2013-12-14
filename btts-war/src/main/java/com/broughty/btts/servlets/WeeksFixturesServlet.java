@@ -69,79 +69,92 @@ public class WeeksFixturesServlet extends HttpServlet {
 
         // work through all leagues
         for (ResultsWebPageEnum resultPage : ResultsWebPageEnum.values()) {
-            log.info("Processing page " + resultPage.getPage());
-            Document doc = Jsoup.connect(resultPage.getPage()).get();
-            response.setContentType("text/plain");
+            try {
+                log.info("Processing page " + resultPage.getPage());
+                Document doc = Jsoup.connect(resultPage.getPage()).get();
+                response.setContentType("text/plain");
 
-            Elements elements = doc.getElementsByClass("match-details");
+                Elements elements = doc.getElementsByClass("match-details");
 
-            for (Element element : elements) {
-                if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
+                for (Element element : elements) {
 
-                    String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(),
-                            "This table charts the fixtures during ");
+                    try{
 
+                    if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
 
-                    fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
-                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
-                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
-                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
-                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
-                    DateTimeFormatter fmt = new DateTimeFormatterBuilder()
-                            .appendDayOfMonth(2)
-                            .appendLiteral(' ')
-                            .appendMonthOfYearText()
-                            .appendLiteral(' ')
-                            .appendYear(4, 4)
-                            .toFormatter();
+                        String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(),
+                                "This table charts the fixtures during ");
 
 
-                    DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
-                    DateTime currentDate = new DateTime();
+                        fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
+                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
+                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
+                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
+                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
+                        DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+                                .appendDayOfMonth(2)
+                                .appendLiteral(' ')
+                                .appendMonthOfYearText()
+                                .appendLiteral(' ')
+                                .appendYear(4, 4)
+                                .toFormatter();
 
 
-                    // no point in processing
-                    if (Days.daysBetween(currentDate.toDateMidnight(), fixtureDate.toDateMidnight()).getDays() > 4) {
-                        log.log(Level.FINE, "days between currentDate.toDateMidnight() " + currentDate.toDateMidnight().toString() + " and fixtureDate.toDateMidnight() " +
-                                fixtureDate.toDateMidnight().toString() + " is greater than 4.");
-                        break;
-                    }
-
-                    log.log(Level.FINE, ("processing match " + element.text() + " on date: " + fixtureDateStr));
-
-                    // if it contains a " V " then it isn't in progress...
-                    if (!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")) {
-
-                        String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
-                        Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
-                        log.info("processing home match " + homeTeam + " on score : " + homeTeamScore);
+                        DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
+                        DateTime currentDate = new DateTime();
 
 
-                        String awayTeam = StringUtils.substringAfterLast(StringUtils.substringAfter(element.text(), "-"), " ");
-                        Integer awayTeamScore = Integer.valueOf(StringUtils.substringBeforeLast(StringUtils.substringAfter(element.text(), "-"), " "));
-                        log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
+                        // no point in processing
+                        if (Days.daysBetween(currentDate.toDateMidnight(), fixtureDate.toDateMidnight()).getDays() > 4) {
+                            log.log(Level.FINE, "days between currentDate.toDateMidnight() " + currentDate.toDateMidnight().toString() + " and fixtureDate.toDateMidnight() " +
+                                    fixtureDate.toDateMidnight().toString() + " is greater than 4.");
+                            break;
+                        }
 
-                        // have we got a BTTS
-                        if (homeTeamScore > 0 && awayTeamScore > 0) {
+                        log.log(Level.FINE, ("processing match " + element.text() + " on date: " + fixtureDateStr));
+
+                        // if it contains a " V " then it isn't in progress...
+                        if (!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")) {
+
+                            String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
+                            Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
+                            log.info("processing home match " + homeTeam + " on score : " + homeTeamScore);
 
 
-                            log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
+                            String awayTeam = StringUtils.substringAfter(StringUtils.substringAfter(element.text(), "-"), " ");
+                            System.out.println("processing away match " + awayTeam);
+                            Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
+                            log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
 
-                            updateChoices(homeTeam, weekKey);
+                            // have we got a BTTS
+                            if (homeTeamScore > 0 && awayTeamScore > 0) {
 
+
+                                log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
+
+                                updateChoices(homeTeam, weekKey);
+
+                            }
 
                         }
 
+
                     }
 
+
+                    }catch(Throwable t){
+                        log.log(Level.WARNING, "Failed to process element " +  element.text() +   " on resultPage  " +    resultPage.getPage(), t);
+                    }
 
                 }
 
 
+            } catch (Throwable t) {
+                // try the next page.
+                log.log(Level.WARNING, "Failed to process fixture page for week " + weekNumber, t);
             }
-
-
         }
+
     }
 
     private void updateChoices(String homeTeam, Key weekKey) {
@@ -153,9 +166,9 @@ public class WeeksFixturesServlet extends HttpServlet {
             PreparedQuery pq = datastore.prepare(query);
             for (Entity choice : pq.asIterable()) {
                 log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
-                if(!((Boolean)choice.getProperty("choice" + i+"Result")).booleanValue()){
-                    log.info("Updating Player " + choice.getProperty("player") + " as home team " + homeTeam + " BTTS - this was " + "choice" + i+"Result");
-                    choice.setProperty("choice" + i+"Result", Boolean.TRUE);
+                if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
+                    log.info("Updating Player " + choice.getProperty("player") + " as home team " + homeTeam + " BTTS - this was " + "choice" + i + "Result");
+                    choice.setProperty("choice" + i + "Result", Boolean.TRUE);
                     datastore.put(choice);
                 }
             }

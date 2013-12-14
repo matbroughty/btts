@@ -84,8 +84,9 @@ public class FixtureResultsTest {
                         System.out.println("processing home match " + homeTeam + " on score : " + homeTeamScore);
 
 
-                        String awayTeam = StringUtils.substringAfterLast(StringUtils.substringAfter(element.text(), "-"), " ");
-                        Integer awayTeamScore = Integer.valueOf(StringUtils.substringBeforeLast(StringUtils.substringAfter(element.text(), "-"), " "));
+                        String awayTeam = StringUtils.substringAfter(StringUtils.substringAfter(element.text(), "-"), " ");
+                        System.out.println("processing away match " + awayTeam);
+                        Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
 
 
 
@@ -150,11 +151,68 @@ public class FixtureResultsTest {
 
                 if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
 
-                    System.out.println(StringUtils.substringAfter(element.parent().parent().parent().child(0).text(), "This table charts the fixtures during "));
+
+                    String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(), "This table charts the fixtures during ");
+
+
+                    System.out.println(fixtureDateStr);
                     System.out.println(element.text());
 
-                }
 
+                    fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
+
+
+
+
+                    DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+                            .appendDayOfMonth(2)
+                            .appendLiteral(' ')
+                            .appendMonthOfYearText()
+                            .appendLiteral(' ')
+                            .appendYear(4, 4)
+                            .toFormatter();
+
+
+                    DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
+
+
+                    DateTime currentDate = new DateTime();
+
+                    // no point in processing
+                    if(Days.daysBetween(currentDate.toDateMidnight(), fixtureDate.toDateMidnight()).getDays() > 4){
+                        System.out.println("days between currentDate.toDateMidnight() " + currentDate.toDateMidnight().toString() + " and fixtureDate.toDateMidnight() " +
+                                fixtureDate.toDateMidnight().toString() + " is greater than 4.");
+                        break;
+                    }
+
+                    System.out.println("processing match " + element.text() + " on date: " + fixtureDateStr);
+
+
+                    // if it contains a " V " then it isn't in progress...
+                    if(!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")){
+
+                        String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
+                        Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
+                        System.out.println("processing home match " + homeTeam + " on score : " + homeTeamScore);
+
+
+                        String awayTeam = StringUtils.substringAfter(StringUtils.substringAfter(element.text(), "-"), " ");
+                        System.out.println("processing away match " + awayTeam);
+                        Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
+
+
+
+
+                        System.out.println("processing away match " + awayTeam + " on score : " + awayTeamScore);
+
+                    }
+
+
+                }
 
             }
 

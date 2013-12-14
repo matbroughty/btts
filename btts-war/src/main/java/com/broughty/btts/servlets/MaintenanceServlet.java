@@ -36,6 +36,8 @@ public class MaintenanceServlet extends HttpServlet {
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         String currentWeek = request.getParameter("current_week");
+        String startDate = request.getParameter("start_date");
+
         log.info("MaintenanceServlet - current week is " + currentWeek);
 
 

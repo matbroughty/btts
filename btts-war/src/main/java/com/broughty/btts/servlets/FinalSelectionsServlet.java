@@ -61,9 +61,9 @@ public class FinalSelectionsServlet extends HttpServlet {
 
 
         // Update the week number so no more changes can be made.
-        currentWeek.setProperty("week", Integer.toString(Integer.valueOf(weekNumber) + 1));
-        datastore.put(currentWeek);
-        log.info("Incremented current week to " + Integer.toString(Integer.valueOf(weekNumber) + 1));
+        //currentWeek.setProperty("week", Integer.toString(Integer.valueOf(weekNumber) + 1));
+        //datastore.put(currentWeek);
+        //log.info("Incremented current week to " + Integer.toString(Integer.valueOf(weekNumber) + 1));
 
 
 
