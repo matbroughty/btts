@@ -5,6 +5,9 @@ import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.Query;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.format.DateTimeFormat;
+import org.joda.time.format.DateTimeFormatter;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -12,7 +15,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -34,9 +39,20 @@ public class MaintenanceServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        DateTimeFormatter fmt = DateTimeFormat.forPattern("dd/MM/yy");
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         String currentWeek = request.getParameter("current_week");
-        String startDate = request.getParameter("start_date");
+
+        DateTime startDate = new DateTime();
+        DateTime endDate = startDate.plusDays(4);
+        try {
+            startDate = fmt.parseDateTime(request.getParameter("start_date"));
+            endDate = fmt.parseDateTime(request.getParameter("end_date"));
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "Couldn't parse dates sent to Maintenance server.", t);
+        }
+
 
         log.info("MaintenanceServlet - current week is " + currentWeek);
 
@@ -54,14 +70,16 @@ public class MaintenanceServlet extends HttpServlet {
 
                 currentWeekEntity.setProperty("week", currentWeek);
                 currentWeekEntity.setProperty("date", new Date());
-
+                currentWeekEntity.setProperty("startDate", startDate.toDate());
+                currentWeekEntity.setProperty("endDate", endDate.toDate());
             } else {
 
                 log.info("MaintenanceServlet - New current week is being set at " + currentWeek);
                 currentWeekEntity = new Entity("CurrentWeek");
                 currentWeekEntity.setProperty("week", currentWeek);
                 currentWeekEntity.setProperty("date", new Date());
-
+                currentWeekEntity.setProperty("startDate", startDate.toDate());
+                currentWeekEntity.setProperty("endDate", endDate.toDate());
             }
 
             datastore.put(currentWeekEntity);

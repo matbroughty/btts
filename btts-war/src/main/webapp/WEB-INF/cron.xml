@@ -3,7 +3,37 @@
     <cron>
         <url>/fixtures</url>
         <description>Get Friday Fixtures</description>
-        <schedule>every 10 minutes</schedule>
+        <schedule>every friday 22:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Early Fixtures</description>
+        <schedule>every saturday 14:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal Fixtures</description>
+        <schedule>every saturday 17:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Evening Fixtures</description>
+        <schedule>every saturday 20:00</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Sunday Early Fixtures</description>
+        <schedule>every sunday 16:00</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Sunday Late Fixtures</description>
+        <schedule>every sunday 18:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Monday Fixtures</description>
+        <schedule>every monday 22:30</schedule>
     </cron>
     <cron>
         <url>/reminders</url>

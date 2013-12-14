@@ -86,7 +86,11 @@
                     </div>
                     <div class="pure-control-group">
                         <label for="start_date">Start Date</label>
-                        <input id="start_date" name="start_date" type="datetime">
+                        <input id="start_date" name="start_date" type="datetime" placeholder="Date Format = dd/mm/yy">
+                    </div>
+                    <div class="pure-control-group">
+                        <label for="end_date">End Date</label>
+                        <input id="end_date" name="end_date" type="datetime"  placeholder="Date Format = dd/mm/yy">
                     </div>
                     <div class="pure-controls">
                         <button type="submit" class="pure-button" value="Get selections">Set Current week</button>

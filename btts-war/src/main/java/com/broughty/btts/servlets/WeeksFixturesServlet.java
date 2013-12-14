@@ -19,6 +19,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -53,8 +54,12 @@ public class WeeksFixturesServlet extends HttpServlet {
 
         Entity currentWeek = pq.asSingleEntity();
         String weekNumber = "N/A";
+        DateTime startDate = new DateTime();
+        DateTime endDate = startDate.plusDays(3);
         if (currentWeek != null) {
             weekNumber = (String) currentWeek.getProperty("week");
+            startDate = new DateTime(currentWeek.getProperty("startDate"));
+            endDate =  new DateTime(currentWeek.getProperty("endDate"));
         }
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
@@ -100,10 +105,9 @@ public class WeeksFixturesServlet extends HttpServlet {
                         DateTime currentDate = new DateTime();
 
 
-                        // no point in processing
-                        if (Days.daysBetween(currentDate.toDateMidnight(), fixtureDate.toDateMidnight()).getDays() > 4) {
-                            log.log(Level.FINE, "days between currentDate.toDateMidnight() " + currentDate.toDateMidnight().toString() + " and fixtureDate.toDateMidnight() " +
-                                    fixtureDate.toDateMidnight().toString() + " is greater than 4.");
+                        // no point in processing any more data
+                        if (fixtureDate.toDateMidnight().isBefore(startDate.toDateMidnight()) || fixtureDate.toDateMidnight().isAfter(endDate.toDateMidnight())) {
+                            log.log(Level.FINE, "Fixture date  " + fixtureDate.toString() + " is before or after the cut off date.");
                             break;
                         }
 
