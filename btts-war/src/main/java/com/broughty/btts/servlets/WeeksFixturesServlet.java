@@ -107,7 +107,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                         break;
                     }
 
-                    log.log(Level.FINE,("processing match " + element.text() + " on date: " + fixtureDateStr));
+                    log.log(Level.FINE, ("processing match " + element.text() + " on date: " + fixtureDateStr));
 
                     // if it contains a " V " then it isn't in progress...
                     if (!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")) {
@@ -153,8 +153,11 @@ public class WeeksFixturesServlet extends HttpServlet {
             PreparedQuery pq = datastore.prepare(query);
             for (Entity choice : pq.asIterable()) {
                 log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
-                if(!((Boolean)choice.getProperty("choice" + i+"Result")).booleanValue())
+                if(!((Boolean)choice.getProperty("choice" + i+"Result")).booleanValue()){
+                    log.info("Updating Player " + choice.getProperty("player") + " as home team " + homeTeam + " BTTS - this was " + "choice" + i+"Result");
                     choice.setProperty("choice" + i+"Result", Boolean.TRUE);
+                    datastore.put(choice);
+                }
             }
 
 

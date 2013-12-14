@@ -47,7 +47,7 @@
 
 <div class="pure-u-1" id="main">
 <div class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-    <a class="pure-menu-heading" class="pure-menu-selected"  href="/">BTTS Choose</a>
+    <a class="pure-menu-heading" class="pure-menu-selected"  href="/choices.jsp">BTTS Choose</a>
     <ul>
         <li><a href="/viewchoices.jsp">View</a></li>
         <li><a href="#">User Picks</a></li>
