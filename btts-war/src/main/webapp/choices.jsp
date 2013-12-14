@@ -157,14 +157,14 @@
             <option>Yeovil</option>
         </optgroup>
         <optgroup label="League One">
-            <option>Bradford City</option>
+            <option>Bradford</option>
             <option>Brentford</option>
             <option>Bristol City</option>
             <option>Carlisle</option>
             <option>Colchester</option>
             <option>Coventry</option>
             <option>Crawley</option>
-            <option>Crewe Alexandra</option>
+            <option>Crewe</option>
             <option>Gillingham</option>
             <option>Leyton Orient</option>
             <option>MK Dons</option>
@@ -312,14 +312,14 @@
             <option>Yeovil</option>
         </optgroup>
         <optgroup label="League One">
-            <option>Bradford City</option>
+            <option>Bradford</option>
             <option>Brentford</option>
             <option>Bristol City</option>
             <option>Carlisle</option>
             <option>Colchester</option>
             <option>Coventry</option>
             <option>Crawley</option>
-            <option>Crewe Alexandra</option>
+            <option>Crewe</option>
             <option>Gillingham</option>
             <option>Leyton Orient</option>
             <option>MK Dons</option>
@@ -467,14 +467,14 @@
             <option>Yeovil</option>
         </optgroup>
         <optgroup label="League One">
-            <option>Bradford City</option>
+            <option>Bradford</option>
             <option>Brentford</option>
             <option>Bristol City</option>
             <option>Carlisle</option>
             <option>Colchester</option>
             <option>Coventry</option>
             <option>Crawley</option>
-            <option>Crewe Alexandra</option>
+            <option>Crewe</option>
             <option>Gillingham</option>
             <option>Leyton Orient</option>
             <option>MK Dons</option>
@@ -622,14 +622,14 @@
             <option>Yeovil</option>
         </optgroup>
         <optgroup label="League One">
-            <option>Bradford City</option>
+            <option>Bradford</option>
             <option>Brentford</option>
             <option>Bristol City</option>
             <option>Carlisle</option>
             <option>Colchester</option>
             <option>Coventry</option>
             <option>Crawley</option>
-            <option>Crewe Alexandra</option>
+            <option>Crewe</option>
             <option>Gillingham</option>
             <option>Leyton Orient</option>
             <option>MK Dons</option>
