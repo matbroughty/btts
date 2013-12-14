@@ -2,8 +2,8 @@
 <cronentries>
     <cron>
         <url>/fixtures</url>
-        <description>Get Fixtures</description>
-        <schedule>every 240 minutes</schedule>
+        <description>Get Friday Fixtures</description>
+        <schedule>every 10 minutes</schedule>
     </cron>
     <cron>
         <url>/reminders</url>

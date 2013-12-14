@@ -23,7 +23,6 @@ public enum PlayerEnum {
     Jose("Jose","jose@hpd.co.uk"),
     Mat("Mat","matb@hpd.co.uk"),
     Pia("Pia","pia@hpd.co.uk"),
-    Stu("Stu","stuart@hpd.co.uk"),
     Tim("Tim","tim@hpd.co.uk"),
     Toby("Toby","toby.low@hpdsoftware.com");
 

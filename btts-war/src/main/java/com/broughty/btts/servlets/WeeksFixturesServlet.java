@@ -1,5 +1,12 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.ResultsWebPageEnum;
+import com.google.appengine.api.datastore.*;
+import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
+import org.joda.time.Days;
+import org.joda.time.format.DateTimeFormatter;
+import org.joda.time.format.DateTimeFormatterBuilder;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
@@ -18,6 +25,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -46,41 +54,111 @@ public class WeeksFixturesServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
-        Document doc = Jsoup.connect("http://www.bbc.co.uk/sport/football/premier-league/fixtures").get();
-        response.setContentType("text/plain");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query q = new Query("CurrentWeek");
+        PreparedQuery pq = datastore.prepare(q);
 
-        Elements elements = doc.getElementsByClass("match-details");
-
-
-        StringBuilder stringBuilder = new StringBuilder();
-        for (Element element : elements) {
-            stringBuilder.append(element.text());
-
+        Entity currentWeek = pq.asSingleEntity();
+        String weekNumber = "N/A";
+        if (currentWeek != null) {
+            weekNumber = (String) currentWeek.getProperty("week");
         }
 
-        Properties props = new Properties();
-        Session session = Session.getDefaultInstance(props, null);
+        Key weekKey = KeyFactory.createKey("Week", weekNumber);
 
 
-        try {
-            Message msg = new MimeMessage(session);
+        // work through all leagues
+        for (ResultsWebPageEnum resultPage : ResultsWebPageEnum.values()) {
+            log.info("Processing page " + resultPage.getPage());
+            Document doc = Jsoup.connect(resultPage.getPage()).get();
+            response.setContentType("text/plain");
+
+            Elements elements = doc.getElementsByClass("match-details");
+
+            for (Element element : elements) {
+                if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
+
+                    String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(),
+                            "This table charts the fixtures during ");
 
 
-            msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipient(Message.RecipientType.TO,
-                    new InternetAddress("mat@broughty.com", "Mr. Broughton"));
-            msg.setSubject("Fixture lists stuff.");
-            msg.setText(stringBuilder.toString());
-            Transport.send(msg);
+                    fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
+                    fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
+                    DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+                            .appendDayOfMonth(2)
+                            .appendLiteral(' ')
+                            .appendMonthOfYearText()
+                            .appendLiteral(' ')
+                            .appendYear(4, 4)
+                            .toFormatter();
 
-        } catch (AddressException e) {
-            log.log(Level.SEVERE, "An email AddressException error message.", e);
-        } catch (MessagingException e) {
-            log.log(Level.SEVERE, "An email MessagingException error message.", e);
+
+                    DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
+                    DateTime currentDate = new DateTime();
+
+
+                    // no point in processing
+                    if (Days.daysBetween(currentDate.toDateMidnight(), fixtureDate.toDateMidnight()).getDays() > 4) {
+                        log.log(Level.FINE, "days between currentDate.toDateMidnight() " + currentDate.toDateMidnight().toString() + " and fixtureDate.toDateMidnight() " +
+                                fixtureDate.toDateMidnight().toString() + " is greater than 4.");
+                        break;
+                    }
+
+                    log.log(Level.FINE,("processing match " + element.text() + " on date: " + fixtureDateStr));
+
+                    // if it contains a " V " then it isn't in progress...
+                    if (!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")) {
+
+                        String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
+                        Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
+                        log.info("processing home match " + homeTeam + " on score : " + homeTeamScore);
+
+
+                        String awayTeam = StringUtils.substringAfterLast(StringUtils.substringAfter(element.text(), "-"), " ");
+                        Integer awayTeamScore = Integer.valueOf(StringUtils.substringBeforeLast(StringUtils.substringAfter(element.text(), "-"), " "));
+                        log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
+
+                        // have we got a BTTS
+                        if (homeTeamScore > 0 && awayTeamScore > 0) {
+
+
+                            log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
+
+                            updateChoices(homeTeam, weekKey);
+
+
+                        }
+
+                    }
+
+
+                }
+
+
+            }
+
+
         }
+    }
 
-        response.getWriter().println("Email contents.");
-        response.getWriter().println(stringBuilder.toString());
+    private void updateChoices(String homeTeam, Key weekKey) {
+
+        log.info("Checking choices records for BTTS for home team");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        for (int i = 1; i <= 4; i++) {
+            Query query = new Query("Choices", weekKey).addFilter("choice" + i, Query.FilterOperator.EQUAL, homeTeam);
+            PreparedQuery pq = datastore.prepare(query);
+            for (Entity choice : pq.asIterable()) {
+                log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
+                if(!((Boolean)choice.getProperty("choice" + i+"Result")).booleanValue())
+                    choice.setProperty("choice" + i+"Result", Boolean.TRUE);
+            }
+
+
+        }
 
 
     }
