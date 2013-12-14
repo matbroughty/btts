@@ -7,26 +7,18 @@ import org.joda.time.DateTime;
 import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
+import org.jsoup.Connection;
 import org.jsoup.Jsoup;
 import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeMessage;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.List;
-import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -54,6 +46,7 @@ public class WeeksFixturesServlet extends HttpServlet {
 
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 
+        StringBuilder responseString = new StringBuilder();
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query q = new Query("CurrentWeek");
         PreparedQuery pq = datastore.prepare(q);
@@ -71,7 +64,10 @@ public class WeeksFixturesServlet extends HttpServlet {
         for (ResultsWebPageEnum resultPage : ResultsWebPageEnum.values()) {
             try {
                 log.info("Processing page " + resultPage.getPage());
-                Document doc = Jsoup.connect(resultPage.getPage()).get();
+                Connection connection = Jsoup.connect(resultPage.getPage());
+                connection.timeout(30000);
+
+                Document doc = connection.get();
                 response.setContentType("text/plain");
 
                 Elements elements = doc.getElementsByClass("match-details");
@@ -132,7 +128,11 @@ public class WeeksFixturesServlet extends HttpServlet {
 
                                 log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
 
-                                updateChoices(homeTeam, weekKey);
+                                responseString.append("Both teams scored in game : ");
+                                responseString.append(homeTeam);
+                                responseString.append("\n");
+
+                                updateChoices(homeTeam, weekKey, responseString);
 
                             }
 
@@ -155,9 +155,10 @@ public class WeeksFixturesServlet extends HttpServlet {
             }
         }
 
+        response.getWriter().write(responseString.toString());
     }
 
-    private void updateChoices(String homeTeam, Key weekKey) {
+    private void updateChoices(String homeTeam, Key weekKey, StringBuilder responseStr) {
 
         log.info("Checking choices records for BTTS for home team");
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
@@ -166,8 +167,16 @@ public class WeeksFixturesServlet extends HttpServlet {
             PreparedQuery pq = datastore.prepare(query);
             for (Entity choice : pq.asIterable()) {
                 log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
+                responseStr.append("Player '");
+                responseStr.append(choice.getProperty("player"));
+
+                responseStr.append("' selected' ");
+                responseStr.append(homeTeam );
+                responseStr.append("' as choice"+i);
+                responseStr.append("\n");
                 if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
                     log.info("Updating Player " + choice.getProperty("player") + " as home team " + homeTeam + " BTTS - this was " + "choice" + i + "Result");
+
                     choice.setProperty("choice" + i + "Result", Boolean.TRUE);
                     datastore.put(choice);
                 }
