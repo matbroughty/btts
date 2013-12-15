@@ -27,6 +27,10 @@
         <servlet-name>MaintenanceServlet</servlet-name>
         <servlet-class>com.broughty.btts.servlets.MaintenanceServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>EmailResultsServlet</servlet-name>
+        <servlet-class>com.broughty.btts.servlets.EmailResultsServlet</servlet-class>
+    </servlet>
     <servlet-mapping>
         <servlet-name>hello</servlet-name>
         <url-pattern>/hello</url-pattern>
@@ -34,6 +38,10 @@
     <servlet-mapping>
         <servlet-name>WeeksFixturesServlet</servlet-name>
         <url-pattern>/fixtures</url-pattern>
+    </servlet-mapping>
+    <servlet-mapping>
+        <servlet-name>EmailResultsServlet</servlet-name>
+        <url-pattern>/emailresults</url-pattern>
     </servlet-mapping>
     <servlet-mapping>
         <servlet-name>WeeksChoicesServlet</servlet-name>

@@ -12,7 +12,12 @@
     </cron>
     <cron>
         <url>/fixtures</url>
-        <description>Get Saturday Normal Fixtures</description>
+        <description>Get Saturday Normal Half Time Fixtures</description>
+        <schedule>every saturday 16:00</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal End Fixtures</description>
         <schedule>every saturday 17:30</schedule>
     </cron>
     <cron>
@@ -23,12 +28,22 @@
     <cron>
         <url>/fixtures</url>
         <description>Get Sunday Early Fixtures</description>
+        <schedule>every sunday 14:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Sunday Afternoon Fixtures</description>
         <schedule>every sunday 16:00</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>
         <description>Get Sunday Late Fixtures</description>
         <schedule>every sunday 18:30</schedule>
+    </cron>
+    <cron>
+        <url>/emailresults</url>
+        <description>Email Results</description>
+        <schedule>every monday 06:00</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>
