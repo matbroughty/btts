@@ -13,17 +13,17 @@ import java.util.logging.Logger;
 public enum PlayerEnum {
 
 
-    Bhavesh("Bhavesh","bhav@hpd.co.uk"),
-    Charles("Charles","charles.fletcher@hpdsoftware.com"),
+    Bhavesh("Bhavesh","Bhavesh.Patel@hpdsoftware.com"),
+    Charles("Charles","Charles.Fletcher@hpdsoftware.com"),
     Dave("Dave","Dave.Spruit@hpdsoftware.com"),
-    Frank("Frank","frank@hpd.co.uk"),
+    Frank("Frank","Frank.Weaver@hpdsoftware.com"),
     Gerald("Gerald","Gerald.McLaughlin@hpdsoftware.com"),
-    Jason("Jason","jason.king@hpdsoftware.com"),
+    Jason("Jason","Jason.King@hpdsoftware.com"),
     Jonathon("Jonathon","Jonathan.Neighbour@hpdsoftware.com"),
-    Jose("Jose","jose@hpd.co.uk"),
+    Jose("Jose","Jose.Santos@hpdsoftware.com"),
     Mat("Mat","matb@hpd.co.uk"),
-    Pia("Pia","pia@hpd.co.uk"),
-    Tim("Tim","tim@hpd.co.uk"),
+    Pia("Pia","Pia.O'Boyle@hpdsoftware.com"),
+    Tim("Tim","Tim.Wilcox@hpdsoftware.com"),
     Toby("Toby","toby.low@hpdsoftware.com");
 
     private static final Logger log = Logger.getLogger(PlayerEnum.class.getName());

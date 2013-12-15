@@ -183,7 +183,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
         StringBuilder allPlayerTable = new StringBuilder();
-        allPlayerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player choices </h2></a>");
+        allPlayerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2></a>");
         allPlayerTable.append("<table class=\"pure-table pure-table-bordered\">");
         allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         allPlayerTable.append("<tbody>");

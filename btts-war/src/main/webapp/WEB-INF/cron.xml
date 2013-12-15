@@ -17,13 +17,33 @@
     </cron>
     <cron>
         <url>/fixtures</url>
-        <description>Get Saturday Normal End Fixtures</description>
+        <description>Get Saturday Normal Half Time Fixtures2</description>
+        <schedule>every saturday 16:15</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal End Fixtures1</description>
+        <schedule>every saturday 16:50</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal End Fixtures2</description>
         <schedule>every saturday 17:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal End  Fixtures3</description>
+        <schedule>every saturday 18:00</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>
         <description>Get Saturday Evening Fixtures</description>
         <schedule>every saturday 20:00</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Evening Attempt 2 Fixtures</description>
+        <schedule>every saturday 21:00</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>
@@ -37,8 +57,18 @@
     </cron>
     <cron>
         <url>/fixtures</url>
+        <description>Get Sunday Afternoon Fixtures2</description>
+        <schedule>every sunday 17:00</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
         <description>Get Sunday Late Fixtures</description>
         <schedule>every sunday 18:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Sunday Late Fixtures2</description>
+        <schedule>every sunday 19:00</schedule>
     </cron>
     <cron>
         <url>/emailresults</url>
