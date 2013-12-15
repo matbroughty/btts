@@ -12,6 +12,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.List;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -53,45 +54,46 @@ public class WeeksChoicesServlet extends HttpServlet {
         Query query = new Query("Choices");
         query.setAncestor(weekKey).addFilter("player", Query.FilterOperator.EQUAL, playerName);
         PreparedQuery pq = datastore.prepare(query);
-        Entity choices = pq.asSingleEntity();
+        Entity playerChoice = pq.asSingleEntity();
 
         // if user has already entered a choice for this week then stuff it back.
-        if (choices != null) {
-            choices.setProperty("date", date);
-            choices.setProperty("choice1", choice1);
-            choices.setProperty("choice2", choice2);
-            choices.setProperty("choice3", choice3);
-            choices.setProperty("choice4", choice4);
-            choices.setProperty("choice1Result", Boolean.FALSE);
-            choices.setProperty("choice2Result", Boolean.FALSE);
-            choices.setProperty("choice3Result", Boolean.FALSE);
-            choices.setProperty("choice4Result", Boolean.FALSE);
+        if (playerChoice != null) {
+            playerChoice.setProperty("date", date);
+            playerChoice.setProperty("choice1", choice1);
+            playerChoice.setProperty("choice2", choice2);
+            playerChoice.setProperty("choice3", choice3);
+            playerChoice.setProperty("choice4", choice4);
+            playerChoice.setProperty("choice1Result", Boolean.FALSE);
+            playerChoice.setProperty("choice2Result", Boolean.FALSE);
+            playerChoice.setProperty("choice3Result", Boolean.FALSE);
+            playerChoice.setProperty("choice4Result", Boolean.FALSE);
         } else {
 
             // if we don't have a user then this is just a request for info
             if (StringUtils.isNotBlank(playerName)) {
-                choices = new Entity("Choices", weekKey);
-                choices.setProperty("player", playerName);
-                choices.setProperty("date", date);
-                choices.setProperty("choice1", choice1);
-                choices.setProperty("choice2", choice2);
-                choices.setProperty("choice3", choice3);
-                choices.setProperty("choice4", choice4);
-                choices.setProperty("choice1Result", Boolean.FALSE);
-                choices.setProperty("choice2Result", Boolean.FALSE);
-                choices.setProperty("choice3Result", Boolean.FALSE);
-                choices.setProperty("choice4Result", Boolean.FALSE);
+                playerChoice = new Entity("Choices", weekKey);
+                playerChoice.setProperty("player", playerName);
+                playerChoice.setProperty("date", date);
+                playerChoice.setProperty("choice1", choice1);
+                playerChoice.setProperty("choice2", choice2);
+                playerChoice.setProperty("choice3", choice3);
+                playerChoice.setProperty("choice4", choice4);
+                playerChoice.setProperty("choice1Result", Boolean.FALSE);
+                playerChoice.setProperty("choice2Result", Boolean.FALSE);
+                playerChoice.setProperty("choice3Result", Boolean.FALSE);
+                playerChoice.setProperty("choice4Result", Boolean.FALSE);
             }
         }
 
-        if (choices != null) {
-            datastore.put(choices);
+        if (playerChoice != null) {
+            log.info("Storing week " + weekNumber + " choices for player " + playerName);
+            datastore.put(playerChoice);
         } else {
             return;
         }
 
 
-        StringBuilder playerTable = new StringBuilder("<html>\n" +
+        StringBuilder playerChoiceTable = new StringBuilder("<html>\n" +
                 "<head>\n" +
                 "    <meta charset=\"utf-8\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://yui.yahooapis.com/pure/0.1.0/pure-min.css\">\n" +
@@ -103,44 +105,50 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "    <div class=\"pure-g \">\n" +
                 "        <div class=\"pure-u-1\">");
 
-        playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
-        playerTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
-        playerTable.append("<tbody>");
+        playerChoiceTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
+        playerChoiceTable.append("<table class=\"pure-table pure-table-bordered\">");
+        playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        playerChoiceTable.append("<tbody>");
 
 
-        playerTable.append("<tr>");
+        playerChoiceTable.append("<tr>");
         SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
 
-        playerTable.append("<td>").append((String) choices.getProperty("player")).append("</td>");
-        playerTable.append("<td>").append(simpleDateFormat.format(choices.getProperty("date"))).append("</td>");
-        playerTable.append("<td>").append(choice1).append("</td>");
-        playerTable.append("<td>").append("&#10008;").append("</td>");
-        playerTable.append("<td>").append(choice2).append("</td>");
-        playerTable.append("<td>").append("&#10008;").append("</td>");
-        playerTable.append("<td>").append(choice3).append("</td>");
-        playerTable.append("<td>").append("&#10008;").append("</td>");
-        playerTable.append("<td>").append(choice4).append("</td>");
-        playerTable.append("<td>").append("&#10008;").append("</td>");
-        playerTable.append("</tr>");
+        playerChoiceTable.append("<td>").append((String) playerChoice.getProperty("player")).append("</td>");
+        playerChoiceTable.append("<td>").append(simpleDateFormat.format(playerChoice.getProperty("date"))).append("</td>");
+        playerChoiceTable.append("<td>").append(choice1).append("</td>");
+        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(choice2).append("</td>");
+        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(choice3).append("</td>");
+        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(choice4).append("</td>");
+        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("</tr>");
 
-        playerTable.append("</tbody></table>");
-        playerTable.append("        </div>\n" +
-                "    </div>\n" +
-                "\n" +
-                "</div>\n" +
+        playerChoiceTable.append("</tbody></table>");
+        playerChoiceTable.append("</div></div>");
+
+        playerChoiceTable.append("    <div class=\"pure-g \">\n" +
+                "        <div class=\"pure-u-1\">");
+
+
+        playerChoiceTable.append(previousSelections(datastore, weekKey, weekNumber));
+
+        playerChoiceTable.append("</div></div>");
+        playerChoiceTable.append("</div>\n" +
                 "</body>\n" +
                 "</html>");
 
 
+        log.info("Emailing Choices for player : \n" + playerChoiceTable.toString());
 
-        log.info("Emailing Choices for player : \n" + playerTable.toString());
+
         try {
             Message msg = new MimeMessage(session);
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            //msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
             msg.addRecipient(Message.RecipientType.TO, PlayerEnum.valueOf(playerName).getMailAddress());
             msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
 
@@ -148,10 +156,11 @@ public class WeeksChoicesServlet extends HttpServlet {
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
 
             MimeBodyPart htmlPart = new MimeBodyPart();
-            htmlPart.setContent(playerTable.toString(), "text/html");
+            htmlPart.setContent(playerChoiceTable.toString(), "text/html");
 
             Multipart mp = new MimeMultipart();
             mp.addBodyPart(htmlPart);
+
             msg.setContent(mp);
 
             Transport.send(msg);
@@ -166,6 +175,56 @@ public class WeeksChoicesServlet extends HttpServlet {
         resp.sendRedirect("/summary.jsp?player=" + playerName + "&week=" + weekNumber);
 
 
+    }
+
+    private String previousSelections(DatastoreService datastore, Key weekKey, String weekNumber) {
+
+        Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
+        List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
+
+        StringBuilder allPlayerTable = new StringBuilder();
+        allPlayerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player choices </h2></a>");
+        allPlayerTable.append("<table class=\"pure-table pure-table-bordered\">");
+        allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        allPlayerTable.append("<tbody>");
+        int i = 1;
+        for (Entity choice : choices) {
+
+
+            String choice1 = (String) choice.getProperty("choice1");
+
+            String choice2 = (String) choice.getProperty("choice2");
+
+            String choice3 = (String) choice.getProperty("choice3");
+
+            String choice4 = (String) choice.getProperty("choice4");
+            if (i % 2 == 0) {
+                allPlayerTable.append("<tr class=\"pure-table-odd\">");
+            } else {
+                allPlayerTable.append("<tr>");
+            }
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+
+            allPlayerTable.append("<td>").append((String) choice.getProperty("player")).append("</td>");
+            allPlayerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
+            allPlayerTable.append("<td>").append(choice1).append("</td>");
+            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(choice2).append("</td>");
+            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(choice3).append("</td>");
+            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(choice4).append("</td>");
+            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("</tr>");
+
+            i++;
+
+        }
+
+        allPlayerTable.append("</tbody></table>");
+
+        return allPlayerTable.toString();
     }
 
 }
