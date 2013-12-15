@@ -1,13 +1,19 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
 
+import javax.mail.*;
+import javax.mail.internet.*;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Properties;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -19,6 +25,9 @@ public class WeeksChoicesServlet extends HttpServlet {
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
+
+        Properties props = new Properties();
+        Session session = Session.getDefaultInstance(props, null);
 
         String playerName = req.getParameter("player");
         String weekNumber = req.getParameter("week");
@@ -32,8 +41,6 @@ public class WeeksChoicesServlet extends HttpServlet {
         log.info(choice2);
         log.info(choice3);
         log.info(choice4);
-
-
 
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
@@ -79,6 +86,78 @@ public class WeeksChoicesServlet extends HttpServlet {
 
         if (choices != null) {
             datastore.put(choices);
+        } else {
+            return;
+        }
+
+
+        StringBuilder playerTable = new StringBuilder("<html>\n" +
+                "<head>\n" +
+                "    <meta charset=\"utf-8\">\n" +
+                "    <link rel=\"stylesheet\" href=\"http://yui.yahooapis.com/pure/0.1.0/pure-min.css\">\n" +
+                "    <link rel=\"stylesheet\" href=\"http://weloveiconfonts.com/api/?family=fontawesome\">\n" +
+                "</head>\n" +
+                "<body>\n" +
+                "<div class=\"pure-u-1\" id=\"main\">\n" +
+                "\n" +
+                "    <div class=\"pure-g \">\n" +
+                "        <div class=\"pure-u-1\">");
+
+        playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
+        playerTable.append("<table class=\"pure-table pure-table-bordered\">");
+        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        playerTable.append("<tbody>");
+
+
+        playerTable.append("<tr>");
+        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+
+        playerTable.append("<td>").append((String) choices.getProperty("player")).append("</td>");
+        playerTable.append("<td>").append(simpleDateFormat.format(choices.getProperty("date"))).append("</td>");
+        playerTable.append("<td>").append(choice1).append("</td>");
+        playerTable.append("<td>").append("&#10008;").append("</td>");
+        playerTable.append("<td>").append(choice2).append("</td>");
+        playerTable.append("<td>").append("&#10008;").append("</td>");
+        playerTable.append("<td>").append(choice3).append("</td>");
+        playerTable.append("<td>").append("&#10008;").append("</td>");
+        playerTable.append("<td>").append(choice4).append("</td>");
+        playerTable.append("<td>").append("&#10008;").append("</td>");
+        playerTable.append("</tr>");
+
+        playerTable.append("</tbody></table>");
+        playerTable.append("        </div>\n" +
+                "    </div>\n" +
+                "\n" +
+                "</div>\n" +
+                "</body>\n" +
+                "</html>");
+
+
+
+        log.info("Emailing Choices for player : \n" + playerTable.toString());
+        try {
+            Message msg = new MimeMessage(session);
+
+
+            msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
+            //msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
+            msg.addRecipient(Message.RecipientType.TO, PlayerEnum.Mat.getMailAddress());
+
+            msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
+
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(playerTable.toString(), "text/html");
+
+            Multipart mp = new MimeMultipart();
+            mp.addBodyPart(htmlPart);
+            msg.setContent(mp);
+
+            Transport.send(msg);
+
+        } catch (AddressException e) {
+            log.log(Level.SEVERE, "An email AddressException error message.", e);
+        } catch (MessagingException e) {
+            log.log(Level.SEVERE, "An email MessagingException error message.", e);
         }
 
 

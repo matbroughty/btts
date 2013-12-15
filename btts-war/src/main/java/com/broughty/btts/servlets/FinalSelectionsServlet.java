@@ -179,11 +179,8 @@ public class FinalSelectionsServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipient(Message.RecipientType.TO,
-                    PlayerEnum.Mat.getMailAddress());
-            msg.addRecipient(Message.RecipientType.TO,
-                    PlayerEnum.Jason.getMailAddress());
-            msg.setSubject("Both teams to score final selections.");
+            msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
+            msg.setSubject("BTTS: Final selections for week " + weekNumber);
             msg.setText(selections.toString());
             Transport.send(msg);
 

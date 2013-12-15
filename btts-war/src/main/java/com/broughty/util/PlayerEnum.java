@@ -58,7 +58,7 @@ public enum PlayerEnum {
     }
 
 
-    public InternetAddress[] getMailAddresses(){
+    public static InternetAddress[] getMailAddresses(){
 
         List<InternetAddress> internetAddresses = new ArrayList<InternetAddress>();
         try{

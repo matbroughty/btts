@@ -67,7 +67,8 @@ public class EmailResultsServlet extends HttpServlet {
                 "\n" +
                 "    <div class=\"pure-g \">\n" +
                 "        <div class=\"pure-u-1\">");
-        playerTable.append("<h2 class=\"content-subhead\">Week " + weekNumber + " player choices</h2>");
+
+        playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player choices </h2></a>");
         playerTable.append("<table class=\"pure-table pure-table-bordered\">");
         playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         playerTable.append("<tbody>");
@@ -125,7 +126,7 @@ public class EmailResultsServlet extends HttpServlet {
                     PlayerEnum.Mat.getMailAddress());
             msg.addRecipient(Message.RecipientType.TO,
                     PlayerEnum.Jason.getMailAddress());
-            msg.setSubject("Both teams to score results - week " + weekNumber);
+            msg.setSubject("BTTS: Results for week " + weekNumber);
 
             MimeBodyPart htmlPart = new MimeBodyPart();
             htmlPart.setContent(playerTable.toString(), "text/html");
