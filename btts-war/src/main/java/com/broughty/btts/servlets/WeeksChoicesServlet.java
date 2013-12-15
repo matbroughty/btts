@@ -141,7 +141,9 @@ public class WeeksChoicesServlet extends HttpServlet {
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
             //msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
-            msg.addRecipient(Message.RecipientType.TO, PlayerEnum.Mat.getMailAddress());
+            msg.addRecipient(Message.RecipientType.TO, PlayerEnum.valueOf(playerName).getMailAddress());
+            msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
+
 
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
 

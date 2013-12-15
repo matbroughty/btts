@@ -122,10 +122,7 @@ public class EmailResultsServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipient(Message.RecipientType.TO,
-                    PlayerEnum.Mat.getMailAddress());
-            msg.addRecipient(Message.RecipientType.TO,
-                    PlayerEnum.Jason.getMailAddress());
+            msg.addRecipients(Message.RecipientType.TO,PlayerEnum.getMailAddresses());
             msg.setSubject("BTTS: Results for week " + weekNumber);
 
             MimeBodyPart htmlPart = new MimeBodyPart();
