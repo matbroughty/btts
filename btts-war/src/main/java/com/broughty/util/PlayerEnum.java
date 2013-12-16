@@ -70,7 +70,7 @@ public enum PlayerEnum {
             log.log(Level.WARNING, "Problem parsing email addresses." ,t);
         }
 
-        return (InternetAddress[])internetAddresses.toArray();
+        return internetAddresses.toArray(new InternetAddress[internetAddresses.size()]);
     }
 
 

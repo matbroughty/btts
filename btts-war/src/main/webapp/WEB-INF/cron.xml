@@ -12,6 +12,16 @@
     </cron>
     <cron>
         <url>/fixtures</url>
+        <description>Get Saturday Normal Quarter Hour Fixtures</description>
+        <schedule>every saturday 15:15</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal Quarter Hour Fixtures2</description>
+        <schedule>every saturday 15:30</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
         <description>Get Saturday Normal Half Time Fixtures</description>
         <schedule>every saturday 16:00</schedule>
     </cron>
@@ -19,6 +29,11 @@
         <url>/fixtures</url>
         <description>Get Saturday Normal Half Time Fixtures2</description>
         <schedule>every saturday 16:15</schedule>
+    </cron>
+    <cron>
+        <url>/fixtures</url>
+        <description>Get Saturday Normal Half Time Fixtures2</description>
+        <schedule>every saturday 16:30</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>
