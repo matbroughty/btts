@@ -1,5 +1,6 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
@@ -11,9 +12,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -105,7 +104,7 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "    <div class=\"pure-g \">\n" +
                 "        <div class=\"pure-u-1\">");
 
-        playerChoiceTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
+        playerChoiceTable.append("<a href=\"http://btts.broughty.com/summary.jsp?week=" + weekNumber + "\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
         playerChoiceTable.append("<table class=\"pure-table pure-table-bordered\">");
         playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         playerChoiceTable.append("<tbody>");
@@ -133,9 +132,23 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "        <div class=\"pure-u-1\">");
 
 
-        playerChoiceTable.append(previousSelections(datastore, weekKey, weekNumber));
+        Map<String, Integer> teamCount = new HashMap<String, Integer>();
+
+        playerChoiceTable.append(previousSelections(datastore, weekKey, weekNumber, teamCount));
 
         playerChoiceTable.append("</div></div>");
+
+
+
+        playerChoiceTable.append("    <div class=\"pure-g \">\n" +
+                "        <div class=\"pure-u-1\">");
+
+
+        playerChoiceTable.append(starPlayerSelections(teamCount));
+
+        playerChoiceTable.append("</div></div>");
+
+
         playerChoiceTable.append("</div>\n" +
                 "</body>\n" +
                 "</html>");
@@ -150,7 +163,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
             msg.addRecipient(Message.RecipientType.TO, PlayerEnum.valueOf(playerName).getMailAddress());
-            msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
+            //msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
 
 
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
@@ -177,13 +190,41 @@ public class WeeksChoicesServlet extends HttpServlet {
 
     }
 
-    private String previousSelections(DatastoreService datastore, Key weekKey, String weekNumber) {
+    private String starPlayerSelections(Map<String, Integer> teamCount) {
+        StringBuilder graphTable = new StringBuilder();
+
+        // most popular first
+        teamCount = MapUtil.sortByValue(teamCount);
+
+        graphTable.append("<table class=\"pure-table pure-table-bordered\">");
+        graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        graphTable.append("<tbody>");
+
+        int i = 1;
+        graphTable.append("<tr>");
+        graphTable.append("<td>").append("*Star*").append("</td>");
+        graphTable.append("<td>").append("************").append("</td>");
+        for (String team : teamCount.keySet()) {
+            // only first 4
+            if(i > 4){
+                break;
+            }
+            graphTable.append("<td>").append(team).append("(").append(teamCount.get(team)).append(")").append("</td>");
+
+            i++;
+        }
+        graphTable.append("</tr>");
+        graphTable.append("</tbody></table>");
+        return graphTable.toString();
+    }
+
+    private String previousSelections(DatastoreService datastore, Key weekKey, String weekNumber, Map<String, Integer> totals) {
 
         Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
         StringBuilder allPlayerTable = new StringBuilder();
-        allPlayerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2></a>");
+        allPlayerTable.append("<a href=\"http://btts.broughty.com/summary.jsp?week=" + weekNumber + "\"><h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2></a>");
         allPlayerTable.append("<table class=\"pure-table pure-table-bordered\">");
         allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         allPlayerTable.append("<tbody>");
@@ -191,13 +232,44 @@ public class WeeksChoicesServlet extends HttpServlet {
         for (Entity choice : choices) {
 
 
+
             String choice1 = (String) choice.getProperty("choice1");
+            if (totals.containsKey(choice1)) {
+                totals.put(choice1, new Integer(totals.get(choice1).intValue() + 1));
+            } else {
+                totals.put(choice1, new Integer(1));
+            }
+
 
             String choice2 = (String) choice.getProperty("choice2");
 
+            if (totals.containsKey(choice2)) {
+                totals.put(choice2, new Integer(totals.get(choice2).intValue() + 1));
+            } else {
+                totals.put(choice2, new Integer(1));
+            }
+
+
             String choice3 = (String) choice.getProperty("choice3");
 
+            if (totals.containsKey(choice3)) {
+                totals.put(choice3, new Integer(totals.get(choice3).intValue() + 1));
+            } else {
+                totals.put(choice3, new Integer(1));
+            }
+
+
             String choice4 = (String) choice.getProperty("choice4");
+
+            if (totals.containsKey(choice4)) {
+                totals.put(choice4, new Integer(totals.get(choice4).intValue() + 1));
+            } else {
+                totals.put(choice4, new Integer(1));
+            }
+
+
+
+
             if (i % 2 == 0) {
                 allPlayerTable.append("<tr class=\"pure-table-odd\">");
             } else {

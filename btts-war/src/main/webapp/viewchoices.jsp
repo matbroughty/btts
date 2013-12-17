@@ -63,7 +63,7 @@
 
 <div class="pure-g">
 <div class="pure-u-1">
-<form action="/choices" method="post" class="pure-form pure-form-aligned">
+<form action="/summary.jsp" method="post" class="pure-form pure-form-aligned">
 <fieldset>
 <div class="pure-control-group">
     <label for="week">Week</label>

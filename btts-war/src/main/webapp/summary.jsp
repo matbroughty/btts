@@ -145,7 +145,7 @@
 
     }
 
-    // most poulare first
+    // most popular first
     teamCount = MapUtil.sortByValue(teamCount);
 
     StringBuilder graphData = new StringBuilder("google.visualization.arrayToDataTable([['Team', 'Votes',{ role: 'style' } ],");
