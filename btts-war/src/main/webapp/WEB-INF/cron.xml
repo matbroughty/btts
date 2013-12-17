@@ -47,18 +47,8 @@
     </cron>
     <cron>
         <url>/fixtures</url>
-        <description>Get Saturday Normal End  Fixtures3</description>
-        <schedule>every saturday 18:00</schedule>
-    </cron>
-    <cron>
-        <url>/fixtures</url>
         <description>Get Saturday Evening Fixtures</description>
         <schedule>every saturday 20:00</schedule>
-    </cron>
-    <cron>
-        <url>/fixtures</url>
-        <description>Get Saturday Evening Attempt 2 Fixtures</description>
-        <schedule>every saturday 21:00</schedule>
     </cron>
     <cron>
         <url>/fixtures</url>

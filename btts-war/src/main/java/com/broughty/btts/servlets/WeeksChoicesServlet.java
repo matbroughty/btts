@@ -22,6 +22,8 @@ import java.util.logging.Logger;
 public class WeeksChoicesServlet extends HttpServlet {
     private static final Logger log = Logger.getLogger(WeeksChoicesServlet.class.getName());
 
+    private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+
     @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
@@ -111,7 +113,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
 
         playerChoiceTable.append("<tr>");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
+        simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
 
         playerChoiceTable.append("<td>").append((String) playerChoice.getProperty("player")).append("</td>");
         playerChoiceTable.append("<td>").append(simpleDateFormat.format(playerChoice.getProperty("date"))).append("</td>");
@@ -196,6 +198,9 @@ public class WeeksChoicesServlet extends HttpServlet {
         // most popular first
         teamCount = MapUtil.sortByValue(teamCount);
 
+
+        graphTable.append("<h2 class=\"content-subhead\">Star Player (i.e. combined) choices </h2>");
+
         graphTable.append("<table class=\"pure-table pure-table-bordered\">");
         graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         graphTable.append("<tbody>");
@@ -204,6 +209,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         graphTable.append("<tr>");
         graphTable.append("<td>").append("*Star*").append("</td>");
         graphTable.append("<td>").append("************").append("</td>");
+        graphTable.append("<td>").append("&#10008;").append("</td>");
         for (String team : teamCount.keySet()) {
             // only first 4
             if(i > 4){
