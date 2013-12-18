@@ -24,11 +24,11 @@
         }).use('gallery-sm-menu', function (Y) {
 
                     var horizontalMenu = new Y.Menu({
-                        container         : '#demo-horizontal-menu',
-                        sourceNode        : '#std-menu-items',
-                        orientation       : 'horizontal',
+                        container: '#demo-horizontal-menu',
+                        sourceNode: '#std-menu-items',
+                        orientation: 'horizontal',
                         hideOnOutsideClick: false,
-                        hideOnClick       : false
+                        hideOnClick: false
                     });
 
                     horizontalMenu.render();
@@ -53,8 +53,13 @@
 
     StringBuilder playerListOption = new StringBuilder();
 
-    for(PlayerEnum playerEnum : PlayerEnum.values()){
-        playerListOption.append("<option>");
+    for (PlayerEnum playerEnum : PlayerEnum.values()) {
+
+        if (playerEnum.compareTo(PlayerEnum.Star) == 0) {
+            playerListOption.append("<option disabled>");
+        } else {
+            playerListOption.append("<option>");
+        }
         playerListOption.append(playerEnum.getName());
         playerListOption.append("</option>");
 

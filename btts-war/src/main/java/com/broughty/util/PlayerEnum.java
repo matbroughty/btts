@@ -24,7 +24,8 @@ public enum PlayerEnum {
     Mat("Mat","matb@hpd.co.uk"),
     Pia("Pia","Pia.O'Boyle@hpdsoftware.com"),
     Tim("Tim","Tim.Wilcox@hpdsoftware.com"),
-    Toby("Toby","toby.low@hpdsoftware.com");
+    Toby("Toby","toby.low@hpdsoftware.com"),
+    Star("&#10026;Star&#10026;", "mat@broughty.com");
 
     private static final Logger log = Logger.getLogger(PlayerEnum.class.getName());
     String name;

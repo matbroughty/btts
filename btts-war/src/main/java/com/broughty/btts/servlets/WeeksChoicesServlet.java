@@ -4,6 +4,7 @@ import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
+import org.joda.time.DateTime;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -113,7 +114,6 @@ public class WeeksChoicesServlet extends HttpServlet {
 
 
         playerChoiceTable.append("<tr>");
-        simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
 
         playerChoiceTable.append("<td>").append((String) playerChoice.getProperty("player")).append("</td>");
         playerChoiceTable.append("<td>").append(simpleDateFormat.format(playerChoice.getProperty("date"))).append("</td>");
@@ -165,7 +165,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
             msg.addRecipient(Message.RecipientType.TO, PlayerEnum.valueOf(playerName).getMailAddress());
-            //msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
+            msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
 
 
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
@@ -199,7 +199,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         teamCount = MapUtil.sortByValue(teamCount);
 
 
-        graphTable.append("<h2 class=\"content-subhead\">Star Player (i.e. combined) choices </h2>");
+        graphTable.append("<h2 class=\"content-subhead\">Star Player</h2>");
 
         graphTable.append("<table class=\"pure-table pure-table-bordered\">");
         graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
@@ -207,15 +207,15 @@ public class WeeksChoicesServlet extends HttpServlet {
 
         int i = 1;
         graphTable.append("<tr>");
-        graphTable.append("<td>").append("*Star*").append("</td>");
-        graphTable.append("<td>").append("************").append("</td>");
-        graphTable.append("<td>").append("&#10008;").append("</td>");
+        graphTable.append("<td>").append(PlayerEnum.Star.getName()).append("</td>");
+        graphTable.append("<td>").append(simpleDateFormat.format(new Date())).append("</td>");
         for (String team : teamCount.keySet()) {
             // only first 4
             if(i > 4){
                 break;
             }
             graphTable.append("<td>").append(team).append("(").append(teamCount.get(team)).append(")").append("</td>");
+            graphTable.append("<td>").append("&#10008;").append("</td>");
 
             i++;
         }
@@ -230,7 +230,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
         StringBuilder allPlayerTable = new StringBuilder();
-        allPlayerTable.append("<a href=\"http://btts.broughty.com/summary.jsp?week=" + weekNumber + "\"><h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2></a>");
+        allPlayerTable.append("<h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2>");
         allPlayerTable.append("<table class=\"pure-table pure-table-bordered\">");
         allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
         allPlayerTable.append("<tbody>");

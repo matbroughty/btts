@@ -17,10 +17,7 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -81,6 +78,28 @@ public class FinalSelectionsServlet extends HttpServlet {
         Entity secondarySelections = datastore.prepare(new Query("SecondarySelections", weekKey)).asSingleEntity();
         if(secondarySelections == null){
             secondarySelections = new Entity("SecondarySelections", weekKey);
+        }
+
+
+
+        // get the start player i.e. the top 4 choices.
+        query = new Query("Choices");
+        query.setAncestor(weekKey).addFilter("player", Query.FilterOperator.EQUAL, PlayerEnum.Star.getName());
+        pq = datastore.prepare(query);
+        Entity starPlayerChoice = pq.asSingleEntity();
+        if(starPlayerChoice == null){
+            starPlayerChoice = new Entity("Choices", weekKey);
+            starPlayerChoice.setProperty("player", PlayerEnum.Star.getName());
+            starPlayerChoice.setProperty("date", new Date());
+            starPlayerChoice.setProperty("choice1", null);
+            starPlayerChoice.setProperty("choice2", null);
+            starPlayerChoice.setProperty("choice3", null);
+            starPlayerChoice.setProperty("choice4", null);
+            starPlayerChoice.setProperty("choice1Result", Boolean.FALSE);
+            starPlayerChoice.setProperty("choice2Result", Boolean.FALSE);
+            starPlayerChoice.setProperty("choice3Result", Boolean.FALSE);
+            starPlayerChoice.setProperty("choice4Result", Boolean.FALSE);
+
         }
 
 
@@ -152,6 +171,7 @@ public class FinalSelectionsServlet extends HttpServlet {
             selections.append("' times. \n");
 
             if(count >= 1 && count < 5){
+                starPlayerChoice.setProperty("choice" + count, team);
                 primeSelections.setProperty("choice" + count, team);
                 primeSelections.setProperty("choice"+count+"count", teamCount.get(team));
                 primeSelections.setProperty("choice"+count+"success", Boolean.FALSE);
@@ -172,6 +192,7 @@ public class FinalSelectionsServlet extends HttpServlet {
 
         datastore.put(primeSelections);
         datastore.put(secondarySelections);
+        datastore.put(starPlayerChoice);
 
 
         try {
