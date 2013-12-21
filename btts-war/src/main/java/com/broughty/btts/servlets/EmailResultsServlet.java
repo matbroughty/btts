@@ -1,6 +1,7 @@
 package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
+import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import net.unto.twitter.Api;
 
@@ -155,9 +156,7 @@ public class EmailResultsServlet extends HttpServlet {
 
     private void twitterAlert(StringBuilder alertString) {
         try {
-            // now update twitter:
-            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
-            api.updateStatus(alertString.toString()).build().post();
+            TwitterHelper.updateStatus(alertString.toString());
         } catch (Throwable t) {
             log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
         }

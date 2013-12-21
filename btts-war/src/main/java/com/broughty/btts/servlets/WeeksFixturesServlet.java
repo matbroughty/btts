@@ -2,6 +2,7 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
 import com.broughty.util.ResultsWebPageEnum;
+import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import com.twilio.sdk.TwilioRestClient;
 import com.twilio.sdk.resource.factory.SmsFactory;
@@ -190,14 +191,15 @@ public class WeeksFixturesServlet extends HttpServlet {
         for (Entity choice : choices) {
             // This user has already been notified..
             String playerName = (String) choice.getProperty("player");
-            if (Boolean.valueOf((Boolean) choice.getProperty("alerted"))) {
+            Boolean alerted = (Boolean)choice.getProperty("alerted");
+            if (alerted != null && alerted.booleanValue()) {
                 log.info("Player " + playerName + " has already been notified they have all 4.");
                 continue;
             }
             StringBuilder alertString = new StringBuilder();
             boolean allTeamsScored = false;
             boolean globalAlert = false;
-            if (PlayerEnum.valueOf(playerName).compareTo(PlayerEnum.Star) == 0) {
+            if (StringUtils.contains(PlayerEnum.Star.getName(), playerName)) {
                 globalAlert = true;
                 alertString.append("Yes!!!! The main bet came in!");
             } else {
@@ -227,9 +229,7 @@ public class WeeksFixturesServlet extends HttpServlet {
 
     private void twitterAlert(StringBuilder alertString) {
         try {
-            // now update twitter:
-            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
-            api.updateStatus(alertString.toString()).build().post();
+            TwitterHelper.updateStatus(alertString.toString());
         } catch (Throwable t) {
             log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
         }

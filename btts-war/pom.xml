@@ -97,6 +97,13 @@
             <artifactId>java-twitter</artifactId>
             <version>0.9-SNAPSHOT</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.twitter4j</groupId>
+            <artifactId>twitter4j-core</artifactId>
+            <version>[3.0,)</version>
+        </dependency>
+
     </dependencies>
       
     <build>
