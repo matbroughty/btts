@@ -3,6 +3,7 @@ package com.broughty.btts.servlets;
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
+import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 
@@ -69,6 +70,8 @@ public class WeeksChoicesServlet extends HttpServlet {
             playerChoice.setProperty("choice2Result", Boolean.FALSE);
             playerChoice.setProperty("choice3Result", Boolean.FALSE);
             playerChoice.setProperty("choice4Result", Boolean.FALSE);
+            playerChoice.setProperty("alerted", Boolean.FALSE);
+
         } else {
 
             // if we don't have a user then this is just a request for info
@@ -84,6 +87,7 @@ public class WeeksChoicesServlet extends HttpServlet {
                 playerChoice.setProperty("choice2Result", Boolean.FALSE);
                 playerChoice.setProperty("choice3Result", Boolean.FALSE);
                 playerChoice.setProperty("choice4Result", Boolean.FALSE);
+                playerChoice.setProperty("alerted", Boolean.FALSE);
             }
         }
 
@@ -94,6 +98,8 @@ public class WeeksChoicesServlet extends HttpServlet {
             return;
         }
 
+
+        StringBuilder playerChoiceTwitter = new StringBuilder();
 
         StringBuilder playerChoiceTable = new StringBuilder("<html>\n" +
                 "<head>\n" +
@@ -155,8 +161,22 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "</body>\n" +
                 "</html>");
 
+        playerChoiceTwitter.append(playerName);
+        playerChoiceTwitter.append(" Week ");
+        playerChoiceTwitter.append(weekNumber);
+        playerChoiceTwitter.append("\n");
+        playerChoiceTwitter.append(choice1);
+        playerChoiceTwitter.append(":");
+        playerChoiceTwitter.append(choice2);
+        playerChoiceTwitter.append(":");
+        playerChoiceTwitter.append(choice3);
+        playerChoiceTwitter.append(":");
+        playerChoiceTwitter.append(choice4);
+        playerChoiceTwitter.append("\n. http://btts.broughty.com/summary.jsp?week=");
+        playerChoiceTwitter.append(weekNumber);
 
-        log.info("Emailing Choices for player : \n" + playerChoiceTable.toString());
+
+        log.info("Emailing\\Twittering Choices for player : \n" + playerChoiceTable.toString());
 
 
         try {
@@ -164,8 +184,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipient(Message.RecipientType.TO, PlayerEnum.valueOf(playerName).getMailAddress());
-            msg.addRecipients(Message.RecipientType.CC, PlayerEnum.getMailAddresses());
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughyt.com"));
 
 
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
@@ -179,6 +198,12 @@ public class WeeksChoicesServlet extends HttpServlet {
             msg.setContent(mp);
 
             Transport.send(msg);
+
+
+            // now update twitter:
+            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
+            api.updateStatus(playerChoiceTwitter.toString()).build().post();
+
 
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);

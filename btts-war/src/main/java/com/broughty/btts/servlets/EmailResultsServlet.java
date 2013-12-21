@@ -2,6 +2,7 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
 import com.google.appengine.api.datastore.*;
+import net.unto.twitter.Api;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -122,7 +123,7 @@ public class EmailResultsServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipients(Message.RecipientType.TO,PlayerEnum.getMailAddresses());
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughty.com"));
             msg.setSubject("BTTS: Results for week " + weekNumber);
 
             MimeBodyPart htmlPart = new MimeBodyPart();
@@ -134,6 +135,12 @@ public class EmailResultsServlet extends HttpServlet {
 
             Transport.send(msg);
 
+            StringBuilder resultsTwitter  = new StringBuilder("Final results in for week' ");
+            resultsTwitter.append(weekNumber);
+            resultsTwitter.append("' are in!\n. http://btts.broughty.com/summary.jsp?week=");
+            resultsTwitter.append(weekNumber);
+            twitterAlert(resultsTwitter);
+
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);
         } catch (MessagingException e) {
@@ -144,6 +151,16 @@ public class EmailResultsServlet extends HttpServlet {
         response.sendRedirect("/emailresponse.jsp?message=" + playerTable.toString());
 
 
+    }
+
+    private void twitterAlert(StringBuilder alertString) {
+        try {
+            // now update twitter:
+            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
+            api.updateStatus(alertString.toString()).build().post();
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
+        }
     }
 
 

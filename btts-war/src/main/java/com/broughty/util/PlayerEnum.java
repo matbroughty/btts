@@ -13,28 +13,33 @@ import java.util.logging.Logger;
 public enum PlayerEnum {
 
 
-    Bhavesh("Bhavesh","Bhavesh.Patel@hpdsoftware.com"),
-    Charles("Charles","Charles.Fletcher@hpdsoftware.com"),
-    Dave("Dave","Dave.Spruit@hpdsoftware.com"),
-    Frank("Frank","Frank.Weaver@hpdsoftware.com"),
-    Gerald("Gerald","Gerald.McLaughlin@hpdsoftware.com"),
-    Jason("Jason","Jason.King@hpdsoftware.com"),
-    Jonathon("Jonathon","Jonathan.Neighbour@hpdsoftware.com"),
-    Jose("Jose","Jose.Santos@hpdsoftware.com"),
-    Mat("Mat","matb@hpd.co.uk"),
-    Pia("Pia","Pia.O'Boyle@hpdsoftware.com"),
-    Tim("Tim","Tim.Wilcox@hpdsoftware.com"),
-    Toby("Toby","toby.low@hpdsoftware.com"),
-    Star("&#10026;Star&#10026;", "mat@broughty.com");
+    Bhavesh("Bhavesh","Bhavesh.Patel@hpdsoftware.com", null),
+    Charles("Charles","Charles.Fletcher@hpdsoftware.com", null),
+    Dave("Dave","Dave.Spruit@hpdsoftware.com", "07956537929"),
+    Frank("Frank","Frank.Weaver@hpdsoftware.com", "07743488945"),
+    Gerald("Gerald","Gerald.McLaughlin@hpdsoftware.com", "07963386490"),
+    Jason("Jason","Jason.King@hpdsoftware.com", null),
+    Jonathon("Jonathon","Jonathan.Neighbour@hpdsoftware.com", null),
+    Jose("Jose","Jose.Santos@hpdsoftware.com", null),
+    Mat("Mat","matb@hpd.co.uk","07712647785"),
+    Pia("Pia","Pia.O'Boyle@hpdsoftware.com", null),
+    Tim("Tim","Tim.Wilcox@hpdsoftware.com", "07760177037"),
+    Toby("Toby","toby.low@hpdsoftware.com", null),
+    Star("&#10026;Star&#10026;", "mat@broughty.com", null);
 
     private static final Logger log = Logger.getLogger(PlayerEnum.class.getName());
     String name;
 
     String email;
 
-    PlayerEnum(String name, String email){
+
+    String mobile;
+
+
+    PlayerEnum(String name, String email, String mobile){
         this.name = name;
         this.email = email;
+        this.mobile = mobile;
     }
 
     public String getName() {
@@ -53,6 +58,13 @@ public enum PlayerEnum {
         this.email = email;
     }
 
+    public String getMobile() {
+        return mobile;
+    }
+
+    public void setMobile(String mobile) {
+        this.mobile = mobile;
+    }
 
     public InternetAddress getMailAddress() throws UnsupportedEncodingException{
        return new InternetAddress(getEmail(), getName());

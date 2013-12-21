@@ -86,7 +86,7 @@ public class ReminderServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughty.com"));
             msg.setSubject("BTTS: Reminder for week " + weekNumber);
             msg.setText(playersNotPickedYet.toString());
             Transport.send(msg);

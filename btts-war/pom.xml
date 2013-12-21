@@ -7,6 +7,17 @@
     <groupId>com.broughty.btts</groupId>
     <artifactId>btts-war</artifactId>
 
+    <repositories>
+
+    <repository>
+        <id>java-twitter-repository</id>
+        <url>http://java-twitter.googlecode.com/svn/repository/</url>
+        <name>java-twitter maven repository</name>
+    </repository>
+    </repositories>
+
+
+
     <parent>
         <groupId>com.broughty.btts</groupId>
         <artifactId>btts</artifactId>
@@ -75,7 +86,17 @@
             <version>1.5.2</version>
         </dependency>
 
+        <dependency>
+            <groupId>com.twilio.sdk</groupId>
+            <artifactId>twilio-java-sdk</artifactId>
+            <version>3.3.9</version>
+        </dependency>
 
+        <dependency>
+            <groupId>net.unto.twitter</groupId>
+            <artifactId>java-twitter</artifactId>
+            <version>0.9-SNAPSHOT</version>
+        </dependency>
     </dependencies>
       
     <build>

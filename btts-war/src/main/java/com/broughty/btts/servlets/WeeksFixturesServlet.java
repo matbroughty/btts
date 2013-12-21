@@ -1,7 +1,12 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.PlayerEnum;
 import com.broughty.util.ResultsWebPageEnum;
 import com.google.appengine.api.datastore.*;
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
+import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
 import org.joda.time.Days;
@@ -13,13 +18,15 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.jsoup.select.Elements;
 
+import javax.mail.*;
+import javax.mail.internet.*;
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Date;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,6 +40,11 @@ import java.util.logging.Logger;
 public class WeeksFixturesServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(WeeksFixturesServlet.class.getName());
+
+
+    public static final String SMS_ACCOUNT_SID = "AC72bc71950d5db7125e5669b797a9ea26";
+
+    public static final String SMS_AUTH_TOKEN = "9ef3f6d72fffc0bf21283e1e668aba93";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -59,8 +71,10 @@ public class WeeksFixturesServlet extends HttpServlet {
         if (currentWeek != null) {
             weekNumber = (String) currentWeek.getProperty("week");
             startDate = new DateTime(currentWeek.getProperty("startDate"));
-            endDate =  new DateTime(currentWeek.getProperty("endDate"));
+            endDate = new DateTime(currentWeek.getProperty("endDate"));
         }
+
+        twitterAlert(new StringBuilder("Checking live scores for week " + weekNumber));
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
 
@@ -79,75 +93,75 @@ public class WeeksFixturesServlet extends HttpServlet {
 
                 for (Element element : elements) {
 
-                    try{
+                    try {
 
-                    if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
+                        if (!StringUtils.equalsIgnoreCase(element.text(), "fixture")) {
 
-                        String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(),
-                                "This table charts the fixtures during ");
-
-
-                        fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
-                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
-                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
-                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
-                        fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
-                        DateTimeFormatter fmt = new DateTimeFormatterBuilder()
-                                .appendDayOfMonth(2)
-                                .appendLiteral(' ')
-                                .appendMonthOfYearText()
-                                .appendLiteral(' ')
-                                .appendYear(4, 4)
-                                .toFormatter();
+                            String fixtureDateStr = StringUtils.substringAfter(element.parent().parent().parent().child(0).text(),
+                                    "This table charts the fixtures during ");
 
 
-                        DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
-                        DateTime currentDate = new DateTime();
+                            fixtureDateStr = StringUtils.substringAfter(fixtureDateStr, " ");
+                            fixtureDateStr = StringUtils.remove(fixtureDateStr, "th");
+                            fixtureDateStr = StringUtils.remove(fixtureDateStr, "nd");
+                            fixtureDateStr = StringUtils.remove(fixtureDateStr, "rd");
+                            fixtureDateStr = StringUtils.remove(fixtureDateStr, "st");
+                            DateTimeFormatter fmt = new DateTimeFormatterBuilder()
+                                    .appendDayOfMonth(2)
+                                    .appendLiteral(' ')
+                                    .appendMonthOfYearText()
+                                    .appendLiteral(' ')
+                                    .appendYear(4, 4)
+                                    .toFormatter();
 
 
-                        // no point in processing any more data
-                        if (fixtureDate.toDateMidnight().isBefore(startDate.toDateMidnight()) || fixtureDate.toDateMidnight().isAfter(endDate.toDateMidnight())) {
-                            log.log(Level.FINE, "Fixture date  " + fixtureDate.toString() + " is before or after the cut off date.");
-                            break;
-                        }
-
-                        log.log(Level.FINE, ("processing match " + element.text() + " on date: " + fixtureDateStr));
-
-                        // if it contains a " V " then it isn't in progress...
-                        if (!StringUtils.contains(element.text(), " V ") && !StringUtils.contains(element.text(), "P-P")) {
-
-                            String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
-                            Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
-                            log.info("processing home match " + homeTeam + " on score : " + homeTeamScore);
+                            DateTime fixtureDate = fmt.parseDateTime(fixtureDateStr);
+                            DateTime currentDate = new DateTime();
 
 
-                            String awayTeam = StringUtils.substringAfter(StringUtils.substringAfter(element.text(), "-"), " ");
-                            System.out.println("processing away match " + awayTeam);
-                            Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
-                            log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
+                            // no point in processing any more data
+                            if (fixtureDate.toDateMidnight().isBefore(startDate.toDateMidnight()) || fixtureDate.toDateMidnight().isAfter(endDate.toDateMidnight())) {
+                                log.log(Level.FINE, "Fixture date  " + fixtureDate.toString() + " is before or after the cut off date.");
+                                break;
+                            }
 
-                            // have we got a BTTS
-                            if (homeTeamScore > 0 && awayTeamScore > 0) {
+                            log.log(Level.FINE, ("processing match " + element.text() + " on date: " + fixtureDateStr));
+
+                            // if it contains a " V " then it isn't in progress...
+                            if (!StringUtils.containsIgnoreCase(element.text(), " V ") && !StringUtils.containsIgnoreCase(element.text(), "P-P")) {
+
+                                String homeTeam = StringUtils.substringBeforeLast(StringUtils.substringBefore(element.text(), "-"), " ");
+                                Integer homeTeamScore = Integer.valueOf(StringUtils.substringAfterLast(StringUtils.substringBefore(element.text(), "-"), " "));
+                                log.info("processing home match " + homeTeam + " on score : " + homeTeamScore);
 
 
-                                log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
+                                String awayTeam = StringUtils.substringAfter(StringUtils.substringAfter(element.text(), "-"), " ");
+                                System.out.println("processing away match " + awayTeam);
+                                Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
+                                log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
 
-                                responseString.append("Both teams scored in game : ");
-                                responseString.append(homeTeam);
-                                responseString.append("\n");
+                                // have we got a BTTS
+                                if (homeTeamScore > 0 && awayTeamScore > 0) {
 
-                                updateChoices(homeTeam, weekKey, responseString);
+
+                                    log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
+
+                                    responseString.append("Both teams scored in game : ");
+                                    responseString.append(homeTeam);
+                                    responseString.append("\n");
+
+                                    updateChoices(homeTeam, weekKey, responseString);
+
+                                }
 
                             }
 
+
                         }
 
 
-                    }
-
-
-                    }catch(Throwable t){
-                        log.log(Level.WARNING, "Failed to process element " +  element.text() +   " on resultPage  " +    resultPage.getPage(), t);
+                    } catch (Throwable t) {
+                        log.log(Level.WARNING, "Failed to process element " + element.text() + " on resultPage  " + resultPage.getPage(), t);
                     }
 
                 }
@@ -159,7 +173,148 @@ public class WeeksFixturesServlet extends HttpServlet {
             }
         }
 
+
+        alert(weekKey, weekNumber);
+
+
         response.getWriter().write(responseString.toString());
+    }
+
+    private void alert(Key weekKey, String weekNumber) {
+
+        log.info("Checking for BTTS alerts:");
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
+        List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
+
+        for (Entity choice : choices) {
+            // This user has already been notified..
+            String playerName = (String) choice.getProperty("player");
+            if (Boolean.valueOf((Boolean) choice.getProperty("alerted"))) {
+                log.info("Player " + playerName + " has already been notified they have all 4.");
+                continue;
+            }
+            StringBuilder alertString = new StringBuilder();
+            boolean allTeamsScored = false;
+            boolean globalAlert = false;
+            if (PlayerEnum.valueOf(playerName).compareTo(PlayerEnum.Star) == 0) {
+                globalAlert = true;
+                alertString.append("Yes!!!! The main bet came in!");
+            } else {
+                alertString.append(playerName);
+                alertString.append(" got all 4 choices!");
+            }
+            for (int i = 1; i <= 4; i++) {
+                allTeamsScored = (Boolean) choice.getProperty("choice" + i + "Result");
+                alertString.append("\n");
+                alertString.append(choice.getProperty("choice" + i));
+            }
+
+            alertString.append("\n");
+            alertString.append("href=http://btts.broughty.com/summary.jsp?week=");
+            alertString.append(weekNumber);
+
+            if (allTeamsScored) {
+                log.info("All 4 teams scored for " + alertString.toString());
+                emailAlert(alertString, weekNumber, playerName);
+                mobileAlert(alertString, globalAlert, PlayerEnum.valueOf(playerName));
+                twitterAlert(alertString);
+                choice.setProperty("alerted", Boolean.TRUE);
+                datastore.put(choice);
+            }
+        }
+    }
+
+    private void twitterAlert(StringBuilder alertString) {
+        try {
+            // now update twitter:
+            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
+            api.updateStatus(alertString.toString()).build().post();
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
+        }
+    }
+
+    private void mobileAlert(StringBuilder alertString, boolean globalAlert, PlayerEnum playerEnum) {
+        try{
+
+            TwilioRestClient client = new TwilioRestClient(SMS_ACCOUNT_SID, SMS_AUTH_TOKEN);
+
+
+            Map<String, String> params = new HashMap<String, String>();
+
+            params.put("Body", alertString.toString());
+
+            params.put("To", playerEnum.getMobile());
+
+            params.put("From", "+441604422945");
+
+            SmsFactory messageFactory = client.getAccount().getSmsFactory();
+
+            if(StringUtils.isBlank(playerEnum.getMobile())){
+                log.info(playerEnum.getName() + " doesn't have a mobile set.");
+            }else{
+                Sms message = messageFactory.create(params);
+                log.info("Sent SMS message to player " + playerEnum.getName() + " mobile " +
+                        playerEnum.getMobile()+ " price = " + message.getPrice() + " message->" +alertString.toString());
+            }
+
+
+            if(globalAlert){
+                for(PlayerEnum player : PlayerEnum.values()){
+                    if(!StringUtils.isBlank(player.getEmail())){
+                        params.put("To", player.getMobile());
+                        Sms message = messageFactory.create(params);
+                        log.info("Sent SMS message to player " + player.getName() + " mobile " +
+                                player.getMobile()+ " price = " + message.getPrice() + " message->" +alertString.toString());
+
+                    }
+
+
+                }
+            }
+
+        }catch(Throwable t){
+            log.log(Level.SEVERE, "An unhandled mobileAlert error message for alert -> " + alertString, t);
+        }
+
+
+
+
+    }
+
+    private void emailAlert(StringBuilder alertString, String weekNumber, String playerName) {
+        try {
+
+            Properties props = new Properties();
+            Session session = Session.getDefaultInstance(props, null);
+
+            Message msg = new MimeMessage(session);
+
+
+            msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughty.com"));
+            msg.setSubject("BTTS: " + playerName + " got all 4 selections correct! Week " + weekNumber);
+
+            MimeBodyPart htmlPart = new MimeBodyPart();
+            htmlPart.setContent(alertString.toString(), "text/html");
+
+            Multipart mp = new MimeMultipart();
+            mp.addBodyPart(htmlPart);
+            msg.setContent(mp);
+
+            Transport.send(msg);
+
+        } catch (AddressException e) {
+            log.log(Level.SEVERE, "An email AddressException error message.", e);
+        } catch (MessagingException e) {
+            log.log(Level.SEVERE, "An email MessagingException error message.", e);
+        }  catch(Throwable t){
+            log.log(Level.SEVERE, "An unhandled email error message.", t);
+        }
+
+
+
     }
 
     private void updateChoices(String homeTeam, Key weekKey, StringBuilder responseStr) {
@@ -175,11 +330,18 @@ public class WeeksFixturesServlet extends HttpServlet {
                 responseStr.append(choice.getProperty("player"));
 
                 responseStr.append("' selected' ");
-                responseStr.append(homeTeam );
-                responseStr.append("' as choice"+i);
+                responseStr.append(homeTeam);
+                responseStr.append("' as choice" + i);
                 responseStr.append("\n");
                 if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
-                    log.info("Updating Player " + choice.getProperty("player") + " as home team " + homeTeam + " BTTS - this was " + "choice" + i + "Result");
+                    StringBuilder bttsMessage = new StringBuilder("Updating Player' ");
+                    bttsMessage.append(choice.getProperty("player"));
+                    bttsMessage.append("' as both teams scored in home team game: ");
+                    bttsMessage.append(choice.getProperty(homeTeam));
+
+
+                    log.info(bttsMessage.toString() + "choice" + i + "Result");
+                    twitterAlert(bttsMessage);
 
                     choice.setProperty("choice" + i + "Result", Boolean.TRUE);
                     datastore.put(choice);

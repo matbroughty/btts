@@ -200,7 +200,7 @@ public class FinalSelectionsServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipients(Message.RecipientType.TO, PlayerEnum.getMailAddresses());
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughty.com"));
             msg.setSubject("BTTS: Final selections for week " + weekNumber);
             msg.setText(selections.toString());
             Transport.send(msg);
@@ -210,8 +210,6 @@ public class FinalSelectionsServlet extends HttpServlet {
         } catch (MessagingException e) {
             log.log(Level.SEVERE, "An email MessagingException error message.", e);
         }
-
-
 
 
 
