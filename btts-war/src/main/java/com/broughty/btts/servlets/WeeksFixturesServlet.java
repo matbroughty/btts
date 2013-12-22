@@ -343,6 +343,10 @@ public class WeeksFixturesServlet extends HttpServlet {
                     log.info(bttsMessage.toString() + "choice" + i + "Result");
                     twitterAlert(bttsMessage);
 
+                    if(StringUtils.equalsIgnoreCase((String)choice.getProperty("player"), PlayerEnum.Mat.getName())){
+                        mobileAlert(bttsMessage, false, PlayerEnum.Mat);
+                    }
+
                     choice.setProperty("choice" + i + "Result", Boolean.TRUE);
                     datastore.put(choice);
 

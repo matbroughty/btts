@@ -151,9 +151,11 @@
     StringBuilder graphData = new StringBuilder("google.visualization.arrayToDataTable([['Team', 'Votes',{ role: 'style' } ],");
 
     graphTable.append("<table class=\"pure-table pure-table-bordered\">");
-    graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
+    graphTable.append("<caption>Primary Bet Choices</caption>");
+    graphTable.append("<thead><tr><th>Team</th> <th>Votes</th> <th>Result</th> </tr> </thead> ");
     graphTable.append("<tbody>");
     int count = 1;
+    boolean singleChoiceHeaderWritten = false;
     for (String team : teamCount.keySet()) {
 
 
@@ -161,21 +163,23 @@
         if(count == 5){
             graphTable.append("</tbody></table>");
             graphTable.append("<table class=\"pure-table pure-table-bordered\">");
-            graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
+            graphTable.append("<caption>Secondary Bet Choices</caption>");
+            graphTable.append("<thead><tr><th>Team</th> <th>Votes</th> <th>Result</th> </tr> </thead> ");
             graphTable.append("<tbody>");
         }
 
         // end of processing - single selection teams don't get a look in.
-        if(teamCount.get(team).intValue() == 1){
+        if(teamCount.get(team).intValue() == 1 && !singleChoiceHeaderWritten){
             graphTable.append("</tbody></table>");
             graphTable.append("<table class=\"pure-table pure-table-bordered\">");
-            graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
+            graphTable.append("<caption>Single Vote Choices</caption>");
+            graphTable.append("<thead><tr><th>Team</th> <th>Votes</th> <th>Result</th> </tr> </thead> ");
             graphTable.append("<tbody>");
-            break;
+            singleChoiceHeaderWritten = true;
         }
 
 
-           
+
         if (count % 2 == 0) {
             graphTable.append("<tr class=\"pure-table-odd\">");
         } else {
@@ -279,11 +283,6 @@
             <div id="chart_div" style="width: 1300px; height: 650px;"></div>
         </div>
 
-    </div>
-    <div class="pure-g l-box">
-        <div class="pure-u-1 l-box">
-            <%= graphTable.toString() %>
-        </div>
     </div>
     <div class="pure-g l-box">
         <div class="pure-u-1 l-box">
