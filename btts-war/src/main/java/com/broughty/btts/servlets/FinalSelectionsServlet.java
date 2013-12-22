@@ -2,6 +2,7 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
+import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 
 import javax.mail.Message;
@@ -194,6 +195,23 @@ public class FinalSelectionsServlet extends HttpServlet {
         datastore.put(secondarySelections);
         datastore.put(starPlayerChoice);
 
+        StringBuilder starPlayerTwitter = new StringBuilder();
+        starPlayerTwitter.append(PlayerEnum.Star.toString());
+        starPlayerTwitter.append(" Week ");
+        starPlayerTwitter.append(weekNumber);
+        starPlayerTwitter.append("\n");
+        starPlayerTwitter.append(starPlayerChoice.getProperty("choice1"));
+        starPlayerTwitter.append(":");
+        starPlayerTwitter.append(starPlayerChoice.getProperty("choice2"));
+        starPlayerTwitter.append(":");
+        starPlayerTwitter.append(starPlayerChoice.getProperty("choice3"));
+        starPlayerTwitter.append(":");
+        starPlayerTwitter.append(starPlayerChoice.getProperty("choice4"));
+        starPlayerTwitter.append("\n. http://btts.broughty.com/summary.jsp?week=");
+        starPlayerTwitter.append(weekNumber);
+
+
+
 
         try {
             Message msg = new MimeMessage(session);
@@ -204,6 +222,8 @@ public class FinalSelectionsServlet extends HttpServlet {
             msg.setSubject("BTTS: Final selections for week " + weekNumber);
             msg.setText(selections.toString());
             Transport.send(msg);
+
+            TwitterHelper.updateStatus(starPlayerTwitter.toString());
 
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);

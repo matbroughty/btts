@@ -1,6 +1,7 @@
 package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
+import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 
 import javax.mail.Message;
@@ -90,6 +91,8 @@ public class ReminderServlet extends HttpServlet {
             msg.setSubject("BTTS: Reminder for week " + weekNumber);
             msg.setText(playersNotPickedYet.toString());
             Transport.send(msg);
+
+            TwitterHelper.updateStatus("BTTS: Reminder for week " + weekNumber + "!\n" + playersNotPickedYet.toString());
 
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);

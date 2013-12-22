@@ -54,6 +54,13 @@ public class EmailResultsServlet extends HttpServlet {
 
         log.info("Processing reminder for week " + weekNumber);
 
+        StringBuilder resultsTwitter  = new StringBuilder("Final results in for week' ");
+        resultsTwitter.append(weekNumber);
+        resultsTwitter.append("' are in!\n. http://btts.broughty.com/summary.jsp?week=");
+        resultsTwitter.append(weekNumber);
+        twitterAlert(resultsTwitter);
+
+
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
         Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
@@ -78,13 +85,46 @@ public class EmailResultsServlet extends HttpServlet {
         for (Entity choice : choices) {
 
 
+            StringBuilder twitterPlayerResult = new StringBuilder();
+
+            String playerName = (String) choice.getProperty("player");
+
+            twitterPlayerResult.append(playerName);
+            twitterPlayerResult.append(" results week ");
+            twitterPlayerResult.append(weekNumber);
+            twitterPlayerResult.append("\n");
+
             String choice1 = (String) choice.getProperty("choice1");
+            boolean success1 = bothTeamsScored(choice.getProperty("choice1Result"));
+            twitterPlayerResult.append(choice1);
+            twitterPlayerResult.append(":");
+            twitterPlayerResult.append(Boolean.toString(success1));
+            twitterPlayerResult.append("\n");
 
             String choice2 = (String) choice.getProperty("choice2");
+            boolean success2 = bothTeamsScored(choice.getProperty("choice2Result"));
+
+            twitterPlayerResult.append(choice2);
+            twitterPlayerResult.append(":");
+            twitterPlayerResult.append(Boolean.toString(success2));
+            twitterPlayerResult.append("\n");
 
             String choice3 = (String) choice.getProperty("choice3");
+            boolean success3 = bothTeamsScored(choice.getProperty("choice3Result"));
+
+            twitterPlayerResult.append(choice3);
+            twitterPlayerResult.append(":");
+            twitterPlayerResult.append(Boolean.toString(success3));
+            twitterPlayerResult.append("\n");
 
             String choice4 = (String) choice.getProperty("choice4");
+            boolean success4 = bothTeamsScored(choice.getProperty("choice4Result"));
+
+            twitterPlayerResult.append(choice4);
+            twitterPlayerResult.append(":");
+            twitterPlayerResult.append(Boolean.toString(success4));
+            twitterPlayerResult.append("");
+
             if (i % 2 == 0) {
                 playerTable.append("<tr class=\"pure-table-odd\">");
             } else {
@@ -93,19 +133,24 @@ public class EmailResultsServlet extends HttpServlet {
 
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
 
-            playerTable.append("<td>").append((String) choice.getProperty("player")).append("</td>");
+            playerTable.append("<td>").append(playerName).append("</td>");
             playerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             playerTable.append("<td>").append(choice1).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice1Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(success1 ? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("<td>").append(choice2).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice2Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(success2 ? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("<td>").append(choice3).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice3Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(success3 ? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice4Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(success4? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("</tr>");
 
             i++;
+
+
+
+
+            twitterAlert(twitterPlayerResult);
 
         }
 
@@ -136,11 +181,7 @@ public class EmailResultsServlet extends HttpServlet {
 
             Transport.send(msg);
 
-            StringBuilder resultsTwitter  = new StringBuilder("Final results in for week' ");
-            resultsTwitter.append(weekNumber);
-            resultsTwitter.append("' are in!\n. http://btts.broughty.com/summary.jsp?week=");
-            resultsTwitter.append(weekNumber);
-            twitterAlert(resultsTwitter);
+
 
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);

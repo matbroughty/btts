@@ -153,13 +153,36 @@
     graphTable.append("<table class=\"pure-table pure-table-bordered\">");
     graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
     graphTable.append("<tbody>");
-    int i = 1;
+    int count = 1;
     for (String team : teamCount.keySet()) {
-        if (i % 2 == 0) {
+
+
+
+        if(count == 5){
+            graphTable.append("</tbody></table>");
+            graphTable.append("<table class=\"pure-table pure-table-bordered\">");
+            graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
+            graphTable.append("<tbody>");
+        }
+
+        // end of processing - single selection teams don't get a look in.
+        if(teamCount.get(team).intValue() == 1){
+            graphTable.append("</tbody></table>");
+            graphTable.append("<table class=\"pure-table pure-table-bordered\">");
+            graphTable.append("<thead><tr><th>Team</th> <th>Score</th> <th>Result</th> </tr> </thead> ");
+            graphTable.append("<tbody>");
+            break;
+        }
+
+
+           
+        if (count % 2 == 0) {
             graphTable.append("<tr class=\"pure-table-odd\">");
         } else {
             graphTable.append("<tr>");
         }
+
+
         graphTable.append("<td>").append(team).append("</td>");
         graphTable.append("<td>").append(teamCount.get(team)).append("</td>");
         graphTable.append("<td>").append(homeTeamsBothScored.contains(team) ? "&#10004;" : "&#10008;").append("</td>");
@@ -172,11 +195,15 @@
         graphData.append(", '");
         graphData.append(homeTeamsBothScored.contains(team) ? "red" : "black");
         graphData.append("'],");
-        i++;
+        count++;
     }
     graphTable.append("</tbody></table>");
     graphData.deleteCharAt(graphData.length() - 1);
     graphData.append("]);");
+
+
+
+
 
 
 %>
@@ -249,7 +276,7 @@
         <div class="pure-u-1 l-box">
             <h2 class="content-subhead">Week <%= weekNumber%> combined table</h2>
 
-            <div id="chart_div" style="width: 900px; height: 650px;"></div>
+            <div id="chart_div" style="width: 1300px; height: 650px;"></div>
         </div>
 
     </div>
@@ -258,10 +285,15 @@
             <%= graphTable.toString() %>
         </div>
     </div>
+    <div class="pure-g l-box">
+        <div class="pure-u-1 l-box">
+            <%= graphTable.toString() %>
+        </div>
     </div>
-    <footer>
-        &copy; 2013 Broughty Co
-    </footer>
+</div>
+<footer>
+    &copy; 2013 Broughty Co
+</footer>
 </body>
 </html>
 

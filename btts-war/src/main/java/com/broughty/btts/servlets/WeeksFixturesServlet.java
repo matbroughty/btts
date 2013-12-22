@@ -75,7 +75,7 @@ public class WeeksFixturesServlet extends HttpServlet {
             endDate = new DateTime(currentWeek.getProperty("endDate"));
         }
 
-        twitterAlert(new StringBuilder("Checking live scores for week " + weekNumber));
+        twitterAlert(new StringBuilder("Checking live scores for week " + weekNumber + " at time " + new Date().toString()));
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
 
@@ -197,9 +197,9 @@ public class WeeksFixturesServlet extends HttpServlet {
                 continue;
             }
             StringBuilder alertString = new StringBuilder();
-            boolean allTeamsScored = false;
+            boolean[] allTeamsScored = new boolean[4];
             boolean globalAlert = false;
-            if (StringUtils.contains(PlayerEnum.Star.getName(), playerName)) {
+            if (StringUtils.contains(playerName, PlayerEnum.Star.toString())) {
                 globalAlert = true;
                 alertString.append("Yes!!!! The main bet came in!");
             } else {
@@ -207,16 +207,16 @@ public class WeeksFixturesServlet extends HttpServlet {
                 alertString.append(" got all 4 choices!");
             }
             for (int i = 1; i <= 4; i++) {
-                allTeamsScored = (Boolean) choice.getProperty("choice" + i + "Result");
+                allTeamsScored[i-1] = (Boolean) choice.getProperty("choice" + i + "Result");
                 alertString.append("\n");
                 alertString.append(choice.getProperty("choice" + i));
             }
 
             alertString.append("\n");
-            alertString.append("href=http://btts.broughty.com/summary.jsp?week=");
+            alertString.append("http://btts.broughty.com/summary.jsp?week=");
             alertString.append(weekNumber);
 
-            if (allTeamsScored) {
+            if (allTeamsScored[0] && allTeamsScored[1] && allTeamsScored[2] && allTeamsScored[3]) {
                 log.info("All 4 teams scored for " + alertString.toString());
                 emailAlert(alertString, weekNumber, playerName);
                 mobileAlert(alertString, globalAlert, PlayerEnum.valueOf(playerName));
@@ -334,10 +334,10 @@ public class WeeksFixturesServlet extends HttpServlet {
                 responseStr.append("' as choice" + i);
                 responseStr.append("\n");
                 if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
-                    StringBuilder bttsMessage = new StringBuilder("Updating Player' ");
+                    StringBuilder bttsMessage = new StringBuilder("Updating Player '");
                     bttsMessage.append(choice.getProperty("player"));
                     bttsMessage.append("' as both teams scored in home team game: ");
-                    bttsMessage.append(choice.getProperty(homeTeam));
+                    bttsMessage.append(choice.getProperty("choice" + i));
 
 
                     log.info(bttsMessage.toString() + "choice" + i + "Result");
@@ -345,6 +345,50 @@ public class WeeksFixturesServlet extends HttpServlet {
 
                     choice.setProperty("choice" + i + "Result", Boolean.TRUE);
                     datastore.put(choice);
+
+
+                    // now tell the updated player how they are doing...
+                    StringBuilder twitterPlayerResult = new StringBuilder();
+
+                    String playerName = (String) choice.getProperty("player");
+
+                    twitterPlayerResult.append(playerName);
+                    twitterPlayerResult.append(" results so far ");
+                    twitterPlayerResult.append("\n");
+
+                    String choice1 = (String) choice.getProperty("choice1");
+                    boolean success1 = bothTeamsScored(choice.getProperty("choice1Result"));
+                    twitterPlayerResult.append(choice1);
+                    twitterPlayerResult.append(":");
+                    twitterPlayerResult.append(Boolean.toString(success1));
+                    twitterPlayerResult.append("\n");
+
+                    String choice2 = (String) choice.getProperty("choice2");
+                    boolean success2 = bothTeamsScored(choice.getProperty("choice2Result"));
+
+                    twitterPlayerResult.append(choice2);
+                    twitterPlayerResult.append(":");
+                    twitterPlayerResult.append(Boolean.toString(success2));
+                    twitterPlayerResult.append("\n");
+
+                    String choice3 = (String) choice.getProperty("choice3");
+                    boolean success3 = bothTeamsScored(choice.getProperty("choice3Result"));
+
+                    twitterPlayerResult.append(choice3);
+                    twitterPlayerResult.append(":");
+                    twitterPlayerResult.append(Boolean.toString(success3));
+                    twitterPlayerResult.append("\n");
+
+                    String choice4 = (String) choice.getProperty("choice4");
+                    boolean success4 = bothTeamsScored(choice.getProperty("choice4Result"));
+
+                    twitterPlayerResult.append(choice4);
+                    twitterPlayerResult.append(":");
+                    twitterPlayerResult.append(Boolean.toString(success4));
+                    twitterPlayerResult.append("");
+
+                    twitterAlert(twitterPlayerResult);
+
                 }
             }
 
@@ -353,4 +397,11 @@ public class WeeksFixturesServlet extends HttpServlet {
 
 
     }
+
+
+    private boolean bothTeamsScored(Object choiceResult) {
+        return choiceResult != null ? Boolean.valueOf((Boolean) choiceResult) : false;
+    }
+
+
 }

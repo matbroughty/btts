@@ -2,6 +2,7 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
+import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
@@ -184,7 +185,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
 
             msg.setFrom(new InternetAddress("broughty@broughtybtts.appspotmail.com", "Broughty.com Admin"));
-            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughyt.com"));
+            msg.addRecipient(Message.RecipientType.TO, new InternetAddress("btts@broughty.com"));
 
 
             msg.setSubject("BTTS: Player " + playerName + " submitted choices for week " + weekNumber);
@@ -200,9 +201,7 @@ public class WeeksChoicesServlet extends HttpServlet {
             Transport.send(msg);
 
 
-            // now update twitter:
-            Api api = Api.builder().username("broughty_btts").password("0Password1").build();
-            api.updateStatus(playerChoiceTwitter.toString()).build().post();
+            TwitterHelper.updateStatus(playerChoiceTwitter.toString());
 
 
         } catch (AddressException e) {
