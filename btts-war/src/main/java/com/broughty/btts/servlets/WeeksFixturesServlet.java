@@ -2,6 +2,7 @@ package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
 import com.broughty.util.ResultsWebPageEnum;
+import com.broughty.util.SmsHelper;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import com.twilio.sdk.TwilioRestClient;
@@ -41,11 +42,6 @@ import java.util.logging.Logger;
 public class WeeksFixturesServlet extends HttpServlet {
 
     private static final Logger log = Logger.getLogger(WeeksFixturesServlet.class.getName());
-
-
-    public static final String SMS_ACCOUNT_SID = "AC72bc71950d5db7125e5669b797a9ea26";
-
-    public static final String SMS_AUTH_TOKEN = "9ef3f6d72fffc0bf21283e1e668aba93";
 
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
@@ -219,7 +215,7 @@ public class WeeksFixturesServlet extends HttpServlet {
             if (allTeamsScored[0] && allTeamsScored[1] && allTeamsScored[2] && allTeamsScored[3]) {
                 log.info("All 4 teams scored for " + alertString.toString());
                 emailAlert(alertString, weekNumber, playerName);
-                mobileAlert(alertString, globalAlert, PlayerEnum.valueOf(playerName));
+                SmsHelper.mobileAlert(alertString, globalAlert, PlayerEnum.valueOf(playerName));
                 twitterAlert(alertString);
                 choice.setProperty("alerted", Boolean.TRUE);
                 datastore.put(choice);
@@ -235,53 +231,7 @@ public class WeeksFixturesServlet extends HttpServlet {
         }
     }
 
-    private void mobileAlert(StringBuilder alertString, boolean globalAlert, PlayerEnum playerEnum) {
-        try{
 
-            TwilioRestClient client = new TwilioRestClient(SMS_ACCOUNT_SID, SMS_AUTH_TOKEN);
-
-
-            Map<String, String> params = new HashMap<String, String>();
-
-            params.put("Body", alertString.toString());
-
-            params.put("To", playerEnum.getMobile());
-
-            params.put("From", "+441604422945");
-
-            SmsFactory messageFactory = client.getAccount().getSmsFactory();
-
-            if(StringUtils.isBlank(playerEnum.getMobile())){
-                log.info(playerEnum.getName() + " doesn't have a mobile set.");
-            }else{
-                Sms message = messageFactory.create(params);
-                log.info("Sent SMS message to player " + playerEnum.getName() + " mobile " +
-                        playerEnum.getMobile()+ " price = " + message.getPrice() + " message->" +alertString.toString());
-            }
-
-
-            if(globalAlert){
-                for(PlayerEnum player : PlayerEnum.values()){
-                    if(!StringUtils.isBlank(player.getEmail())){
-                        params.put("To", player.getMobile());
-                        Sms message = messageFactory.create(params);
-                        log.info("Sent SMS message to player " + player.getName() + " mobile " +
-                                player.getMobile()+ " price = " + message.getPrice() + " message->" +alertString.toString());
-
-                    }
-
-
-                }
-            }
-
-        }catch(Throwable t){
-            log.log(Level.SEVERE, "An unhandled mobileAlert error message for alert -> " + alertString, t);
-        }
-
-
-
-
-    }
 
     private void emailAlert(StringBuilder alertString, String weekNumber, String playerName) {
         try {
@@ -344,7 +294,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                     twitterAlert(bttsMessage);
 
                     if(StringUtils.equalsIgnoreCase((String)choice.getProperty("player"), PlayerEnum.Mat.getName())){
-                        mobileAlert(bttsMessage, false, PlayerEnum.Mat);
+                        SmsHelper.mobileAlert(bttsMessage, false, PlayerEnum.Mat);
                     }
 
                     choice.setProperty("choice" + i + "Result", Boolean.TRUE);

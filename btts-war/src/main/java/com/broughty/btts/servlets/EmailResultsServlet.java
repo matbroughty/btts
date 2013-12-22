@@ -1,9 +1,14 @@
 package com.broughty.btts.servlets;
 
 import com.broughty.util.PlayerEnum;
+import com.broughty.util.SmsHelper;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
+import com.twilio.sdk.TwilioRestClient;
+import com.twilio.sdk.resource.factory.SmsFactory;
+import com.twilio.sdk.resource.instance.Sms;
 import net.unto.twitter.Api;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -14,7 +19,9 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -54,7 +61,7 @@ public class EmailResultsServlet extends HttpServlet {
 
         log.info("Processing reminder for week " + weekNumber);
 
-        StringBuilder resultsTwitter  = new StringBuilder("Final results in for week' ");
+        StringBuilder resultsTwitter = new StringBuilder("Final results in for week' ");
         resultsTwitter.append(weekNumber);
         resultsTwitter.append("' are in!\n. http://btts.broughty.com/summary.jsp?week=");
         resultsTwitter.append(weekNumber);
@@ -92,7 +99,7 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(playerName);
             twitterPlayerResult.append(" results week ");
             twitterPlayerResult.append(weekNumber);
-            twitterPlayerResult.append("\n");
+            twitterPlayerResult.append(":\n");
 
             String choice1 = (String) choice.getProperty("choice1");
             boolean success1 = bothTeamsScored(choice.getProperty("choice1Result"));
@@ -142,13 +149,15 @@ public class EmailResultsServlet extends HttpServlet {
             playerTable.append("<td>").append(choice3).append("</td>");
             playerTable.append("<td>").append(success3 ? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
-            playerTable.append("<td>").append(success4? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(success4 ? "&#10004;" : "&#10008;").append("</td>");
             playerTable.append("</tr>");
 
             i++;
 
 
-
+            if (!StringUtils.contains(playerName, "Star")) {
+                SmsHelper.mobileAlert(twitterPlayerResult, false, PlayerEnum.valueOf(playerName));
+            }
 
             twitterAlert(twitterPlayerResult);
 
@@ -182,7 +191,6 @@ public class EmailResultsServlet extends HttpServlet {
             Transport.send(msg);
 
 
-
         } catch (AddressException e) {
             log.log(Level.SEVERE, "An email AddressException error message.", e);
         } catch (MessagingException e) {
@@ -207,4 +215,6 @@ public class EmailResultsServlet extends HttpServlet {
     private boolean bothTeamsScored(Object choiceResult) {
         return choiceResult != null ? Boolean.valueOf((Boolean) choiceResult) : false;
     }
+
+
 }

@@ -31,6 +31,14 @@
         <servlet-name>EmailResultsServlet</servlet-name>
         <servlet-class>com.broughty.btts.servlets.EmailResultsServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>SmsReceivingServlet</servlet-name>
+        <servlet-class>com.broughty.btts.servlets.SmsReceivingServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>SmsReceivingServlet</servlet-name>
+        <url-pattern>/sms</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>hello</servlet-name>
         <url-pattern>/hello</url-pattern>
