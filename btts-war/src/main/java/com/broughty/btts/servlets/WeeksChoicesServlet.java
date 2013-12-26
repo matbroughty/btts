@@ -1,12 +1,11 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.BTTSHelper;
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
-import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
-import org.joda.time.DateTime;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -67,10 +66,14 @@ public class WeeksChoicesServlet extends HttpServlet {
             playerChoice.setProperty("choice2", choice2);
             playerChoice.setProperty("choice3", choice3);
             playerChoice.setProperty("choice4", choice4);
-            playerChoice.setProperty("choice1Result", Boolean.FALSE);
-            playerChoice.setProperty("choice2Result", Boolean.FALSE);
-            playerChoice.setProperty("choice3Result", Boolean.FALSE);
-            playerChoice.setProperty("choice4Result", Boolean.FALSE);
+            playerChoice.setProperty("choice1Result", null);
+            playerChoice.setProperty("choice2Result", null);
+            playerChoice.setProperty("choice3Result", null);
+            playerChoice.setProperty("choice4Result", null);
+            playerChoice.setProperty("choice1Points", BTTSHelper.SCORELESS);
+            playerChoice.setProperty("choice2Points", BTTSHelper.SCORELESS);
+            playerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
+            playerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
             playerChoice.setProperty("alerted", Boolean.FALSE);
 
         } else {
@@ -84,10 +87,14 @@ public class WeeksChoicesServlet extends HttpServlet {
                 playerChoice.setProperty("choice2", choice2);
                 playerChoice.setProperty("choice3", choice3);
                 playerChoice.setProperty("choice4", choice4);
-                playerChoice.setProperty("choice1Result", Boolean.FALSE);
-                playerChoice.setProperty("choice2Result", Boolean.FALSE);
-                playerChoice.setProperty("choice3Result", Boolean.FALSE);
-                playerChoice.setProperty("choice4Result", Boolean.FALSE);
+                playerChoice.setProperty("choice1Result", null);
+                playerChoice.setProperty("choice2Result", null);
+                playerChoice.setProperty("choice3Result", null);
+                playerChoice.setProperty("choice4Result", null);
+                playerChoice.setProperty("choice1Points", BTTSHelper.SCORELESS);
+                playerChoice.setProperty("choice2Points", BTTSHelper.SCORELESS);
+                playerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
+                playerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
                 playerChoice.setProperty("alerted", Boolean.FALSE);
             }
         }
@@ -146,7 +153,6 @@ public class WeeksChoicesServlet extends HttpServlet {
         playerChoiceTable.append(previousSelections(datastore, weekKey, weekNumber, teamCount));
 
         playerChoiceTable.append("</div></div>");
-
 
 
         playerChoiceTable.append("    <div class=\"pure-g \">\n" +
@@ -235,7 +241,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         graphTable.append("<td>").append(simpleDateFormat.format(new Date())).append("</td>");
         for (String team : teamCount.keySet()) {
             // only first 4
-            if(i > 4){
+            if (i > 4) {
                 break;
             }
             graphTable.append("<td>").append(team).append("(").append(teamCount.get(team)).append(")").append("</td>");
@@ -260,7 +266,6 @@ public class WeeksChoicesServlet extends HttpServlet {
         allPlayerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
-
 
 
             String choice1 = (String) choice.getProperty("choice1");
@@ -296,8 +301,6 @@ public class WeeksChoicesServlet extends HttpServlet {
             } else {
                 totals.put(choice4, new Integer(1));
             }
-
-
 
 
             if (i % 2 == 0) {

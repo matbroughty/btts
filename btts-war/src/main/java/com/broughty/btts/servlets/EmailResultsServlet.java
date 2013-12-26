@@ -1,13 +1,10 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.BTTSHelper;
 import com.broughty.util.PlayerEnum;
 import com.broughty.util.SmsHelper;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
-import com.twilio.sdk.TwilioRestClient;
-import com.twilio.sdk.resource.factory.SmsFactory;
-import com.twilio.sdk.resource.instance.Sms;
-import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.mail.*;
@@ -19,9 +16,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -102,34 +97,27 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(":\n");
 
             String choice1 = (String) choice.getProperty("choice1");
-            boolean success1 = bothTeamsScored(choice.getProperty("choice1Result"));
             twitterPlayerResult.append(choice1);
             twitterPlayerResult.append(":");
-            twitterPlayerResult.append(Boolean.toString(success1));
+            twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice1Result")));
             twitterPlayerResult.append("\n");
 
             String choice2 = (String) choice.getProperty("choice2");
-            boolean success2 = bothTeamsScored(choice.getProperty("choice2Result"));
-
             twitterPlayerResult.append(choice2);
             twitterPlayerResult.append(":");
-            twitterPlayerResult.append(Boolean.toString(success2));
+            twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice2Result")));
             twitterPlayerResult.append("\n");
 
             String choice3 = (String) choice.getProperty("choice3");
-            boolean success3 = bothTeamsScored(choice.getProperty("choice3Result"));
-
             twitterPlayerResult.append(choice3);
             twitterPlayerResult.append(":");
-            twitterPlayerResult.append(Boolean.toString(success3));
+            twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice3Result")));
             twitterPlayerResult.append("\n");
 
             String choice4 = (String) choice.getProperty("choice4");
-            boolean success4 = bothTeamsScored(choice.getProperty("choice4Result"));
-
             twitterPlayerResult.append(choice4);
             twitterPlayerResult.append(":");
-            twitterPlayerResult.append(Boolean.toString(success4));
+            twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice4Result")));
             twitterPlayerResult.append("");
 
             if (i % 2 == 0) {
@@ -143,13 +131,16 @@ public class EmailResultsServlet extends HttpServlet {
             playerTable.append("<td>").append(playerName).append("</td>");
             playerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             playerTable.append("<td>").append(choice1).append("</td>");
-            playerTable.append("<td>").append(success1 ? "&#10004;" : "&#10008;").append("</td>");
+
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice1Result"))).append("</td>");
             playerTable.append("<td>").append(choice2).append("</td>");
-            playerTable.append("<td>").append(success2 ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice2Result"))).append("</td>");
             playerTable.append("<td>").append(choice3).append("</td>");
-            playerTable.append("<td>").append(success3 ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice3Result"))).append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
-            playerTable.append("<td>").append(success4 ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice4Result"))).append("</td>");
+
+
             playerTable.append("</tr>");
 
             i++;

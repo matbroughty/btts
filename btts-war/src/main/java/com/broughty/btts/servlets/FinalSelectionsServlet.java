@@ -52,7 +52,7 @@ public class FinalSelectionsServlet extends HttpServlet {
         String weekNumber = "N/A";
         if (currentWeek != null) {
             weekNumber = (String) currentWeek.getProperty("week");
-        }else{
+        } else {
             log.warning("Week not set " + weekNumber);
             return;
         }
@@ -64,7 +64,6 @@ public class FinalSelectionsServlet extends HttpServlet {
         //log.info("Incremented current week to " + Integer.toString(Integer.valueOf(weekNumber) + 1));
 
 
-
         log.info("Processing Final Selections for week " + weekNumber);
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
@@ -72,15 +71,14 @@ public class FinalSelectionsServlet extends HttpServlet {
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
         Entity primeSelections = datastore.prepare(new Query("PrimeSelections", weekKey)).asSingleEntity();
-        if(primeSelections == null){
+        if (primeSelections == null) {
             primeSelections = new Entity("PrimeSelections", weekKey);
         }
 
         Entity secondarySelections = datastore.prepare(new Query("SecondarySelections", weekKey)).asSingleEntity();
-        if(secondarySelections == null){
+        if (secondarySelections == null) {
             secondarySelections = new Entity("SecondarySelections", weekKey);
         }
-
 
 
         // get the start player i.e. the top 4 choices.
@@ -88,7 +86,7 @@ public class FinalSelectionsServlet extends HttpServlet {
         query.setAncestor(weekKey).addFilter("player", Query.FilterOperator.EQUAL, PlayerEnum.Star.getName());
         pq = datastore.prepare(query);
         Entity starPlayerChoice = pq.asSingleEntity();
-        if(starPlayerChoice == null){
+        if (starPlayerChoice == null) {
             starPlayerChoice = new Entity("Choices", weekKey);
             starPlayerChoice.setProperty("player", PlayerEnum.Star.getName());
             starPlayerChoice.setProperty("date", new Date());
@@ -151,16 +149,16 @@ public class FinalSelectionsServlet extends HttpServlet {
         int count = 1;
         int secondarySelectionsCount = 1;
         for (String team : teamCount.keySet()) {
-            if(count == 1){
+            if (count == 1) {
                 selections.append("Prime Selections Start:  \n");
             }
 
-            if(count == 5){
+            if (count == 5) {
                 selections.append("Secondary Selections Start: \n");
             }
 
             // end of processing - single selection teams don't get a look in.
-            if(teamCount.get(team).intValue() == 1){
+            if (teamCount.get(team).intValue() == 1) {
                 selections.append("Secondary Selections End: \n");
                 break;
             }
@@ -171,23 +169,23 @@ public class FinalSelectionsServlet extends HttpServlet {
             selections.append(teamCount.get(team));
             selections.append("' times. \n");
 
-            if(count >= 1 && count < 5){
+            if (count >= 1 && count < 5) {
                 starPlayerChoice.setProperty("choice" + count, team);
                 primeSelections.setProperty("choice" + count, team);
-                primeSelections.setProperty("choice"+count+"count", teamCount.get(team));
-                primeSelections.setProperty("choice"+count+"success", Boolean.FALSE);
-            }else{
+                primeSelections.setProperty("choice" + count + "count", teamCount.get(team));
+                primeSelections.setProperty("choice" + count + "success", Boolean.FALSE);
+            } else {
                 secondarySelections.setProperty("choice" + secondarySelectionsCount, team);
-                secondarySelections.setProperty("choice"+secondarySelectionsCount+"count", teamCount.get(team));
-                secondarySelections.setProperty("choice"+secondarySelectionsCount+"success", Boolean.FALSE);
-                secondarySelectionsCount ++;
+                secondarySelections.setProperty("choice" + secondarySelectionsCount + "count", teamCount.get(team));
+                secondarySelections.setProperty("choice" + secondarySelectionsCount + "success", Boolean.FALSE);
+                secondarySelectionsCount++;
             }
 
-            if(count == 4){
+            if (count == 4) {
                 selections.append("Prime Selections End. \n");
             }
 
-            count ++;
+            count++;
 
         }
 
@@ -211,8 +209,6 @@ public class FinalSelectionsServlet extends HttpServlet {
         starPlayerTwitter.append(weekNumber);
 
 
-
-
         try {
             Message msg = new MimeMessage(session);
 
@@ -230,7 +226,6 @@ public class FinalSelectionsServlet extends HttpServlet {
         } catch (MessagingException e) {
             log.log(Level.SEVERE, "An email MessagingException error message.", e);
         }
-
 
 
         response.sendRedirect("/emailresponse.jsp?message=" + selections.toString());

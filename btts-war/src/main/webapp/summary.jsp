@@ -4,6 +4,7 @@
 <%@ page import="com.broughty.util.MapUtil" %>
 <%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ page import="com.google.appengine.api.datastore.*" %>
+<%@ page import="com.broughty.util.BTTSHelper" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -43,15 +44,7 @@
     StringBuilder graphTable = new StringBuilder();
     String weekNumber = request.getParameter("week");
     if (StringUtils.isBlank(weekNumber)) {
-
-        Query q = new Query("CurrentWeek");
-        PreparedQuery pq = datastore.prepare(q);
-
-        Entity currentWeek = pq.asSingleEntity();
-        weekNumber = "N/A";
-        if (currentWeek != null) {
-            weekNumber = (String) currentWeek.getProperty("week");
-        }
+        weekNumber = BTTSHelper.getCurrentWeek();
     }
 
 
@@ -121,13 +114,13 @@
             playerTable.append("<td>").append((String) choice.getProperty("player")).append("</td>");
             playerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             playerTable.append("<td>").append(choice1).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice1Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice1Result"))).append("</td>");
             playerTable.append("<td>").append(choice2).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice2Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice2Result"))).append("</td>");
             playerTable.append("<td>").append(choice3).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice3Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice3Result"))).append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
-            playerTable.append("<td>").append(bothTeamsScored(choice.getProperty("choice4Result")) ? "&#10004;" : "&#10008;").append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice4Result"))).append("</td>");
             playerTable.append("</tr>");
 
 
@@ -295,9 +288,3 @@
 </footer>
 </body>
 </html>
-
-<%!
-    private boolean bothTeamsScored(Object choiceResult) {
-        return choiceResult != null ? Boolean.valueOf((Boolean) choiceResult) : false;
-    }
-%>

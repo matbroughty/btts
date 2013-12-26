@@ -1,6 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ page import="com.broughty.util.PlayerEnum" %>
+<%@ page import="com.broughty.util.BTTSHelper" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -40,16 +41,8 @@
 <body>
 
 <%
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
-    Query q = new Query("CurrentWeek");
-    PreparedQuery pq = datastore.prepare(q);
-
-    Entity currentWeek = pq.asSingleEntity();
-    String week = "N/A";
-    if (currentWeek != null) {
-        week = (String) currentWeek.getProperty("week");
-    }
+    String week = BTTSHelper.getCurrentWeek();
 
     StringBuilder playerListOption = new StringBuilder();
 

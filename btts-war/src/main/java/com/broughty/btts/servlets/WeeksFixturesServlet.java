@@ -1,17 +1,9 @@
 package com.broughty.btts.servlets;
 
-import com.broughty.util.PlayerEnum;
-import com.broughty.util.ResultsWebPageEnum;
-import com.broughty.util.SmsHelper;
-import com.broughty.util.TwitterHelper;
+import com.broughty.util.*;
 import com.google.appengine.api.datastore.*;
-import com.twilio.sdk.TwilioRestClient;
-import com.twilio.sdk.resource.factory.SmsFactory;
-import com.twilio.sdk.resource.instance.Sms;
-import net.unto.twitter.Api;
 import org.apache.commons.lang3.StringUtils;
 import org.joda.time.DateTime;
-import org.joda.time.Days;
 import org.joda.time.format.DateTimeFormatter;
 import org.joda.time.format.DateTimeFormatterBuilder;
 import org.jsoup.Connection;
@@ -28,7 +20,9 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
+import java.util.Properties;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -46,7 +40,6 @@ public class WeeksFixturesServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -69,6 +62,14 @@ public class WeeksFixturesServlet extends HttpServlet {
             weekNumber = (String) currentWeek.getProperty("week");
             startDate = new DateTime(currentWeek.getProperty("startDate"));
             endDate = new DateTime(currentWeek.getProperty("endDate"));
+        }
+
+
+        String mobileNumber = request.getParameter("mobile");
+
+        if (StringUtils.isNotBlank(mobileNumber)) {
+            twitterAlert(new StringBuilder("Refresh request from mobile ending  ").append(StringUtils.right(mobileNumber, 5)));
+
         }
 
         twitterAlert(new StringBuilder("Checking live scores for week " + weekNumber + " at time " + new Date().toString()));
@@ -137,19 +138,10 @@ public class WeeksFixturesServlet extends HttpServlet {
                                 Integer awayTeamScore = Integer.valueOf(StringUtils.substringBefore(StringUtils.substringAfter(element.text(), "-"), " "));
                                 log.info("processing away match " + awayTeam + " on score : " + awayTeamScore);
 
-                                // have we got a BTTS
-                                if (homeTeamScore > 0 && awayTeamScore > 0) {
+                                // game has at least kicked off so update
 
+                                updateChoices(homeTeam, weekKey, responseString, homeTeamScore, awayTeamScore);
 
-                                    log.info("both teams scored : Home Game team =  " + homeTeam + " on date " + fixtureDateStr);
-
-                                    responseString.append("Both teams scored in game : ");
-                                    responseString.append(homeTeam);
-                                    responseString.append("\n");
-
-                                    updateChoices(homeTeam, weekKey, responseString);
-
-                                }
 
                             }
 
@@ -187,7 +179,7 @@ public class WeeksFixturesServlet extends HttpServlet {
         for (Entity choice : choices) {
             // This user has already been notified..
             String playerName = (String) choice.getProperty("player");
-            Boolean alerted = (Boolean)choice.getProperty("alerted");
+            Boolean alerted = (Boolean) choice.getProperty("alerted");
             if (alerted != null && alerted.booleanValue()) {
                 log.info("Player " + playerName + " has already been notified they have all 4.");
                 continue;
@@ -203,7 +195,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                 alertString.append(" got all 4 choices!");
             }
             for (int i = 1; i <= 4; i++) {
-                allTeamsScored[i-1] = (Boolean) choice.getProperty("choice" + i + "Result");
+                allTeamsScored[i - 1] = (Boolean) choice.getProperty("choice" + i + "Result");
                 alertString.append("\n");
                 alertString.append(choice.getProperty("choice" + i));
             }
@@ -231,8 +223,6 @@ public class WeeksFixturesServlet extends HttpServlet {
         }
     }
 
-
-
     private void emailAlert(StringBuilder alertString, String weekNumber, String playerName) {
         try {
 
@@ -259,103 +249,113 @@ public class WeeksFixturesServlet extends HttpServlet {
             log.log(Level.SEVERE, "An email AddressException error message.", e);
         } catch (MessagingException e) {
             log.log(Level.SEVERE, "An email MessagingException error message.", e);
-        }  catch(Throwable t){
+        } catch (Throwable t) {
             log.log(Level.SEVERE, "An unhandled email error message.", t);
         }
 
 
-
     }
 
-    private void updateChoices(String homeTeam, Key weekKey, StringBuilder responseStr) {
+    private void updateChoices(String homeTeam, Key weekKey, StringBuilder responseStr, int homeScore, int awayScore) {
+        log.info("Checking choices records for BTTS for home team " + homeTeam);
 
-        log.info("Checking choices records for BTTS for home team");
+
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         for (int i = 1; i <= 4; i++) {
             Query query = new Query("Choices", weekKey).addFilter("choice" + i, Query.FilterOperator.EQUAL, homeTeam);
             PreparedQuery pq = datastore.prepare(query);
             for (Entity choice : pq.asIterable()) {
-                log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
-                responseStr.append("Player '");
-                responseStr.append(choice.getProperty("player"));
 
-                responseStr.append("' selected' ");
-                responseStr.append(homeTeam);
-                responseStr.append("' as choice" + i);
-                responseStr.append("\n");
-                if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
-                    StringBuilder bttsMessage = new StringBuilder("Updating Player '");
-                    bttsMessage.append(choice.getProperty("player"));
-                    bttsMessage.append("' as both teams scored in home team game: ");
-                    bttsMessage.append(choice.getProperty("choice" + i));
-
-
-                    log.info(bttsMessage.toString() + "choice" + i + "Result");
-                    twitterAlert(bttsMessage);
-
-                    if(StringUtils.equalsIgnoreCase((String)choice.getProperty("player"), PlayerEnum.Mat.getName())){
-                        SmsHelper.mobileAlert(bttsMessage, false, PlayerEnum.Mat);
-                    }
-
-                    choice.setProperty("choice" + i + "Result", Boolean.TRUE);
-                    datastore.put(choice);
-
-
-                    // now tell the updated player how they are doing...
-                    StringBuilder twitterPlayerResult = new StringBuilder();
-
-                    String playerName = (String) choice.getProperty("player");
-
-                    twitterPlayerResult.append(playerName);
-                    twitterPlayerResult.append(" results so far ");
-                    twitterPlayerResult.append("\n");
-
-                    String choice1 = (String) choice.getProperty("choice1");
-                    boolean success1 = bothTeamsScored(choice.getProperty("choice1Result"));
-                    twitterPlayerResult.append(choice1);
-                    twitterPlayerResult.append(":");
-                    twitterPlayerResult.append(Boolean.toString(success1));
-                    twitterPlayerResult.append("\n");
-
-                    String choice2 = (String) choice.getProperty("choice2");
-                    boolean success2 = bothTeamsScored(choice.getProperty("choice2Result"));
-
-                    twitterPlayerResult.append(choice2);
-                    twitterPlayerResult.append(":");
-                    twitterPlayerResult.append(Boolean.toString(success2));
-                    twitterPlayerResult.append("\n");
-
-                    String choice3 = (String) choice.getProperty("choice3");
-                    boolean success3 = bothTeamsScored(choice.getProperty("choice3Result"));
-
-                    twitterPlayerResult.append(choice3);
-                    twitterPlayerResult.append(":");
-                    twitterPlayerResult.append(Boolean.toString(success3));
-                    twitterPlayerResult.append("\n");
-
-                    String choice4 = (String) choice.getProperty("choice4");
-                    boolean success4 = bothTeamsScored(choice.getProperty("choice4Result"));
-
-                    twitterPlayerResult.append(choice4);
-                    twitterPlayerResult.append(":");
-                    twitterPlayerResult.append(Boolean.toString(success4));
-                    twitterPlayerResult.append("");
-
-                    twitterAlert(twitterPlayerResult);
-
+                // if game hasn't been marked yet then show it is under way.
+                if (choice.getProperty("choice" + i + "Result") == null){
+                    choice.setProperty("choice" + i + "Result", Boolean.FALSE);
                 }
+
+                // update points
+                if(homeScore > 0 || awayScore > 0){
+                    if(homeScore > 0 && awayScore > 0){
+                        choice.setProperty("choice" + i + "Points", BTTSHelper.BOTH_TEAMS_SCORED);
+                    }else{
+                        choice.setProperty("choice" + i + "Points", BTTSHelper.ONE_TEAM_SCORED);
+                    }
+                }
+
+                if (homeScore > 0 && awayScore > 0) {
+                    responseStr.append("Both teams scored in game : ");
+                    responseStr.append(homeTeam);
+                    responseStr.append("\n");
+
+                    log.info("Player " + choice.getProperty("player") + " selected " + homeTeam + " and BTTS!");
+                    responseStr.append("Player '");
+                    responseStr.append(choice.getProperty("player"));
+
+                    responseStr.append("' selected' ");
+                    responseStr.append(homeTeam);
+                    responseStr.append("' as choice" + i);
+                    responseStr.append("\n");
+                    if (!((Boolean) choice.getProperty("choice" + i + "Result")).booleanValue()) {
+                        StringBuilder bttsMessage = new StringBuilder("Updating Player '");
+                        bttsMessage.append(choice.getProperty("player"));
+                        bttsMessage.append("' as both teams scored in home team game: ");
+                        bttsMessage.append(choice.getProperty("choice" + i));
+
+
+                        log.info(bttsMessage.toString() + "choice" + i + "Result");
+                        twitterAlert(bttsMessage);
+
+                        if (StringUtils.equalsIgnoreCase((String) choice.getProperty("player"), PlayerEnum.Mat.getName())) {
+                            SmsHelper.mobileAlert(bttsMessage, false, PlayerEnum.Mat);
+                        }
+
+                        choice.setProperty("choice" + i + "Result", Boolean.TRUE);
+                        datastore.put(choice);
+
+
+                        // now tell the updated player how they are doing...
+                        StringBuilder twitterPlayerResult = new StringBuilder();
+
+                        String playerName = (String) choice.getProperty("player");
+
+                        twitterPlayerResult.append(playerName);
+                        twitterPlayerResult.append(" results so far ");
+                        twitterPlayerResult.append("\n");
+
+                        String choice1 = (String) choice.getProperty("choice1");
+                        twitterPlayerResult.append(choice1);
+                        twitterPlayerResult.append(":");
+                        twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice1Result")));
+                        twitterPlayerResult.append("\n");
+
+                        String choice2 = (String) choice.getProperty("choice2");
+
+                        twitterPlayerResult.append(choice2);
+                        twitterPlayerResult.append(":");
+                        twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice2Result")));
+                        twitterPlayerResult.append("\n");
+
+                        String choice3 = (String) choice.getProperty("choice3");
+
+                        twitterPlayerResult.append(choice3);
+                        twitterPlayerResult.append(":");
+                        twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice3Result")));
+                        twitterPlayerResult.append("\n");
+
+                        String choice4 = (String) choice.getProperty("choice4");
+
+                        twitterPlayerResult.append(choice4);
+                        twitterPlayerResult.append(":");
+                        twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice4Result")));
+                        twitterPlayerResult.append("");
+
+                        twitterAlert(twitterPlayerResult);
+
+                    }
+                }
+
             }
-
-
         }
 
 
     }
-
-
-    private boolean bothTeamsScored(Object choiceResult) {
-        return choiceResult != null ? Boolean.valueOf((Boolean) choiceResult) : false;
-    }
-
 
 }
