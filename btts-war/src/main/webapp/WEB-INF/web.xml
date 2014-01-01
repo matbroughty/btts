@@ -35,6 +35,15 @@
         <servlet-name>SmsReceivingServlet</servlet-name>
         <servlet-class>com.broughty.btts.servlets.SmsReceivingServlet</servlet-class>
     </servlet>
+    <servlet>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>mvc-dispatcher</servlet-name>
+        <url-pattern>/rest/*</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>SmsReceivingServlet</servlet-name>
         <url-pattern>/sms</url-pattern>
@@ -47,6 +56,8 @@
         <servlet-name>WeeksFixturesServlet</servlet-name>
         <url-pattern>/fixtures</url-pattern>
     </servlet-mapping>
+
+
     <servlet-mapping>
         <servlet-name>EmailResultsServlet</servlet-name>
         <url-pattern>/emailresults</url-pattern>

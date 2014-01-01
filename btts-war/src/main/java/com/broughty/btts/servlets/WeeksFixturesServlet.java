@@ -274,10 +274,13 @@ public class WeeksFixturesServlet extends HttpServlet {
                 // update points
                 if(homeScore > 0 || awayScore > 0){
                     if(homeScore > 0 && awayScore > 0){
+                        log.info("Updating home team with " + BTTSHelper.BOTH_TEAMS_SCORED + " points.");
                         choice.setProperty("choice" + i + "Points", BTTSHelper.BOTH_TEAMS_SCORED);
                     }else{
+                        log.info("Updating home team with " + BTTSHelper.ONE_TEAM_SCORED + " points.");
                         choice.setProperty("choice" + i + "Points", BTTSHelper.ONE_TEAM_SCORED);
                     }
+                    datastore.put(choice);
                 }
 
                 if (homeScore > 0 && awayScore > 0) {

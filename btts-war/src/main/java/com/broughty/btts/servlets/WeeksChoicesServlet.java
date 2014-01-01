@@ -6,6 +6,7 @@ import com.broughty.util.PlayerEnum;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
+import sun.management.resources.agent_it;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -60,7 +61,19 @@ public class WeeksChoicesServlet extends HttpServlet {
         Entity playerChoice = pq.asSingleEntity();
 
         // if user has already entered a choice for this week then stuff it back.
+        // first check if all teams are the same - if they are delete
+
         if (playerChoice != null) {
+
+            if(StringUtils.equals(choice1, choice2) && StringUtils.equals(choice2, choice3)){
+                log.info("A delete request has come in for player " + playerName + " week number " + weekNumber);
+                TwitterHelper.updateStatus("Deleting player " + playerName + " choices for week number "  + weekNumber);
+                // Duplicate choices is the same as a request to delete
+                datastore.delete(playerChoice.getKey());
+                return;
+
+            }
+
             playerChoice.setProperty("date", date);
             playerChoice.setProperty("choice1", choice1);
             playerChoice.setProperty("choice2", choice2);
