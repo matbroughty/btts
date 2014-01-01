@@ -1,6 +1,7 @@
 package com.broughty.controller;
 
 import com.broughty.model.LeagueTableData;
+import com.broughty.model.TestJson;
 import com.broughty.util.BTTSHelper;
 import com.broughty.util.PlayerEnum;
 import org.springframework.stereotype.Controller;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created by matbroughty on 27/12/13.
@@ -19,26 +21,36 @@ import java.util.List;
 @RequestMapping("/league")
 public class JSONController {
 
-    @RequestMapping(value = "{name}", method = RequestMethod.GET)
+    private static final Logger log = Logger.getLogger(JSONController.class.getName());
+
+
+    @RequestMapping(value = "{name}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     LeagueTableData getPlayerPointsInJSON(@PathVariable String name) {
+        log.info("request for player points for player " + name);
         BTTSHelper.getPlayerPoints(name);
         LeagueTableData table = new LeagueTableData(name, BTTSHelper.getPlayerPoints(name));
+        log.info("request for player points for player " + name + " results " + table.toString());
         return table;
 
     }
 
-    @RequestMapping(method = RequestMethod.GET)
+
+
+    @RequestMapping(method = RequestMethod.GET,  produces = "application/json")
     public
     @ResponseBody
     List<LeagueTableData> getPointsInJSON() {
+        log.info("request for player points for all players ");
         List<LeagueTableData> tableDataList = new ArrayList<LeagueTableData>();
 
         for(PlayerEnum player : PlayerEnum.values()){
             tableDataList.add(new LeagueTableData(player.getName(), BTTSHelper.getPlayerPoints(player.getName())));
 
         }
+
+        log.info("request for all player results " + tableDataList.toString());
         return tableDataList;
     }
 

@@ -30,4 +30,12 @@ public class LeagueTableData {
     public void setPoints(List<Integer> points) {
         this.points = points;
     }
+
+    @Override
+    public String toString() {
+        return "LeagueTableData{" +
+                "playerName='" + playerName + '\'' +
+                ", points=" + points +
+                '}';
+    }
 }

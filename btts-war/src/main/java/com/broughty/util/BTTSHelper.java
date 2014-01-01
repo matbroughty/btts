@@ -76,10 +76,11 @@ public class BTTSHelper {
 
     private static Integer sumPlayerWeeklyPoints(Entity choice) {
         Integer points = new Integer(0);
-        points = points + (choice.getProperty("choice1Points") != null ? (Integer)choice.getProperty("choice1Points") : 0);
-        points = points + (choice.getProperty("choice2Points") != null ? (Integer)choice.getProperty("choice1Points") : 0);
-        points = points + (choice.getProperty("choice3Points") != null ? (Integer)choice.getProperty("choice1Points") : 0);
-        points = points + (choice.getProperty("choice4Points") != null ? (Integer)choice.getProperty("choice1Points") : 0);
+
+        points = points + (choice.getProperty("choice1Points") != null ? ((Number)choice.getProperty("choice1Points")).intValue() : 0);
+        points = points + (choice.getProperty("choice2Points") != null ? ((Number)choice.getProperty("choice2Points")).intValue()  : 0);
+        points = points + (choice.getProperty("choice3Points") != null ? ((Number)choice.getProperty("choice3Points")).intValue()  : 0);
+        points = points + (choice.getProperty("choice4Points") != null ? ((Number)choice.getProperty("choice4Points")).intValue()  : 0);
         return points;
     }
 
