@@ -85,15 +85,15 @@ public class SmsReceivingServlet extends HttpServlet {
             String[] result = body.split(";");
             if (result.length > 4) {
                 playerChoicesParams.append("&player=");
-                playerChoicesParams.append(result[0]);
+                playerChoicesParams.append(StringUtils.trim(result[0]));
                 playerChoicesParams.append("&choice1=");
-                playerChoicesParams.append(result[1]);
+                playerChoicesParams.append(StringUtils.trim(result[1]));
                 playerChoicesParams.append("&choice2=");
-                playerChoicesParams.append(result[2]);
+                playerChoicesParams.append(StringUtils.trim(result[2]));
                 playerChoicesParams.append("&choice3=");
-                playerChoicesParams.append(result[3]);
+                playerChoicesParams.append(StringUtils.trim(result[3]));
                 playerChoicesParams.append("&choice4=");
-                playerChoicesParams.append(result[4]);
+                playerChoicesParams.append(StringUtils.trim(result[4]));
             } else {
                 log.log(Level.WARNING, "Not enough params in: " + body);
                 throw new IllegalArgumentException("Not enough params to choose teams.");
