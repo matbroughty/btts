@@ -1,10 +1,14 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="java.text.SimpleDateFormat" %>
-<%@ page import="java.util.*" %>
-<%@ page import="com.broughty.util.MapUtil" %>
-<%@ page import="org.apache.commons.lang3.StringUtils" %>
-<%@ page import="com.google.appengine.api.datastore.*" %>
 <%@ page import="com.broughty.util.BTTSHelper" %>
+<%@ page import="com.broughty.util.MapUtil" %>
+<%@ page import="com.broughty.util.PlayerEnum" %>
+<%@ page import="com.google.appengine.api.datastore.*" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
+<%@ page import="java.text.SimpleDateFormat" %>
+<%@ page import="java.util.ArrayList" %>
+<%@ page import="java.util.HashMap" %>
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -63,44 +67,55 @@
 
 
         playerTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th><th>Default Choice</th></tr> </thead> ");
         playerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
 
+            // don't count star player or any players who defaulted to the star player
+            boolean skipCount = false;
+            if (StringUtils.equals(PlayerEnum.Star.getName(), (String) choice.getProperty("player")) ||
+                    BTTSHelper.entityPropertyAsBoolean(choice.getProperty("defaultChoices"))) {
+                skipCount = true;
+            }
+
 
             String choice1 = (String) choice.getProperty("choice1");
-            if (teamCount.containsKey(choice1)) {
-                teamCount.put(choice1, new Integer(teamCount.get(choice1).intValue() + 1));
-            } else {
-                teamCount.put(choice1, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice1)) {
+                    teamCount.put(choice1, new Integer(teamCount.get(choice1).intValue() + 1));
+                } else {
+                    teamCount.put(choice1, new Integer(1));
+                }
             }
-
 
             String choice2 = (String) choice.getProperty("choice2");
+            if (!skipCount) {
+                if (teamCount.containsKey(choice2)) {
+                    teamCount.put(choice2, new Integer(teamCount.get(choice2).intValue() + 1));
+                } else {
+                    teamCount.put(choice2, new Integer(1));
+                }
 
-            if (teamCount.containsKey(choice2)) {
-                teamCount.put(choice2, new Integer(teamCount.get(choice2).intValue() + 1));
-            } else {
-                teamCount.put(choice2, new Integer(1));
             }
-
 
             String choice3 = (String) choice.getProperty("choice3");
+            if (!skipCount) {
+                if (teamCount.containsKey(choice3)) {
+                    teamCount.put(choice3, new Integer(teamCount.get(choice3).intValue() + 1));
+                } else {
+                    teamCount.put(choice3, new Integer(1));
+                }
 
-            if (teamCount.containsKey(choice3)) {
-                teamCount.put(choice3, new Integer(teamCount.get(choice3).intValue() + 1));
-            } else {
-                teamCount.put(choice3, new Integer(1));
             }
 
-
             String choice4 = (String) choice.getProperty("choice4");
-
-            if (teamCount.containsKey(choice4)) {
-                teamCount.put(choice4, new Integer(teamCount.get(choice4).intValue() + 1));
-            } else {
-                teamCount.put(choice4, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice4)) {
+                    teamCount.put(choice4, new Integer(teamCount.get(choice4).intValue() + 1));
+                } else {
+                    teamCount.put(choice4, new Integer(1));
+                }
             }
 
             if (i % 2 == 0) {
@@ -121,12 +136,13 @@
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice3Result"))).append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice4Result"))).append("</td>");
+            playerTable.append("<td>").append(Boolean.toString(BTTSHelper.entityPropertyAsBoolean(choice.getProperty("defaultChoices")))).append("</td>");
             playerTable.append("</tr>");
 
 
             // Quickly keep track of which teams have scored.  Very inneficient!
             for (int j = 1; j <= 4; j++) {
-                if ((Boolean) choice.getProperty("choice" + j + "Result")) {
+                if (BTTSHelper.entityPropertyAsBoolean(choice.getProperty("choice" + j + "Result"))) {
                     homeTeamsBothScored.add((String) choice.getProperty("choice" + j));
                 }
             }
@@ -137,7 +153,6 @@
         playerTable.append("</tbody></table>");
 
     }
-
     // most popular first
     teamCount = MapUtil.sortByValue(teamCount);
 
@@ -152,8 +167,7 @@
     for (String team : teamCount.keySet()) {
 
 
-
-        if(count == 5){
+        if (count == 5) {
             graphTable.append("</tbody></table>");
             graphTable.append("<table class=\"pure-table pure-table-bordered\">");
             graphTable.append("<caption>Secondary Bet Choices</caption>");
@@ -162,7 +176,7 @@
         }
 
         // end of processing - single selection teams don't get a look in.
-        if(teamCount.get(team).intValue() == 1 && !singleChoiceHeaderWritten){
+        if (teamCount.get(team).intValue() == 1 && !singleChoiceHeaderWritten) {
             graphTable.append("</tbody></table>");
             graphTable.append("<table class=\"pure-table pure-table-bordered\">");
             graphTable.append("<caption>Single Vote Choices</caption>");
@@ -170,7 +184,6 @@
             graphTable.append("<tbody>");
             singleChoiceHeaderWritten = true;
         }
-
 
 
         if (count % 2 == 0) {
@@ -182,7 +195,7 @@
 
         graphTable.append("<td>").append(team).append("</td>");
         graphTable.append("<td>").append(teamCount.get(team)).append("</td>");
-        graphTable.append("<td>").append(homeTeamsBothScored.contains(team) ? "&#10004;" : "&#10008;").append("</td>");
+        graphTable.append("<td>").append(homeTeamsBothScored.contains(team) ? BTTSHelper.SUCCESS : BTTSHelper.FAIL).append("</td>");
         graphTable.append("</tr>");
 
         graphData.append("['");
@@ -197,10 +210,6 @@
     graphTable.append("</tbody></table>");
     graphData.deleteCharAt(graphData.length() - 1);
     graphData.append("]);");
-
-
-
-
 
 
 %>
@@ -265,7 +274,11 @@
     <div class="pure-g l-box">
         <div class="pure-u-1 l-box">
             <h2 class="content-subhead">Week <%= weekNumber%> player choices</h2>
-            <%= playerTable.toString() %>
+            <%= playerTable
+                    .
+                            toString
+                                    (
+                                    ) %>
         </div>
     </div>
 
@@ -279,7 +292,11 @@
     </div>
     <div class="pure-g l-box">
         <div class="pure-u-1 l-box">
-            <%= graphTable.toString() %>
+            <%= graphTable
+                    .
+                            toString
+                                    (
+                                    ) %>
         </div>
     </div>
 </div>

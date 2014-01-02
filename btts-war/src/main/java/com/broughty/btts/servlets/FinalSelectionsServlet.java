@@ -1,9 +1,11 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.BTTSHelper;
 import com.broughty.util.MapUtil;
 import com.broughty.util.PlayerEnum;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.repackaged.org.joda.time.DateTime;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -81,7 +83,7 @@ public class FinalSelectionsServlet extends HttpServlet {
         }
 
 
-        // get the start player i.e. the top 4 choices.
+        // get the star player i.e. the top 4 choices.
         query = new Query("Choices");
         query.setAncestor(weekKey).addFilter("player", Query.FilterOperator.EQUAL, PlayerEnum.Star.getName());
         pq = datastore.prepare(query);
@@ -94,16 +96,23 @@ public class FinalSelectionsServlet extends HttpServlet {
             starPlayerChoice.setProperty("choice2", null);
             starPlayerChoice.setProperty("choice3", null);
             starPlayerChoice.setProperty("choice4", null);
-            starPlayerChoice.setProperty("choice1Result", Boolean.FALSE);
-            starPlayerChoice.setProperty("choice2Result", Boolean.FALSE);
-            starPlayerChoice.setProperty("choice3Result", Boolean.FALSE);
-            starPlayerChoice.setProperty("choice4Result", Boolean.FALSE);
+            starPlayerChoice.setProperty("choice1Result", null);
+            starPlayerChoice.setProperty("choice2Result", null);
+            starPlayerChoice.setProperty("choice3Result", null);
+            starPlayerChoice.setProperty("choice4Result", null);
 
         }
 
 
         Map<String, Integer> teamCount = new HashMap<String, Integer>();
+        // who has not chosen - will be defaulted with star player games..
+        List<String> weeksPlayers = new ArrayList<String>();
+        // star doesn't count
+        weeksPlayers.add(PlayerEnum.Star.getName());
         for (Entity choice : choices) {
+
+            // add the player to list of those that have selected.
+            weeksPlayers.add((String) choice.getProperty("player"));
 
 
             String choice1 = (String) choice.getProperty("choice1");
@@ -191,7 +200,43 @@ public class FinalSelectionsServlet extends HttpServlet {
 
         datastore.put(primeSelections);
         datastore.put(secondarySelections);
+
+
+
         datastore.put(starPlayerChoice);
+
+
+
+        // default to star player for ones that didn't choose.
+        for (PlayerEnum player : PlayerEnum.values()) {
+            if (!weeksPlayers.contains(player.getName())) {
+                log.info(player.getName() + " not selected so getting the star choices.");
+                Entity defaultPlayerChoice = new Entity("Choices", weekKey);
+                defaultPlayerChoice.setProperty("player", player.getName());
+                // make sure date is behind the star player
+                defaultPlayerChoice.setProperty("date", new DateTime(starPlayerChoice.getProperty("date")).plusDays(-1).toDate());
+                defaultPlayerChoice.setProperty("choice1", starPlayerChoice.getProperty("choice1"));
+                defaultPlayerChoice.setProperty("choice2", starPlayerChoice.getProperty("choice2"));
+                defaultPlayerChoice.setProperty("choice3", starPlayerChoice.getProperty("choice3"));
+                defaultPlayerChoice.setProperty("choice4", starPlayerChoice.getProperty("choice4"));
+                defaultPlayerChoice.setProperty("choice1Result", null);
+                defaultPlayerChoice.setProperty("choice2Result", null);
+                defaultPlayerChoice.setProperty("choice3Result", null);
+                defaultPlayerChoice.setProperty("choice4Result", null);
+                defaultPlayerChoice.setProperty("choice1Points", BTTSHelper.SCORELESS);
+                defaultPlayerChoice.setProperty("choice2Points", BTTSHelper.SCORELESS);
+                defaultPlayerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
+                defaultPlayerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
+                // don't alert player who didn't choose themselves
+                defaultPlayerChoice.setProperty("alerted", Boolean.TRUE);
+                // mark as a default choice
+                defaultPlayerChoice.setProperty("defaultChoices", Boolean.TRUE);
+                // store
+                datastore.put(defaultPlayerChoice);
+            }
+        }
+
+
 
         StringBuilder starPlayerTwitter = new StringBuilder();
         starPlayerTwitter.append(PlayerEnum.Star.toString());

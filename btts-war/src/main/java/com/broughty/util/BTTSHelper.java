@@ -38,6 +38,15 @@ public class BTTSHelper {
     }
 
 
+    public static boolean entityPropertyAsBoolean(Object choiceResult) {
+        if (choiceResult == null || !(choiceResult instanceof Boolean)) {
+            return false;
+        }
+        return (Boolean) choiceResult;
+    }
+
+
+
     public static String getCurrentWeek(){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 

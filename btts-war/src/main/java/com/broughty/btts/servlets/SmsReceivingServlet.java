@@ -10,6 +10,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.util.Enumeration;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -65,7 +66,9 @@ public class SmsReceivingServlet extends HttpServlet {
         }
         if (StringUtils.containsIgnoreCase(request.getParameter("Body"), ";")) {
             log.info("Requesting choices via number " + StringUtils.right(request.getParameter("From"), 6));
-            response.sendRedirect("/choices?" + buildPlayerChoiceRequest(request.getParameter("Body")));
+            String choicesUrl = "/choices?" + buildPlayerChoiceRequest(request.getParameter("Body"));
+            log.info("Calling choices URL " + choicesUrl);
+            response.sendRedirect(choicesUrl);
             return;
 
         }
@@ -92,6 +95,7 @@ public class SmsReceivingServlet extends HttpServlet {
                 playerChoicesParams.append("&choice4=");
                 playerChoicesParams.append(result[4]);
             } else {
+                log.log(Level.WARNING, "Not enough params in: " + body);
                 throw new IllegalArgumentException("Not enough params to choose teams.");
 
             }
@@ -100,6 +104,7 @@ public class SmsReceivingServlet extends HttpServlet {
             TwitterHelper.updateStatus("!! Dodgy sms choice request of " + body);
         }
 
+        log.info("The choices servlet params are " + playerChoicesParams.toString());
         return playerChoicesParams.toString();
 
     }

@@ -37,7 +37,7 @@ public class TwitterHelper {
             Twitter twitter = tf.getInstance();
 
 
-            twitter.updateStatus(message);
+            //twitter.updateStatus(message);
 
         } catch (Throwable t) {
             log.log(Level.WARNING, "failed to send twitter message -> " + message, t);

@@ -1,7 +1,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
-<%@ page import="com.google.appengine.api.datastore.*" %>
-<%@ page import="com.broughty.util.PlayerEnum" %>
 <%@ page import="com.broughty.util.BTTSHelper" %>
+<%@ page import="com.broughty.util.PlayerEnum" %>
+<%@ page import="org.apache.commons.lang3.StringUtils" %>
 <%@ taglib prefix="fn" uri="http://java.sun.com/jsp/jstl/functions" %>
 
 <html>
@@ -51,7 +51,12 @@
         if (playerEnum.compareTo(PlayerEnum.Star) == 0) {
             playerListOption.append("<option disabled>");
         } else {
-            playerListOption.append("<option>");
+            String playerName = request.getParameter("playerName");
+            if (StringUtils.equalsIgnoreCase(playerName, playerEnum.getName())) {
+                playerListOption.append("<option selected>");
+            } else {
+                playerListOption.append("<option>");
+            }
         }
         playerListOption.append(playerEnum.getName());
         playerListOption.append("</option>");
@@ -256,6 +261,54 @@
             <option>Queen's Park</option>
             <option>Stirling</option>
         </optgroup>
+        <optgroup label="Conference">
+            <option>Luton</option>
+            <option>Cambridge</option>
+            <option>Alfreton</option>
+            <option>Grimsby</option>
+            <option>Halifax</option>
+            <option>Kidderminster</option>
+            <option>Nuneaton</option>
+            <option>Salisbury</option>
+            <option>Barnet</option>
+            <option>Braintree</option>
+            <option>Macclesfield</option>
+            <option>Gateshead</option>
+            <option>Welling</option>
+            <option>Forest Green</option>
+            <option>Wrexham</option>
+            <option>Hereford</option>
+            <option>Woking</option>
+            <option>Lincoln City</option>
+            <option>Aldershot</option>
+            <option>Southport</option>
+            <option>Chester</option>
+            <option>Tamworth</option>
+            <option>Dartford</option>
+            <option>Hyde</option>
+        </optgroup>
+        <optgroup label="La Liga">
+            <option>Barcelona</option>
+            <option>Atlético Madrid</option>
+            <option>Real Madrid</option>
+            <option>Athletic Club</option>
+            <option>Real Sociedad</option>
+            <option>Villarreal</option>
+            <option>Sevilla</option>
+            <option>Getafe</option>
+            <option>Espanyol</option>
+            <option>Málaga</option>
+            <option>Valencia CF</option>
+            <option>Granada CF</option>
+            <option>Levante</option>
+            <option>Elche</option>
+            <option>Celta de Vigo</option>
+            <option>Almería</option>
+            <option>Real Valladolid</option>
+            <option>Osasuna</option>
+            <option>Rayo Vallecano</option>
+            <option>Real Betis</option>
+        </optgroup>
     </select>
 </div>
 <div class="pure-control-group">
@@ -410,6 +463,54 @@
             <option>Peterhead</option>
             <option>Queen's Park</option>
             <option>Stirling</option>
+        </optgroup>
+        <optgroup label="Conference">
+            <option>Luton</option>
+            <option>Cambridge</option>
+            <option>Alfreton</option>
+            <option>Grimsby</option>
+            <option>Halifax</option>
+            <option>Kidderminster</option>
+            <option>Nuneaton</option>
+            <option>Salisbury</option>
+            <option>Barnet</option>
+            <option>Braintree</option>
+            <option>Macclesfield</option>
+            <option>Gateshead</option>
+            <option>Welling</option>
+            <option>Forest Green</option>
+            <option>Wrexham</option>
+            <option>Hereford</option>
+            <option>Woking</option>
+            <option>Lincoln City</option>
+            <option>Aldershot</option>
+            <option>Southport</option>
+            <option>Chester</option>
+            <option>Tamworth</option>
+            <option>Dartford</option>
+            <option>Hyde</option>
+        </optgroup>
+        <optgroup label="La Liga">
+            <option>Barcelona</option>
+            <option>Atlético Madrid</option>
+            <option>Real Madrid</option>
+            <option>Athletic Club</option>
+            <option>Real Sociedad</option>
+            <option>Villarreal</option>
+            <option>Sevilla</option>
+            <option>Getafe</option>
+            <option>Espanyol</option>
+            <option>Málaga</option>
+            <option>Valencia CF</option>
+            <option>Granada CF</option>
+            <option>Levante</option>
+            <option>Elche</option>
+            <option>Celta de Vigo</option>
+            <option>Almería</option>
+            <option>Real Valladolid</option>
+            <option>Osasuna</option>
+            <option>Rayo Vallecano</option>
+            <option>Real Betis</option>
         </optgroup>
     </select>
 </div>
@@ -566,6 +667,54 @@
             <option>Queen's Park</option>
             <option>Stirling</option>
         </optgroup>
+        <optgroup label="Conference">
+            <option>Luton</option>
+            <option>Cambridge</option>
+            <option>Alfreton</option>
+            <option>Grimsby</option>
+            <option>Halifax</option>
+            <option>Kidderminster</option>
+            <option>Nuneaton</option>
+            <option>Salisbury</option>
+            <option>Barnet</option>
+            <option>Braintree</option>
+            <option>Macclesfield</option>
+            <option>Gateshead</option>
+            <option>Welling</option>
+            <option>Forest Green</option>
+            <option>Wrexham</option>
+            <option>Hereford</option>
+            <option>Woking</option>
+            <option>Lincoln City</option>
+            <option>Aldershot</option>
+            <option>Southport</option>
+            <option>Chester</option>
+            <option>Tamworth</option>
+            <option>Dartford</option>
+            <option>Hyde</option>
+        </optgroup>
+        <optgroup label="La Liga">
+            <option>Barcelona</option>
+            <option>Atlético Madrid</option>
+            <option>Real Madrid</option>
+            <option>Athletic Club</option>
+            <option>Real Sociedad</option>
+            <option>Villarreal</option>
+            <option>Sevilla</option>
+            <option>Getafe</option>
+            <option>Espanyol</option>
+            <option>Málaga</option>
+            <option>Valencia CF</option>
+            <option>Granada CF</option>
+            <option>Levante</option>
+            <option>Elche</option>
+            <option>Celta de Vigo</option>
+            <option>Almería</option>
+            <option>Real Valladolid</option>
+            <option>Osasuna</option>
+            <option>Rayo Vallecano</option>
+            <option>Real Betis</option>
+        </optgroup>
     </select>
 </div>
 <div class="pure-control-group">
@@ -720,6 +869,54 @@
             <option>Peterhead</option>
             <option>Queen's Park</option>
             <option>Stirling</option>
+        </optgroup>
+        <optgroup label="Conference">
+            <option>Luton</option>
+            <option>Cambridge</option>
+            <option>Alfreton</option>
+            <option>Grimsby</option>
+            <option>Halifax</option>
+            <option>Kidderminster</option>
+            <option>Nuneaton</option>
+            <option>Salisbury</option>
+            <option>Barnet</option>
+            <option>Braintree</option>
+            <option>Macclesfield</option>
+            <option>Gateshead</option>
+            <option>Welling</option>
+            <option>Forest Green</option>
+            <option>Wrexham</option>
+            <option>Hereford</option>
+            <option>Woking</option>
+            <option>Lincoln City</option>
+            <option>Aldershot</option>
+            <option>Southport</option>
+            <option>Chester</option>
+            <option>Tamworth</option>
+            <option>Dartford</option>
+            <option>Hyde</option>
+        </optgroup>
+        <optgroup label="La Liga">
+            <option>Barcelona</option>
+            <option>Atlético Madrid</option>
+            <option>Real Madrid</option>
+            <option>Athletic Club</option>
+            <option>Real Sociedad</option>
+            <option>Villarreal</option>
+            <option>Sevilla</option>
+            <option>Getafe</option>
+            <option>Espanyol</option>
+            <option>Málaga</option>
+            <option>Valencia CF</option>
+            <option>Granada CF</option>
+            <option>Levante</option>
+            <option>Elche</option>
+            <option>Celta de Vigo</option>
+            <option>Almería</option>
+            <option>Real Valladolid</option>
+            <option>Osasuna</option>
+            <option>Rayo Vallecano</option>
+            <option>Real Betis</option>
         </optgroup>
     </select>
 </div>

@@ -12,9 +12,10 @@ public enum ResultsWebPageEnum {
     SCOT_PREM("http://www.bbc.co.uk/sport/football/scottish-premiership/fixtures"),
     SCOT_CHAMP("http://www.bbc.co.uk/sport/football/scottish-championship/fixtures"),
     SCOT_ONE("http://www.bbc.co.uk/sport/football/scottish-league-one/fixtures"),
-    SCOT_TWO("http://www.bbc.co.uk/sport/football/scottish-league-two/fixtures");
-
-
+    SCOT_TWO("http://www.bbc.co.uk/sport/football/scottish-league-two/fixtures"),
+    CONFERENCE("http://www.bbc.co.uk/sport/football/conference/fixtures"),
+    FA_CUP("http://www.bbc.co.uk/sport/football/fa-cup/fixtures"),
+    EUROPE("http://www.bbc.co.uk/sport/football/european/fixtures");
 
     String page;
 

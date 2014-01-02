@@ -14,6 +14,7 @@
         <include path="/js/vendor/**.js" />
         <include path="/js/**.js" />
         <include path="/css/**.css" />
+        <include path="/**.html" />
     </static-files>
 
 

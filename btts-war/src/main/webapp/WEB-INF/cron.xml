@@ -90,9 +90,4 @@
         <description>Friday Reminders</description>
         <schedule>every friday 09:30</schedule>
     </cron>
-    <cron>
-        <url>/selections</url>
-        <description>Friday Final Selections</description>
-        <schedule>every friday 11:00</schedule>
-    </cron>
 </cronentries>

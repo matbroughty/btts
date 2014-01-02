@@ -6,10 +6,10 @@ import com.broughty.util.PlayerEnum;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
-import sun.management.resources.agent_it;
 
 import javax.mail.*;
 import javax.mail.internet.*;
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,9 +28,17 @@ public class WeeksChoicesServlet extends HttpServlet {
     private static final SimpleDateFormat simpleDateFormat = new SimpleDateFormat("EEE, d MMM yyyy HH:mm");
 
     @Override
+    protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        log.info("doGet request in WeeksChoicesServlet ");
+        doPost(req, resp);
+    }
+
+
+    @Override
     public void doPost(HttpServletRequest req, HttpServletResponse resp)
             throws IOException {
 
+        log.info("doPost request in WeeksChoicesServlet ");
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
@@ -88,7 +96,7 @@ public class WeeksChoicesServlet extends HttpServlet {
             playerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
             playerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
             playerChoice.setProperty("alerted", Boolean.FALSE);
-
+            playerChoice.setProperty("defaultChoices", Boolean.FALSE);
         } else {
 
             // if we don't have a user then this is just a request for info
@@ -109,6 +117,7 @@ public class WeeksChoicesServlet extends HttpServlet {
                 playerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
                 playerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
                 playerChoice.setProperty("alerted", Boolean.FALSE);
+                playerChoice.setProperty("defaultChoices", Boolean.FALSE);
             }
         }
 
@@ -145,13 +154,13 @@ public class WeeksChoicesServlet extends HttpServlet {
         playerChoiceTable.append("<td>").append((String) playerChoice.getProperty("player")).append("</td>");
         playerChoiceTable.append("<td>").append(simpleDateFormat.format(playerChoice.getProperty("date"))).append("</td>");
         playerChoiceTable.append("<td>").append(choice1).append("</td>");
-        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice2).append("</td>");
-        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice3).append("</td>");
-        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice4).append("</td>");
-        playerChoiceTable.append("<td>").append("&#10008;").append("</td>");
+        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("</tr>");
 
         playerChoiceTable.append("</tbody></table>");
@@ -258,7 +267,7 @@ public class WeeksChoicesServlet extends HttpServlet {
                 break;
             }
             graphTable.append("<td>").append(team).append("(").append(teamCount.get(team)).append(")").append("</td>");
-            graphTable.append("<td>").append("&#10008;").append("</td>");
+            graphTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
 
             i++;
         }
@@ -279,6 +288,9 @@ public class WeeksChoicesServlet extends HttpServlet {
         allPlayerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
+
+
+
 
 
             String choice1 = (String) choice.getProperty("choice1");
@@ -327,13 +339,13 @@ public class WeeksChoicesServlet extends HttpServlet {
             allPlayerTable.append("<td>").append((String) choice.getProperty("player")).append("</td>");
             allPlayerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             allPlayerTable.append("<td>").append(choice1).append("</td>");
-            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice2).append("</td>");
-            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice3).append("</td>");
-            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice4).append("</td>");
-            allPlayerTable.append("<td>").append("&#10008;").append("</td>");
+            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("</tr>");
 
             i++;
