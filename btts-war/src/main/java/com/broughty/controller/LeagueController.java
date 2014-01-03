@@ -1,7 +1,6 @@
 package com.broughty.controller;
 
 import com.broughty.model.LeagueTableData;
-import com.broughty.model.TestJson;
 import com.broughty.util.BTTSHelper;
 import com.broughty.util.PlayerEnum;
 import org.springframework.stereotype.Controller;
@@ -19,9 +18,9 @@ import java.util.logging.Logger;
  */
 @Controller
 @RequestMapping("/league")
-public class JSONController {
+public class LeagueController {
 
-    private static final Logger log = Logger.getLogger(JSONController.class.getName());
+    private static final Logger log = Logger.getLogger(LeagueController.class.getName());
 
 
     @RequestMapping(value = "{name}", method = RequestMethod.GET, produces = "application/json")

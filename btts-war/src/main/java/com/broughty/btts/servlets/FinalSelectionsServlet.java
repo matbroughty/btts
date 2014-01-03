@@ -6,6 +6,7 @@ import com.broughty.util.PlayerEnum;
 import com.broughty.util.TwitterHelper;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.repackaged.org.joda.time.DateTime;
+import org.apache.commons.lang.StringUtils;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;
@@ -33,7 +34,6 @@ public class FinalSelectionsServlet extends HttpServlet {
     protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         doGet(request, response);
     }
-
 
     @Override
     public void init(ServletConfig config) throws ServletException {
@@ -111,44 +111,53 @@ public class FinalSelectionsServlet extends HttpServlet {
         weeksPlayers.add(PlayerEnum.Star.getName());
         for (Entity choice : choices) {
 
+
+            // don't count star player or any players who defaulted to the star player
+            boolean skipCount = false;
+            if (StringUtils.equals(PlayerEnum.Star.getName(), (String) choice.getProperty("player")) ||
+                    BTTSHelper.entityPropertyAsBoolean(choice.getProperty("defaultChoices"))) {
+                skipCount = true;
+            }
+
             // add the player to list of those that have selected.
             weeksPlayers.add((String) choice.getProperty("player"));
 
 
             String choice1 = (String) choice.getProperty("choice1");
-            if (teamCount.containsKey(choice1)) {
-                teamCount.put(choice1, new Integer(teamCount.get(choice1).intValue() + 1));
-            } else {
-                teamCount.put(choice1, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice1)) {
+                    teamCount.put(choice1, new Integer(teamCount.get(choice1).intValue() + 1));
+                } else {
+                    teamCount.put(choice1, new Integer(1));
+                }
             }
-
 
             String choice2 = (String) choice.getProperty("choice2");
-
-            if (teamCount.containsKey(choice2)) {
-                teamCount.put(choice2, new Integer(teamCount.get(choice2).intValue() + 1));
-            } else {
-                teamCount.put(choice2, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice2)) {
+                    teamCount.put(choice2, new Integer(teamCount.get(choice2).intValue() + 1));
+                } else {
+                    teamCount.put(choice2, new Integer(1));
+                }
             }
-
 
             String choice3 = (String) choice.getProperty("choice3");
-
-            if (teamCount.containsKey(choice3)) {
-                teamCount.put(choice3, new Integer(teamCount.get(choice3).intValue() + 1));
-            } else {
-                teamCount.put(choice3, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice3)) {
+                    teamCount.put(choice3, new Integer(teamCount.get(choice3).intValue() + 1));
+                } else {
+                    teamCount.put(choice3, new Integer(1));
+                }
             }
-
 
             String choice4 = (String) choice.getProperty("choice4");
-
-            if (teamCount.containsKey(choice4)) {
-                teamCount.put(choice4, new Integer(teamCount.get(choice4).intValue() + 1));
-            } else {
-                teamCount.put(choice4, new Integer(1));
+            if (!skipCount) {
+                if (teamCount.containsKey(choice4)) {
+                    teamCount.put(choice4, new Integer(teamCount.get(choice4).intValue() + 1));
+                } else {
+                    teamCount.put(choice4, new Integer(1));
+                }
             }
-
         }
 
 
@@ -202,9 +211,7 @@ public class FinalSelectionsServlet extends HttpServlet {
         datastore.put(secondarySelections);
 
 
-
         datastore.put(starPlayerChoice);
-
 
 
         // default to star player for ones that didn't choose.
@@ -235,7 +242,6 @@ public class FinalSelectionsServlet extends HttpServlet {
                 datastore.put(defaultPlayerChoice);
             }
         }
-
 
 
         StringBuilder starPlayerTwitter = new StringBuilder();

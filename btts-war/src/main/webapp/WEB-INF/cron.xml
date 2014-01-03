@@ -76,11 +76,6 @@
         <schedule>every sunday 19:00</schedule>
     </cron>
     <cron>
-        <url>/emailresults</url>
-        <description>Email Results</description>
-        <schedule>every monday 06:00</schedule>
-    </cron>
-    <cron>
         <url>/fixtures</url>
         <description>Get Monday Fixtures</description>
         <schedule>every monday 22:30</schedule>

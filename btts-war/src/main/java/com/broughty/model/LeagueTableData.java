@@ -8,11 +8,13 @@ import java.util.List;
 public class LeagueTableData {
 
     String playerName;
+    Integer total;
     List<Integer> points;
 
     public LeagueTableData(String playerName, List<Integer> points) {
         this.playerName = playerName;
         this.points = points;
+        this.total = sum(points);
     }
 
     public String getPlayerName() {
@@ -31,10 +33,29 @@ public class LeagueTableData {
         this.points = points;
     }
 
+    public Integer getTotal() {
+        return total;
+    }
+
+    public void setTotal(Integer total) {
+        this.total = total;
+    }
+
+    public Integer sum(List<Integer> list) {
+        Integer sum = 0;
+        for (Integer i : list) {
+            if (i != null) {
+                sum = sum + i;
+            }
+        }
+        return sum;
+    }
+
     @Override
     public String toString() {
         return "LeagueTableData{" +
                 "playerName='" + playerName + '\'' +
+                ", total=" + total +
                 ", points=" + points +
                 '}';
     }

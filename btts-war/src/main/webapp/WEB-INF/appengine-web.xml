@@ -11,10 +11,14 @@
 
     <static-files>
         <include path="/favicon.ico"/>
+        <include path="/app/**.js" />
+        <include path="/app/controllers/**.js" />
+        <include path="/app/factories/**.js" />
         <include path="/js/vendor/**.js" />
         <include path="/js/**.js" />
         <include path="/css/**.css" />
         <include path="/**.html" />
+        <include path="app/partials/**.html" />
     </static-files>
 
 

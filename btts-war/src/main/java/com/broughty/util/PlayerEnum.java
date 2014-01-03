@@ -18,7 +18,7 @@ public enum PlayerEnum {
     Dave("Dave","Dave.Spruit@hpdsoftware.com", "07956537929"),
     Frank("Frank","Frank.Weaver@hpdsoftware.com", "07743488945"),
     Gerald("Gerald","Gerald.McLaughlin@hpdsoftware.com", "07963386490"),
-    Jason("Jason","Jason.King@hpdsoftware.com", null),
+    Jason("Jason","Jason.King@hpdsoftware.com", "07429084210"),
     Jonathon("Jonathon","Jonathan.Neighbour@hpdsoftware.com", null),
     Jose("Jose","Jose.Santos@hpdsoftware.com", null),
     Mat("Mat","mat@broughty.com","07712647785"),
