@@ -86,7 +86,7 @@ public class BTTSHelper {
             // this will act as a week where we weren't checking....
             log.info("Checking choice1Points value : " + choice.getProperty("choice1Points"));
             if (choice.getProperty("choice1Points") != null) {
-                results.add(sumPlayerWeeklyPoints(choice));
+                results.add(sumPlayerWeeklyPoints(choice, true));
             }
         }
 
@@ -95,13 +95,52 @@ public class BTTSHelper {
 
     }
 
-    private static Integer sumPlayerWeeklyPoints(Entity choice) {
+    public static Integer getPlayerBothTeamScoredCount(String playerName) {
+        log.log(Level.FINE, "getting number of BTTS for " + playerName);
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        Query query = new Query("Choices");
+        query.addFilter(ChoicesEntityEnum.PLAYER.getFieldName(), Query.FilterOperator.EQUAL, playerName);
+        PreparedQuery pq = datastore.prepare(query);
+        int bttsCount = 0;
+        for (Entity choice : pq.asIterable()) {
+
+            if (choice.getProperty("choice1Points") != null) {
+                bttsCount += sumPlayerWeeklyPoints(choice, false);
+            }
+        }
+
+        log.info("player count btts for " + playerName + " = " + bttsCount);
+        return bttsCount;
+
+    }
+
+
+    private static Integer sumPlayerWeeklyPoints(Entity choice, boolean pointSum) {
         Integer points = new Integer(0);
-        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName())).intValue() : 0);
-        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName())).intValue() : 0);
-        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName())).intValue() : 0);
-        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue() : 0);
-        return points;
+        // number of times got 3 points
+        Integer bttsCount = 0;
+        int choice1 = (choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName())).intValue() : 0);
+        points = points + choice1;
+        if (choice1 == BTTSHelper.BOTH_TEAMS_SCORED) {
+            bttsCount++;
+        }
+        int choice2 = (choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName())).intValue() : 0);
+        points = points + choice2;
+        if (choice2 == BTTSHelper.BOTH_TEAMS_SCORED) {
+            bttsCount++;
+        }
+        int choice3 = (choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName())).intValue() : 0);
+        points = points + choice3;
+        if (choice3 == BTTSHelper.BOTH_TEAMS_SCORED) {
+            bttsCount++;
+        }
+
+        int choice4 = (choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue() : 0);
+        points = points + choice4;
+        if (choice3 == BTTSHelper.BOTH_TEAMS_SCORED) {
+            bttsCount++;
+        }
+        return pointSum ? points : bttsCount;
     }
 
 

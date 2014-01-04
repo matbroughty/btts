@@ -28,7 +28,7 @@ public class LeagueController {
     @ResponseBody
     LeagueTableData getPlayerPointsInJSON(@PathVariable String name) {
         log.info("request for player points for player " + name);
-        LeagueTableData table = new LeagueTableData(name, BTTSHelper.getPlayerPoints(name));
+        LeagueTableData table = new LeagueTableData(name, BTTSHelper.getPlayerPoints(name), BTTSHelper.getPlayerBothTeamScoredCount(name));
         log.info("request for player points for player " + name + " results " + table.toString());
         return table;
 
@@ -45,7 +45,7 @@ public class LeagueController {
 
         for(PlayerEnum player : PlayerEnum.values()){
             log.info("Getting League Points for player " + player.getName());
-            tableDataList.add(new LeagueTableData(player.getName(), BTTSHelper.getPlayerPoints(player.getName())));
+            tableDataList.add(new LeagueTableData(player.getName(), BTTSHelper.getPlayerPoints(player.getName()), BTTSHelper.getPlayerBothTeamScoredCount(player.getName())));
         }
 
         log.info("request for all player results " + tableDataList.toString());

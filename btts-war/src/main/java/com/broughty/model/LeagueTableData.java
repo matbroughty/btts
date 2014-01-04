@@ -12,12 +12,14 @@ public class LeagueTableData {
 
     String playerName;
     Integer total;
+    Integer bttsCount;
     List<Integer> points;
 
-    public LeagueTableData(String playerName, List<Integer> points) {
+    public LeagueTableData(String playerName, List<Integer> points, Integer bttsCount) {
         setPlayerName(playerName);
         this.points = points;
         this.total = sum(points);
+        this.bttsCount = bttsCount;
     }
 
     public String getPlayerName() {
@@ -44,6 +46,14 @@ public class LeagueTableData {
         this.total = total;
     }
 
+    public Integer getBttsCount() {
+        return bttsCount;
+    }
+
+    public void setBttsCount(Integer bttsCount) {
+        this.bttsCount = bttsCount;
+    }
+
     public Integer sum(List<Integer> list) {
         Integer sum = 0;
         for (Integer i : list) {
@@ -59,7 +69,32 @@ public class LeagueTableData {
         return "LeagueTableData{" +
                 "playerName='" + playerName + '\'' +
                 ", total=" + total +
+                ", bttsCount=" + bttsCount +
                 ", points=" + points +
                 '}';
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        LeagueTableData that = (LeagueTableData) o;
+
+        if (!bttsCount.equals(that.bttsCount)) return false;
+        if (!playerName.equals(that.playerName)) return false;
+        if (!points.equals(that.points)) return false;
+        if (!total.equals(that.total)) return false;
+
+        return true;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = playerName.hashCode();
+        result = 31 * result + total.hashCode();
+        result = 31 * result + bttsCount.hashCode();
+        result = 31 * result + points.hashCode();
+        return result;
     }
 }
