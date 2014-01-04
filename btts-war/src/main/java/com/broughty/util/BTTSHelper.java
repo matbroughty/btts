@@ -137,7 +137,7 @@ public class BTTSHelper {
 
         int choice4 = (choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue() : 0);
         points = points + choice4;
-        if (choice3 == BTTSHelper.BOTH_TEAMS_SCORED) {
+        if (choice4 == BTTSHelper.BOTH_TEAMS_SCORED) {
             bttsCount++;
         }
         return pointSum ? points : bttsCount;
