@@ -81,7 +81,7 @@ public class EmailResultsServlet extends HttpServlet {
 
         playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player choices </h2></a>");
         playerTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th><th>Choice One</th><th>Result</th><th>Points</th><th>Choice Two</th><th>Result</th><th>Points</th><th>Choice Three</th><th>Result</th><th>Points</th><th>Choice Four</th><th>Result</th><th>Points</th></tr> </thead> ");
         playerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
@@ -100,24 +100,36 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(choice1);
             twitterPlayerResult.append(":");
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice1Result")));
+            twitterPlayerResult.append(" (");
+            twitterPlayerResult.append(choice.getProperty("choice1Points"));
+            twitterPlayerResult.append("(");
             twitterPlayerResult.append("\n");
 
             String choice2 = (String) choice.getProperty("choice2");
             twitterPlayerResult.append(choice2);
             twitterPlayerResult.append(":");
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice2Result")));
+            twitterPlayerResult.append(" (");
+            twitterPlayerResult.append(choice.getProperty("choice2Points"));
+            twitterPlayerResult.append("(");
             twitterPlayerResult.append("\n");
 
             String choice3 = (String) choice.getProperty("choice3");
             twitterPlayerResult.append(choice3);
             twitterPlayerResult.append(":");
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice3Result")));
+            twitterPlayerResult.append(" (");
+            twitterPlayerResult.append(choice.getProperty("choice3Points"));
+            twitterPlayerResult.append("(");
             twitterPlayerResult.append("\n");
 
             String choice4 = (String) choice.getProperty("choice4");
             twitterPlayerResult.append(choice4);
             twitterPlayerResult.append(":");
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice4Result")));
+            twitterPlayerResult.append(" (");
+            twitterPlayerResult.append(choice.getProperty("choice4Points"));
+            twitterPlayerResult.append("(");
             twitterPlayerResult.append("");
 
             if (i % 2 == 0) {
@@ -131,15 +143,17 @@ public class EmailResultsServlet extends HttpServlet {
             playerTable.append("<td>").append(playerName).append("</td>");
             playerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             playerTable.append("<td>").append(choice1).append("</td>");
-
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice1Result"))).append("</td>");
+            playerTable.append("<td>").append(choice.getProperty("choice1Points")).append("</td>");
             playerTable.append("<td>").append(choice2).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice2Result"))).append("</td>");
+            playerTable.append("<td>").append(choice.getProperty("choice2Points")).append("</td>");
             playerTable.append("<td>").append(choice3).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice3Result"))).append("</td>");
+            playerTable.append("<td>").append(choice.getProperty("choice3Points")).append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice4Result"))).append("</td>");
-
+            playerTable.append("<td>").append(choice.getProperty("choice4Points")).append("</td>");
 
             playerTable.append("</tr>");
 
