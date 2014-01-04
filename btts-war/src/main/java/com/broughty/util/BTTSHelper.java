@@ -1,6 +1,7 @@
 package com.broughty.util;
 
 import com.broughty.model.PlayerChoicesData;
+import com.broughty.model.PlayerData;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -94,10 +95,10 @@ public class BTTSHelper {
 
     private static Integer sumPlayerWeeklyPoints(Entity choice) {
         Integer points = new Integer(0);
-        points = points + (choice.getProperty("choice1Points") != null ? ((Number) choice.getProperty("choice1Points")).intValue() : 0);
-        points = points + (choice.getProperty("choice2Points") != null ? ((Number) choice.getProperty("choice2Points")).intValue() : 0);
-        points = points + (choice.getProperty("choice3Points") != null ? ((Number) choice.getProperty("choice3Points")).intValue() : 0);
-        points = points + (choice.getProperty("choice4Points") != null ? ((Number) choice.getProperty("choice4Points")).intValue() : 0);
+        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName())).intValue() : 0);
+        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName())).intValue() : 0);
+        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName())).intValue() : 0);
+        points = points + (choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName()) != null ? ((Number) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue() : 0);
         return points;
     }
 
@@ -159,4 +160,12 @@ public class BTTSHelper {
     }
 
 
+    public static List<PlayerData> getPlayers() {
+        List<PlayerData> players = new ArrayList<PlayerData>(PlayerEnum.values().length);
+        for (PlayerEnum player : PlayerEnum.values()) {
+            PlayerData playerData = new PlayerData(player.getName(), player.getEmail(), player.getMobile());
+            players.add(playerData);
+        }
+        return players;
+    }
 }

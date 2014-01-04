@@ -1,6 +1,6 @@
 bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
     $scope.$log = $log;
-    $http.get('http://btts.broughty.com/rest/choices').
+    $http.get('http://btts.broughty.com/api/choices').
         success(function (data) {
             $scope.currentChoices = data;
         }).
@@ -13,7 +13,7 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
 });
 bttsApp.controller('CurrentStarChoicesController', function ($scope, $http, $log) {
     $scope.$log = $log;
-    $http.get('http://btts.broughty.com/rest/choices/Star').
+    $http.get('http://btts.broughty.com/api/choices/Star').
         success(function (data) {
             $scope.currentChoices = data;
         }).
@@ -24,4 +24,3 @@ bttsApp.controller('CurrentStarChoicesController', function ($scope, $http, $log
             $scope.status = status;
         });
 });
-

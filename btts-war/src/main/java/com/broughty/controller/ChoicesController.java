@@ -1,16 +1,13 @@
 package com.broughty.controller;
 
 import com.broughty.model.PlayerChoicesData;
-import com.broughty.model.LeagueTableData;
 import com.broughty.util.BTTSHelper;
-import com.broughty.util.PlayerEnum;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
@@ -32,7 +29,7 @@ public class ChoicesController {
 
     }
 
-    @RequestMapping(method = RequestMethod.GET,  produces = "application/json")
+    @RequestMapping(method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     List<PlayerChoicesData> getCurrentWeekChoicesInJSON() {
@@ -41,7 +38,7 @@ public class ChoicesController {
     }
 
 
-    @RequestMapping(value = "{week}/player/{name}", method = RequestMethod.GET, produces = "application/json")
+    @RequestMapping(value = "{week}/{name}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
     PlayerChoicesData getPlayerWeekChoicesInJSON(@PathVariable String week, @PathVariable String name) {
