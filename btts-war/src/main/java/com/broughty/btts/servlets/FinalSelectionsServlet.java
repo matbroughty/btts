@@ -100,6 +100,11 @@ public class FinalSelectionsServlet extends HttpServlet {
             starPlayerChoice.setProperty("choice2Result", null);
             starPlayerChoice.setProperty("choice3Result", null);
             starPlayerChoice.setProperty("choice4Result", null);
+            starPlayerChoice.setProperty("choice1Points", BTTSHelper.SCORELESS);
+            starPlayerChoice.setProperty("choice2Points", BTTSHelper.SCORELESS);
+            starPlayerChoice.setProperty("choice3Points", BTTSHelper.SCORELESS);
+            starPlayerChoice.setProperty("choice4Points", BTTSHelper.SCORELESS);
+
 
         }
 

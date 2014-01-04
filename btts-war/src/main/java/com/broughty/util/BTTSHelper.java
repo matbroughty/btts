@@ -45,7 +45,12 @@ public class BTTSHelper {
         return (Boolean) choiceResult;
     }
 
-
+    public static Integer entityPropertyAsInteger(Object choiceResult) {
+        if (choiceResult == null || !(choiceResult instanceof Integer)) {
+            return 0;
+        }
+        return (Integer) choiceResult;
+    }
 
     public static String getCurrentWeek(){
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();

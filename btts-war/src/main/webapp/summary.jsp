@@ -130,16 +130,16 @@
             playerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             playerTable.append("<td>").append(choice1).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice1Result"))).append("</td>");
-            playerTable.append("<td>").append(choice.getProperty("choice1Points")).append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.entityPropertyAsInteger(choice.getProperty("choice1Points"))).append("</td>");
             playerTable.append("<td>").append(choice2).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice2Result"))).append("</td>");
-            playerTable.append("<td>").append(choice.getProperty("choice2Points")).append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.entityPropertyAsInteger(choice.getProperty("choice2Points"))).append("</td>");
             playerTable.append("<td>").append(choice3).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice3Result"))).append("</td>");
-            playerTable.append("<td>").append(choice.getProperty("choice3Points")).append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.entityPropertyAsInteger(choice.getProperty("choice3Points"))).append("</td>");
             playerTable.append("<td>").append(choice4).append("</td>");
             playerTable.append("<td>").append(BTTSHelper.bothTeamsScored(choice.getProperty("choice4Result"))).append("</td>");
-            playerTable.append("<td>").append(choice.getProperty("choice4Points")).append("</td>");
+            playerTable.append("<td>").append(BTTSHelper.entityPropertyAsInteger(choice.getProperty("choice4Points"))).append("</td>");
             playerTable.append("<td>").append(Boolean.toString(BTTSHelper.entityPropertyAsBoolean(choice.getProperty("defaultChoices")))).append("</td>");
             playerTable.append("</tr>");
 
@@ -258,7 +258,7 @@
         <ul id="std-menu-items">
             <li><a href="/summary.jsp">Current Week</a></li>
             <li><a href="/viewchoices.jsp">Previous Weeks</a></li>
-
+            <li><a href="/league.html">Previous Weeks</a></li>
             <li>
                 <a href="">Maintenance</a>
                 <ul>
