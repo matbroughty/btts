@@ -1,0 +1,23 @@
+    <div class="container">
+    	<table class="pure-table pure-table-bordered"><thead><tr><th>Player</th> <th>Week</th> <th>Choice One</th><th>Result</th><th>Points</th><th>Choice Two</th><th>Result</th><th>Points</th><th>Choice Three</th><th>Result</th><th>Points</th><th>Choice Four</th><th>Result</th><th>Points</th><th>Default Choice</th></tr> </thead>
+    		<tbody>
+    			<tr data-ng-repeat="choices in currentChoices | orderBy:'player'" ng-class-odd="'pure-table-odd'" >
+    				<td>{{choices.player}}</td>
+    				<td>{{choices.week}}</td>
+                    <td>{{choices.choice1}}</td>
+                    <td>{{choices.choice1Result}}</td>
+                    <td>{{choices.choice1Points}}</td>
+                    <td>{{choices.choice2}}</td>
+                    <td>{{choices.choice2Result}}</td>
+                    <td>{{choices.choice2Points}}</td>
+                    <td>{{choices.choice3}}</td>
+                    <td>{{choices.choice3Result}}</td>
+                    <td>{{choices.choice3Points}}</td>
+                    <td>{{choices.choice4}}</td>
+                    <td>{{choices.choice4Result}}</td>
+                    <td>{{choices.choice4Points}}</td>
+                    <td>{{choices.defaultChoices}}</td>
+                </tr>
+    		</tbody>
+    	</table>  
+    </div> 
