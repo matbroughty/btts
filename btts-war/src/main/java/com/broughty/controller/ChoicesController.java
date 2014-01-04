@@ -23,7 +23,6 @@ public class ChoicesController {
 
     private static final Logger log = Logger.getLogger(ChoicesController.class.getName());
 
-
     @RequestMapping(value = "{week}", method = RequestMethod.GET, produces = "application/json")
     public
     @ResponseBody
@@ -33,8 +32,6 @@ public class ChoicesController {
 
     }
 
-
-
     @RequestMapping(method = RequestMethod.GET,  produces = "application/json")
     public
     @ResponseBody
@@ -43,5 +40,13 @@ public class ChoicesController {
         return BTTSHelper.getWeeksChoices(BTTSHelper.getCurrentWeek());
     }
 
+
+    @RequestMapping(value = "{week}/player/{name}", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    PlayerChoicesData getPlayerWeekChoicesInJSON(@PathVariable String week, @PathVariable String name) {
+        log.info("json request player choices for player " + name + " for week " + week);
+        return BTTSHelper.getPlayersWeeksChoices(week, name);
+    }
 
 }

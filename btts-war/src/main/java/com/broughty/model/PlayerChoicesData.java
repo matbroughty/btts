@@ -1,6 +1,8 @@
 package com.broughty.model;
 
+import com.broughty.util.PlayerEnum;
 import com.broughty.util.ResultEnum;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.Date;
 
@@ -44,7 +46,7 @@ public class PlayerChoicesData {
     }
 
     public void setPlayer(String player) {
-        this.player = player;
+        this.player = StringUtils.containsIgnoreCase(player, "Star") ? PlayerEnum.Star.toString() : player;
     }
 
     public String getChoice1() {

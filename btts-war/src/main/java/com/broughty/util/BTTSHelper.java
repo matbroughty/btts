@@ -2,6 +2,7 @@ package com.broughty.util;
 
 import com.broughty.model.PlayerChoicesData;
 import com.google.appengine.api.datastore.*;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -75,7 +76,7 @@ public class BTTSHelper {
         log.log(Level.FINE, "getting player points for " + playerName);
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
         Query query = new Query("Choices");
-        query.addFilter("player", Query.FilterOperator.EQUAL, playerName);
+        query.addFilter(ChoicesEntityEnum.PLAYER.getFieldName(), Query.FilterOperator.EQUAL, playerName);
         PreparedQuery pq = datastore.prepare(query);
 
         List<Integer> results = new ArrayList<Integer>();
@@ -100,43 +101,62 @@ public class BTTSHelper {
         return points;
     }
 
+
+    public static PlayerChoicesData getPlayersWeeksChoices(String week, String playerName) {
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+        if(StringUtils.containsIgnoreCase(playerName, "Star")){
+            playerName = PlayerEnum.Star.getName();
+        }
+        Key weekKey = KeyFactory.createKey("Week", week);
+        Query query = new Query("Choices", weekKey).addFilter(ChoicesEntityEnum.PLAYER.getFieldName(), Query.FilterOperator.EQUAL, playerName);
+        Entity choice = datastore.prepare(query).asSingleEntity();
+        PlayerChoicesData playerChoicesData = createPlayerChoicesData(week, choice);
+        return playerChoicesData;
+    }
+
+
     public static List<PlayerChoicesData> getWeeksChoices(String week) {
 
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
 
         Key weekKey = KeyFactory.createKey("Week", week);
-        Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
+        Query query = new Query("Choices", weekKey).addSort(ChoicesEntityEnum.DATE.getFieldName(), Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
         List<PlayerChoicesData> weeksChoices = new ArrayList<PlayerChoicesData>();
         for (Entity choice : choices) {
-            PlayerChoicesData playerChoicesData = new PlayerChoicesData(week);
-            playerChoicesData.setPlayer((String) choice.getProperty(ChoicesEntityEnum.PLAYER.getFieldName()));
-            playerChoicesData.setAlerted(BTTSHelper.entityPropertyAsBoolean(choice.getProperty(ChoicesEntityEnum.ALERTED.getFieldName())));
-            playerChoicesData.setChoice1((String) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE.getFieldName()));
-            playerChoicesData.setChoice2((String) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO.getFieldName()));
-            playerChoicesData.setChoice3((String) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE.getFieldName()));
-            playerChoicesData.setChoice4((String) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR.getFieldName()));
-
-            playerChoicesData.setChoice1Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName())).intValue());
-            playerChoicesData.setChoice2Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName())).intValue());
-            playerChoicesData.setChoice3Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName())).intValue());
-            playerChoicesData.setChoice4Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue());
-
-            playerChoicesData.setChoice1Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_RESULT.getFieldName())));
-            playerChoicesData.setChoice2Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_RESULT.getFieldName())));
-            playerChoicesData.setChoice3Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_RESULT.getFieldName())));
-            playerChoicesData.setChoice4Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_RESULT.getFieldName())));
-
-
-            playerChoicesData.setDateEntered((Date) choice.getProperty(ChoicesEntityEnum.DATE.getFieldName()));
-
-            playerChoicesData.setDefaultChoices(BTTSHelper.entityPropertyAsBoolean(choice.getProperty(ChoicesEntityEnum.DEFAULT.getFieldName())));
-
-            weeksChoices.add(playerChoicesData);
+            weeksChoices.add(createPlayerChoicesData(week, choice));
         }
-
-
         return weeksChoices;
     }
+
+    private static PlayerChoicesData createPlayerChoicesData(String week, Entity choice) {
+        PlayerChoicesData playerChoicesData = new PlayerChoicesData(week);
+        playerChoicesData.setPlayer((String) choice.getProperty(ChoicesEntityEnum.PLAYER.getFieldName()));
+        playerChoicesData.setAlerted(BTTSHelper.entityPropertyAsBoolean(choice.getProperty(ChoicesEntityEnum.ALERTED.getFieldName())));
+        playerChoicesData.setChoice1((String) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE.getFieldName()));
+        playerChoicesData.setChoice2((String) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO.getFieldName()));
+        playerChoicesData.setChoice3((String) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE.getFieldName()));
+        playerChoicesData.setChoice4((String) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR.getFieldName()));
+
+        playerChoicesData.setChoice1Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_POINTS.getFieldName())).intValue());
+        playerChoicesData.setChoice2Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_POINTS.getFieldName())).intValue());
+        playerChoicesData.setChoice3Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_POINTS.getFieldName())).intValue());
+        playerChoicesData.setChoice4Points(BTTSHelper.entityPropertyAsNumber(choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_POINTS.getFieldName())).intValue());
+
+        playerChoicesData.setChoice1Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_ONE_RESULT.getFieldName())));
+        playerChoicesData.setChoice2Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_TWO_RESULT.getFieldName())));
+        playerChoicesData.setChoice3Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_THREE_RESULT.getFieldName())));
+        playerChoicesData.setChoice4Result(ResultEnum.fromBoolean((Boolean) choice.getProperty(ChoicesEntityEnum.CHOICE_FOUR_RESULT.getFieldName())));
+
+
+        playerChoicesData.setDateEntered((Date) choice.getProperty(ChoicesEntityEnum.DATE.getFieldName()));
+
+        playerChoicesData.setDefaultChoices(BTTSHelper.entityPropertyAsBoolean(choice.getProperty(ChoicesEntityEnum.DEFAULT.getFieldName())));
+
+
+        return playerChoicesData;
+    }
+
+
 }
