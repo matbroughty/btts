@@ -46,10 +46,10 @@ public class BTTSHelper {
     }
 
     public static Integer entityPropertyAsInteger(Object choiceResult) {
-        if (choiceResult == null || !(choiceResult instanceof Integer)) {
+        if (choiceResult == null) {
             return 0;
         }
-        return (Integer) choiceResult;
+        return (Integer)choiceResult;
     }
 
     public static String getCurrentWeek(){

@@ -258,7 +258,7 @@
         <ul id="std-menu-items">
             <li><a href="/summary.jsp">Current Week</a></li>
             <li><a href="/viewchoices.jsp">Previous Weeks</a></li>
-            <li><a href="/league.html">Previous Weeks</a></li>
+            <li><a href="/league.html">League</a></li>
             <li>
                 <a href="">Maintenance</a>
                 <ul>
