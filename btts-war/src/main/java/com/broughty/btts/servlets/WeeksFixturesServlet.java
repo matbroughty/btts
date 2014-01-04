@@ -195,7 +195,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                 alertString.append(" got all 4 choices!");
             }
             for (int i = 1; i <= 4; i++) {
-                allTeamsScored[i - 1] = (Boolean) choice.getProperty("choice" + i + "Result");
+                allTeamsScored[i - 1] = BTTSHelper.entityPropertyAsBoolean(choice.getProperty("choice" + i + "Result"));
                 alertString.append("\n");
                 alertString.append(choice.getProperty("choice" + i));
             }
@@ -269,6 +269,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                 // if game hasn't been marked yet then show it is under way.
                 if (choice.getProperty("choice" + i + "Result") == null){
                     choice.setProperty("choice" + i + "Result", Boolean.FALSE);
+                    log.info("Marking home team game " + homeTeam + " as started." );
                     datastore.put(choice);
                 }
 
