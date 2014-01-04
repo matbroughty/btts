@@ -1,5 +1,8 @@
 package com.broughty.model;
 
+import com.broughty.util.PlayerEnum;
+import org.apache.commons.lang.StringUtils;
+
 import java.util.List;
 
 /**
@@ -12,7 +15,7 @@ public class LeagueTableData {
     List<Integer> points;
 
     public LeagueTableData(String playerName, List<Integer> points) {
-        this.playerName = playerName;
+        setPlayerName(playerName);
         this.points = points;
         this.total = sum(points);
     }
@@ -22,7 +25,7 @@ public class LeagueTableData {
     }
 
     public void setPlayerName(String playerName) {
-        this.playerName = playerName;
+        this.playerName = StringUtils.containsIgnoreCase(playerName, "Star") ? PlayerEnum.Star.toString() : playerName;
     }
 
     public List<Integer> getPoints() {
