@@ -83,12 +83,14 @@ public class BTTSHelper {
         List<Integer> results = new ArrayList<Integer>();
         for (Entity choice : pq.asIterable()) {
 
+            // this will act as a week where we weren't checking....
+            log.info("Checking choice1Points value : " + choice.getProperty("choice1Points"));
             if (choice.getProperty("choice1Points") != null) {
                 results.add(sumPlayerWeeklyPoints(choice));
             }
         }
 
-        log.log(Level.FINE, "player points for " + playerName + " = " + results);
+        log.info("player points for " + playerName + " = " + results);
         return results;
 
     }

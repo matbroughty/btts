@@ -44,8 +44,8 @@ public class LeagueController {
         List<LeagueTableData> tableDataList = new ArrayList<LeagueTableData>();
 
         for(PlayerEnum player : PlayerEnum.values()){
+            log.info("Getting League Points for player " + player.getName());
             tableDataList.add(new LeagueTableData(player.getName(), BTTSHelper.getPlayerPoints(player.getName())));
-
         }
 
         log.info("request for all player results " + tableDataList.toString());
