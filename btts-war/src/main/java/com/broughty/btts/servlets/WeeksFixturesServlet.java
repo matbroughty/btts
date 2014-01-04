@@ -269,6 +269,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                 // if game hasn't been marked yet then show it is under way.
                 if (choice.getProperty("choice" + i + "Result") == null){
                     choice.setProperty("choice" + i + "Result", Boolean.FALSE);
+                    datastore.put(choice);
                 }
 
                 // update points

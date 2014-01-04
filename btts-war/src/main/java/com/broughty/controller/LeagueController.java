@@ -28,7 +28,6 @@ public class LeagueController {
     @ResponseBody
     LeagueTableData getPlayerPointsInJSON(@PathVariable String name) {
         log.info("request for player points for player " + name);
-        BTTSHelper.getPlayerPoints(name);
         LeagueTableData table = new LeagueTableData(name, BTTSHelper.getPlayerPoints(name));
         log.info("request for player points for player " + name + " results " + table.toString());
         return table;
