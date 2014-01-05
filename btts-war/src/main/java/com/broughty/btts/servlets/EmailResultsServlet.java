@@ -102,7 +102,7 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice1Result")));
             twitterPlayerResult.append(" (");
             twitterPlayerResult.append(choice.getProperty("choice1Points"));
-            twitterPlayerResult.append("(");
+            twitterPlayerResult.append(")");
             twitterPlayerResult.append("\n");
 
             String choice2 = (String) choice.getProperty("choice2");
@@ -111,7 +111,7 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice2Result")));
             twitterPlayerResult.append(" (");
             twitterPlayerResult.append(choice.getProperty("choice2Points"));
-            twitterPlayerResult.append("(");
+            twitterPlayerResult.append(")");
             twitterPlayerResult.append("\n");
 
             String choice3 = (String) choice.getProperty("choice3");
@@ -120,7 +120,7 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice3Result")));
             twitterPlayerResult.append(" (");
             twitterPlayerResult.append(choice.getProperty("choice3Points"));
-            twitterPlayerResult.append("(");
+            twitterPlayerResult.append(")");
             twitterPlayerResult.append("\n");
 
             String choice4 = (String) choice.getProperty("choice4");
@@ -129,7 +129,7 @@ public class EmailResultsServlet extends HttpServlet {
             twitterPlayerResult.append(BTTSHelper.bothTeamsScoredHuman(choice.getProperty("choice4Result")));
             twitterPlayerResult.append(" (");
             twitterPlayerResult.append(choice.getProperty("choice4Points"));
-            twitterPlayerResult.append("(");
+            twitterPlayerResult.append(")");
             twitterPlayerResult.append("");
 
             if (i % 2 == 0) {

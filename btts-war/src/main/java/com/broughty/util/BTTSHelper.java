@@ -2,6 +2,7 @@ package com.broughty.util;
 
 import com.broughty.model.PlayerChoicesData;
 import com.broughty.model.PlayerData;
+import com.broughty.model.WeekData;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -22,6 +23,7 @@ public class BTTSHelper {
     public static final String FAIL = "&#10008;";
     public static final String WAITING = "&#9749";
     private static final Logger log = Logger.getLogger(BTTSHelper.class.getName());
+    private static WeekData currentWeekData;
 
     public static String bothTeamsScored(Object choiceResult) {
         if (choiceResult == null || !(choiceResult instanceof Boolean)) {
@@ -208,5 +210,25 @@ public class BTTSHelper {
             players.add(playerData);
         }
         return players;
+    }
+
+    public static WeekData getCurrentWeekData() {
+
+        WeekData weekData = new WeekData();
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+
+        Query q = new Query("CurrentWeek");
+        PreparedQuery pq = datastore.prepare(q);
+
+        Entity currentWeek = pq.asSingleEntity();
+        String week = "N/A";
+        weekData.setWeekNumber(week);
+        if (currentWeek != null) {
+            weekData.setWeekNumber((String) currentWeek.getProperty("week"));
+            weekData.setStartDate((Date) currentWeek.getProperty("startDate"));
+            weekData.setEndDate((Date) currentWeek.getProperty("endDate"));
+        }
+        return weekData;
     }
 }
