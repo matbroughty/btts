@@ -18,7 +18,7 @@
 <title></title>
 <meta name="description" content="">
 <meta name="viewport" content="width=device-width">
-<script src="http://yui.yahooapis.com/3.14.0/build/yui/yui-min.js"></script>
+<script src="http://yui.yahooapis.com/3.14.1/build/yui/yui-min.js"></script>
 <script>
     YUI({
         classNamePrefix: 'pure'
@@ -222,24 +222,30 @@
 <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
 
 <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
-<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=fontawesome">
+<%--<link rel="stylesheet" href="http://weloveiconfonts.com/api/?family=fontawesome">--%>
 <link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
+<link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
 <script src="js/Chart.js"></script>
 <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+
+
+
+
 <script type="text/javascript">
-    google.load("visualization", "1", {packages: ["corechart"]});
+    google.load("visualization", "1", {packages:["corechart"]});
     google.setOnLoadCallback(drawChart);
     function drawChart() {
         var data =
-        <%= graphData.toString()%>
+    <%= graphData.toString()%>
 
         var options = {
-            title: 'Combined choices',
-            vAxis: {title: 'Team', titleTextStyle: {color: 'black'}},
-            ledgend: {position: 'top', textStyle: {color: 'black', fontSize: 16}},
-            colors: ['black'],
-            hAxis: {minValue: 0, format: '0'}
+            title:'Combined choices',
+            vAxis:{title:'Team', titleTextStyle:{color:'black'}},
+            ledgend:{position:'top', textStyle:{color:'black', fontSize:16}},
+            colors:['black'],
+            hAxis:{minValue:0, format:'0'}
         };
 
         var chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));

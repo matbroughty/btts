@@ -1,0 +1,901 @@
+<div class="container">
+
+
+<div class="pure-g">
+<div class="pure-u-1">
+<form class="pure-form pure-form-aligned" ng-submit="postChoices()">
+<fieldset>
+<div class="pure-control-group">
+    <label for="week">Week</label>
+    <select id="week" name="week">
+        <option selected>{{selectedWeekNumber}}
+        </option>
+    </select>
+</div>
+<div class="pure-control-group">
+    <label>Player</label>
+
+    <select name="player" ng-model="choice.playerName" ng-options="player.name for player in players">
+    </select>
+
+</div>
+<div class="pure-control-group">
+<label for="choice1">Choice One</label>
+<select id="choice1" name="choice1" ng-model="choice.choice1" >
+    <optgroup label="Premiership">
+        <option>Arsenal</option>
+        <option>Aston Villa</option>
+        <option>Cardiff</option>
+        <option>Chelsea</option>
+        <option>Crystal Palace</option>
+        <option>Everton</option>
+        <option>Fulham</option>
+        <option>Hull</option>
+        <option>Liverpool</option>
+        <option>Man City</option>
+        <option>Man Utd</option>
+        <option>Newcastle</option>
+        <option>Norwich</option>
+        <option>Southampton</option>
+        <option>Stoke</option>
+        <option>Sunderland</option>
+        <option>Swansea</option>
+        <option>Tottenham</option>
+        <option>West Brom</option>
+        <option>West Ham</option>
+    </optgroup>
+    <optgroup label="Championship">
+        <option>Barnsley</option>
+        <option>Birmingham</option>
+        <option>Blackburn</option>
+        <option>Blackpool</option>
+        <option>Bolton</option>
+        <option>Bournemouth</option>
+        <option>Brighton</option>
+        <option>Burnley</option>
+        <option>Charlton</option>
+        <option>Derby</option>
+        <option>Doncaster</option>
+        <option>Huddersfield</option>
+        <option>Ipswich</option>
+        <option>Leeds</option>
+        <option>Leicester</option>
+        <option>Middlesbrough</option>
+        <option>Millwall</option>
+        <option>Nottm Forest</option>
+        <option>QPR</option>
+        <option>Reading</option>
+        <option>Sheff Wed</option>
+        <option>Watford</option>
+        <option>Wigan</option>
+        <option>Yeovil</option>
+    </optgroup>
+    <optgroup label="League One">
+        <option>Bradford</option>
+        <option>Brentford</option>
+        <option>Bristol City</option>
+        <option>Carlisle</option>
+        <option>Colchester</option>
+        <option>Coventry</option>
+        <option>Crawley</option>
+        <option>Crewe</option>
+        <option>Gillingham</option>
+        <option>Leyton Orient</option>
+        <option>MK Dons</option>
+        <option>Notts County</option>
+        <option>Oldham</option>
+        <option>Peterborough</option>
+        <option>Port Vale</option>
+        <option>Preston</option>
+        <option>Rotherham</option>
+        <option>Sheffield</option>
+        <option>Shrewsbury</option>
+        <option>Stevenage</option>
+        <option>Swindon</option>
+        <option>Tranmere</option>
+        <option>Walsall</option>
+        <option>Wolves</option>
+    </optgroup>
+    <optgroup label="League Two">
+        <option>Accrington</option>
+        <option>Wimbledon</option>
+        <option>Bristol Rovers</option>
+        <option>Burton</option>
+        <option>Bury</option>
+        <option>Cheltenham</option>
+        <option>Chesterfield</option>
+        <option>Dag & Red</option>
+        <option>Exeter</option>
+        <option>Fleetwood</option>
+        <option>Hartlepool</option>
+        <option>Mansfield</option>
+        <option>Morecambe</option>
+        <option>Newport</option>
+        <option>Northampton</option>
+        <option>Oxford Utd</option>
+        <option>Plymouth</option>
+        <option>Portsmouth</option>
+        <option>Rochdale</option>
+        <option>Scunthorpe</option>
+        <option>Southend</option>
+        <option>Torquay</option>
+        <option>Wycombe</option>
+        <option>York</option>
+    </optgroup>
+    <optgroup label="Scottish Premiership">
+        <option>Aberdeen</option>
+        <option>Celtic</option>
+        <option>Dundee Utd</option>
+        <option>Hearts</option>
+        <option>Hibernian</option>
+        <option>Inverness CT</option>
+        <option>Kilmarnock</option>
+        <option>Motherwell</option>
+        <option>Partick Thistle</option>
+        <option>Ross County</option>
+        <option>St Johnstone</option>
+        <option>St Mirren</option>
+    </optgroup>
+    <optgroup label="Scottish Championship">
+        <option>Dundee</option>
+        <option>Hamilton</option>
+        <option>Falkirk</option>
+        <option>Raith Rovers</option>
+        <option>Alloa</option>
+        <option>Livingston</option>
+        <option>Queen of Sth</option>
+        <option>Dumbarton</option>
+        <option>Cowdenbeath</option>
+        <option>Morton</option>
+    </optgroup>
+    <optgroup label="Scottish League One">
+        <option>Airdrieonians</option>
+        <option>Arbroath</option>
+        <option>Ayr</option>
+        <option>Brechin</option>
+        <option>Dunfermline</option>
+        <option>East Fife</option>
+        <option>Forfar</option>
+        <option>Rangers</option>
+        <option>Stenhousemuir</option>
+        <option>Stranraer</option>
+    </optgroup>
+    <optgroup label="Scottish League Two">
+        <option>Albion</option>
+        <option>Annan</option>
+        <option>Berwick</option>
+        <option>Clyde</option>
+        <option>East Stirling</option>
+        <option>Elgin</option>
+        <option>Montrose</option>
+        <option>Peterhead</option>
+        <option>Queen's Park</option>
+        <option>Stirling</option>
+    </optgroup>
+    <optgroup label="Conference">
+        <option>Luton</option>
+        <option>Cambridge</option>
+        <option>Alfreton</option>
+        <option>Grimsby</option>
+        <option>Halifax</option>
+        <option>Kidderminster</option>
+        <option>Nuneaton</option>
+        <option>Salisbury</option>
+        <option>Barnet</option>
+        <option>Braintree</option>
+        <option>Macclesfield</option>
+        <option>Gateshead</option>
+        <option>Welling</option>
+        <option>Forest Green</option>
+        <option>Wrexham</option>
+        <option>Hereford</option>
+        <option>Woking</option>
+        <option>Lincoln City</option>
+        <option>Aldershot</option>
+        <option>Southport</option>
+        <option>Chester</option>
+        <option>Tamworth</option>
+        <option>Dartford</option>
+        <option>Hyde</option>
+    </optgroup>
+    <optgroup label="La Liga">
+        <option>Barcelona</option>
+        <option>Atlético Madrid</option>
+        <option>Real Madrid</option>
+        <option>Athletic Club</option>
+        <option>Real Sociedad</option>
+        <option>Villarreal</option>
+        <option>Sevilla</option>
+        <option>Getafe</option>
+        <option>Espanyol</option>
+        <option>Málaga</option>
+        <option>Valencia CF</option>
+        <option>Granada CF</option>
+        <option>Levante</option>
+        <option>Elche</option>
+        <option>Celta de Vigo</option>
+        <option>Almería</option>
+        <option>Real Valladolid</option>
+        <option>Osasuna</option>
+        <option>Rayo Vallecano</option>
+        <option>Real Betis</option>
+    </optgroup>
+</select>
+</div>
+<div class="pure-control-group">
+<label for="choice2">Choice Two</label>
+<select id="choice2" name="choice2" ng-model="choice.choice2">
+    <optgroup label="Premiership">
+        <option>Arsenal</option>
+        <option>Aston Villa</option>
+        <option>Cardiff</option>
+        <option>Chelsea</option>
+        <option>Crystal Palace</option>
+        <option>Everton</option>
+        <option>Fulham</option>
+        <option>Hull</option>
+        <option>Liverpool</option>
+        <option>Man City</option>
+        <option>Man Utd</option>
+        <option>Newcastle</option>
+        <option>Norwich</option>
+        <option>Southampton</option>
+        <option>Stoke</option>
+        <option>Sunderland</option>
+        <option>Swansea</option>
+        <option>Tottenham</option>
+        <option>West Brom</option>
+        <option>West Ham</option>
+    </optgroup>
+    <optgroup label="Championship">
+        <option>Barnsley</option>
+        <option>Birmingham</option>
+        <option>Blackburn</option>
+        <option>Blackpool</option>
+        <option>Bolton</option>
+        <option>Bournemouth</option>
+        <option>Brighton</option>
+        <option>Burnley</option>
+        <option>Charlton</option>
+        <option>Derby</option>
+        <option>Doncaster</option>
+        <option>Huddersfield</option>
+        <option>Ipswich</option>
+        <option>Leeds</option>
+        <option>Leicester</option>
+        <option>Middlesbrough</option>
+        <option>Millwall</option>
+        <option>Nottm Forest</option>
+        <option>QPR</option>
+        <option>Reading</option>
+        <option>Sheff Wed</option>
+        <option>Watford</option>
+        <option>Wigan</option>
+        <option>Yeovil</option>
+    </optgroup>
+    <optgroup label="League One">
+        <option>Bradford</option>
+        <option>Brentford</option>
+        <option>Bristol City</option>
+        <option>Carlisle</option>
+        <option>Colchester</option>
+        <option>Coventry</option>
+        <option>Crawley</option>
+        <option>Crewe</option>
+        <option>Gillingham</option>
+        <option>Leyton Orient</option>
+        <option>MK Dons</option>
+        <option>Notts County</option>
+        <option>Oldham</option>
+        <option>Peterborough</option>
+        <option>Port Vale</option>
+        <option>Preston</option>
+        <option>Rotherham</option>
+        <option>Sheffield</option>
+        <option>Shrewsbury</option>
+        <option>Stevenage</option>
+        <option>Swindon</option>
+        <option>Tranmere</option>
+        <option>Walsall</option>
+        <option>Wolves</option>
+    </optgroup>
+    <optgroup label="League Two">
+        <option>Accrington</option>
+        <option>Wimbledon</option>
+        <option>Bristol Rovers</option>
+        <option>Burton</option>
+        <option>Bury</option>
+        <option>Cheltenham</option>
+        <option>Chesterfield</option>
+        <option>Dag & Red</option>
+        <option>Exeter</option>
+        <option>Fleetwood</option>
+        <option>Hartlepool</option>
+        <option>Mansfield</option>
+        <option>Morecambe</option>
+        <option>Newport</option>
+        <option>Northampton</option>
+        <option>Oxford Utd</option>
+        <option>Plymouth</option>
+        <option>Portsmouth</option>
+        <option>Rochdale</option>
+        <option>Scunthorpe</option>
+        <option>Southend</option>
+        <option>Torquay</option>
+        <option>Wycombe</option>
+        <option>York</option>
+    </optgroup>
+    <optgroup label="Scottish Premiership">
+        <option>Aberdeen</option>
+        <option>Celtic</option>
+        <option>Dundee Utd</option>
+        <option>Hearts</option>
+        <option>Hibernian</option>
+        <option>Inverness CT</option>
+        <option>Kilmarnock</option>
+        <option>Motherwell</option>
+        <option>Partick Thistle</option>
+        <option>Ross County</option>
+        <option>St Johnstone</option>
+        <option>St Mirren</option>
+    </optgroup>
+    <optgroup label="Scottish Championship">
+        <option>Dundee</option>
+        <option>Hamilton</option>
+        <option>Falkirk</option>
+        <option>Raith Rovers</option>
+        <option>Alloa</option>
+        <option>Livingston</option>
+        <option>Queen of Sth</option>
+        <option>Dumbarton</option>
+        <option>Cowdenbeath</option>
+        <option>Morton</option>
+    </optgroup>
+    <optgroup label="Scottish League One">
+        <option>Airdrieonians</option>
+        <option>Arbroath</option>
+        <option>Ayr</option>
+        <option>Brechin</option>
+        <option>Dunfermline</option>
+        <option>East Fife</option>
+        <option>Forfar</option>
+        <option>Rangers</option>
+        <option>Stenhousemuir</option>
+        <option>Stranraer</option>
+    </optgroup>
+    <optgroup label="Scottish League Two">
+        <option>Albion</option>
+        <option>Annan</option>
+        <option>Berwick</option>
+        <option>Clyde</option>
+        <option>East Stirling</option>
+        <option>Elgin</option>
+        <option>Montrose</option>
+        <option>Peterhead</option>
+        <option>Queen's Park</option>
+        <option>Stirling</option>
+    </optgroup>
+    <optgroup label="Conference">
+        <option>Luton</option>
+        <option>Cambridge</option>
+        <option>Alfreton</option>
+        <option>Grimsby</option>
+        <option>Halifax</option>
+        <option>Kidderminster</option>
+        <option>Nuneaton</option>
+        <option>Salisbury</option>
+        <option>Barnet</option>
+        <option>Braintree</option>
+        <option>Macclesfield</option>
+        <option>Gateshead</option>
+        <option>Welling</option>
+        <option>Forest Green</option>
+        <option>Wrexham</option>
+        <option>Hereford</option>
+        <option>Woking</option>
+        <option>Lincoln City</option>
+        <option>Aldershot</option>
+        <option>Southport</option>
+        <option>Chester</option>
+        <option>Tamworth</option>
+        <option>Dartford</option>
+        <option>Hyde</option>
+    </optgroup>
+    <optgroup label="La Liga">
+        <option>Barcelona</option>
+        <option>Atlético Madrid</option>
+        <option>Real Madrid</option>
+        <option>Athletic Club</option>
+        <option>Real Sociedad</option>
+        <option>Villarreal</option>
+        <option>Sevilla</option>
+        <option>Getafe</option>
+        <option>Espanyol</option>
+        <option>Málaga</option>
+        <option>Valencia CF</option>
+        <option>Granada CF</option>
+        <option>Levante</option>
+        <option>Elche</option>
+        <option>Celta de Vigo</option>
+        <option>Almería</option>
+        <option>Real Valladolid</option>
+        <option>Osasuna</option>
+        <option>Rayo Vallecano</option>
+        <option>Real Betis</option>
+    </optgroup>
+</select>
+</div>
+<div class="pure-control-group">
+<label for="choice3">Choice Three</label>
+<select id="choice3" name="choice3" ng-model="choice.choice3">
+    <optgroup label="Premiership">
+        <option>Arsenal</option>
+        <option>Aston Villa</option>
+        <option>Cardiff</option>
+        <option>Chelsea</option>
+        <option>Crystal Palace</option>
+        <option>Everton</option>
+        <option>Fulham</option>
+        <option>Hull</option>
+        <option>Liverpool</option>
+        <option>Man City</option>
+        <option>Man Utd</option>
+        <option>Newcastle</option>
+        <option>Norwich</option>
+        <option>Southampton</option>
+        <option>Stoke</option>
+        <option>Sunderland</option>
+        <option>Swansea</option>
+        <option>Tottenham</option>
+        <option>West Brom</option>
+        <option>West Ham</option>
+    </optgroup>
+    <optgroup label="Championship">
+        <option>Barnsley</option>
+        <option>Birmingham</option>
+        <option>Blackburn</option>
+        <option>Blackpool</option>
+        <option>Bolton</option>
+        <option>Bournemouth</option>
+        <option>Brighton</option>
+        <option>Burnley</option>
+        <option>Charlton</option>
+        <option>Derby</option>
+        <option>Doncaster</option>
+        <option>Huddersfield</option>
+        <option>Ipswich</option>
+        <option>Leeds</option>
+        <option>Leicester</option>
+        <option>Middlesbrough</option>
+        <option>Millwall</option>
+        <option>Nottm Forest</option>
+        <option>QPR</option>
+        <option>Reading</option>
+        <option>Sheff Wed</option>
+        <option>Watford</option>
+        <option>Wigan</option>
+        <option>Yeovil</option>
+    </optgroup>
+    <optgroup label="League One">
+        <option>Bradford</option>
+        <option>Brentford</option>
+        <option>Bristol City</option>
+        <option>Carlisle</option>
+        <option>Colchester</option>
+        <option>Coventry</option>
+        <option>Crawley</option>
+        <option>Crewe</option>
+        <option>Gillingham</option>
+        <option>Leyton Orient</option>
+        <option>MK Dons</option>
+        <option>Notts County</option>
+        <option>Oldham</option>
+        <option>Peterborough</option>
+        <option>Port Vale</option>
+        <option>Preston</option>
+        <option>Rotherham</option>
+        <option>Sheffield</option>
+        <option>Shrewsbury</option>
+        <option>Stevenage</option>
+        <option>Swindon</option>
+        <option>Tranmere</option>
+        <option>Walsall</option>
+        <option>Wolves</option>
+    </optgroup>
+    <optgroup label="League Two">
+        <option>Accrington</option>
+        <option>Wimbledon</option>
+        <option>Bristol Rovers</option>
+        <option>Burton</option>
+        <option>Bury</option>
+        <option>Cheltenham</option>
+        <option>Chesterfield</option>
+        <option>Dag & Red</option>
+        <option>Exeter</option>
+        <option>Fleetwood</option>
+        <option>Hartlepool</option>
+        <option>Mansfield</option>
+        <option>Morecambe</option>
+        <option>Newport</option>
+        <option>Northampton</option>
+        <option>Oxford Utd</option>
+        <option>Plymouth</option>
+        <option>Portsmouth</option>
+        <option>Rochdale</option>
+        <option>Scunthorpe</option>
+        <option>Southend</option>
+        <option>Torquay</option>
+        <option>Wycombe</option>
+        <option>York</option>
+    </optgroup>
+    <optgroup label="Scottish Premiership">
+        <option>Aberdeen</option>
+        <option>Celtic</option>
+        <option>Dundee Utd</option>
+        <option>Hearts</option>
+        <option>Hibernian</option>
+        <option>Inverness CT</option>
+        <option>Kilmarnock</option>
+        <option>Motherwell</option>
+        <option>Partick Thistle</option>
+        <option>Ross County</option>
+        <option>St Johnstone</option>
+        <option>St Mirren</option>
+    </optgroup>
+    <optgroup label="Scottish Championship">
+        <option>Dundee</option>
+        <option>Hamilton</option>
+        <option>Falkirk</option>
+        <option>Raith Rovers</option>
+        <option>Alloa</option>
+        <option>Livingston</option>
+        <option>Queen of Sth</option>
+        <option>Dumbarton</option>
+        <option>Cowdenbeath</option>
+        <option>Morton</option>
+    </optgroup>
+    <optgroup label="Scottish League One">
+        <option>Airdrieonians</option>
+        <option>Arbroath</option>
+        <option>Ayr</option>
+        <option>Brechin</option>
+        <option>Dunfermline</option>
+        <option>East Fife</option>
+        <option>Forfar</option>
+        <option>Rangers</option>
+        <option>Stenhousemuir</option>
+        <option>Stranraer</option>
+    </optgroup>
+    <optgroup label="Scottish League Two">
+        <option>Albion</option>
+        <option>Annan</option>
+        <option>Berwick</option>
+        <option>Clyde</option>
+        <option>East Stirling</option>
+        <option>Elgin</option>
+        <option>Montrose</option>
+        <option>Peterhead</option>
+        <option>Queen's Park</option>
+        <option>Stirling</option>
+    </optgroup>
+    <optgroup label="Conference">
+        <option>Luton</option>
+        <option>Cambridge</option>
+        <option>Alfreton</option>
+        <option>Grimsby</option>
+        <option>Halifax</option>
+        <option>Kidderminster</option>
+        <option>Nuneaton</option>
+        <option>Salisbury</option>
+        <option>Barnet</option>
+        <option>Braintree</option>
+        <option>Macclesfield</option>
+        <option>Gateshead</option>
+        <option>Welling</option>
+        <option>Forest Green</option>
+        <option>Wrexham</option>
+        <option>Hereford</option>
+        <option>Woking</option>
+        <option>Lincoln City</option>
+        <option>Aldershot</option>
+        <option>Southport</option>
+        <option>Chester</option>
+        <option>Tamworth</option>
+        <option>Dartford</option>
+        <option>Hyde</option>
+    </optgroup>
+    <optgroup label="La Liga">
+        <option>Barcelona</option>
+        <option>Atlético Madrid</option>
+        <option>Real Madrid</option>
+        <option>Athletic Club</option>
+        <option>Real Sociedad</option>
+        <option>Villarreal</option>
+        <option>Sevilla</option>
+        <option>Getafe</option>
+        <option>Espanyol</option>
+        <option>Málaga</option>
+        <option>Valencia CF</option>
+        <option>Granada CF</option>
+        <option>Levante</option>
+        <option>Elche</option>
+        <option>Celta de Vigo</option>
+        <option>Almería</option>
+        <option>Real Valladolid</option>
+        <option>Osasuna</option>
+        <option>Rayo Vallecano</option>
+        <option>Real Betis</option>
+    </optgroup>
+</select>
+</div>
+<div class="pure-control-group">
+<label for="choice4">Choice Four</label>
+<select id="choice4" name="choice4" ng-model="choice.choice4">
+    <optgroup label="Premiership">
+        <option>Arsenal</option>
+        <option>Aston Villa</option>
+        <option>Cardiff</option>
+        <option>Chelsea</option>
+        <option>Crystal Palace</option>
+        <option>Everton</option>
+        <option>Fulham</option>
+        <option>Hull</option>
+        <option>Liverpool</option>
+        <option>Man City</option>
+        <option>Man Utd</option>
+        <option>Newcastle</option>
+        <option>Norwich</option>
+        <option>Southampton</option>
+        <option>Stoke</option>
+        <option>Sunderland</option>
+        <option>Swansea</option>
+        <option>Tottenham</option>
+        <option>West Brom</option>
+        <option>West Ham</option>
+    </optgroup>
+    <optgroup label="Championship">
+        <option>Barnsley</option>
+        <option>Birmingham</option>
+        <option>Blackburn</option>
+        <option>Blackpool</option>
+        <option>Bolton</option>
+        <option>Bournemouth</option>
+        <option>Brighton</option>
+        <option>Burnley</option>
+        <option>Charlton</option>
+        <option>Derby</option>
+        <option>Doncaster</option>
+        <option>Huddersfield</option>
+        <option>Ipswich</option>
+        <option>Leeds</option>
+        <option>Leicester</option>
+        <option>Middlesbrough</option>
+        <option>Millwall</option>
+        <option>Nottm Forest</option>
+        <option>QPR</option>
+        <option>Reading</option>
+        <option>Sheff Wed</option>
+        <option>Watford</option>
+        <option>Wigan</option>
+        <option>Yeovil</option>
+    </optgroup>
+    <optgroup label="League One">
+        <option>Bradford</option>
+        <option>Brentford</option>
+        <option>Bristol City</option>
+        <option>Carlisle</option>
+        <option>Colchester</option>
+        <option>Coventry</option>
+        <option>Crawley</option>
+        <option>Crewe</option>
+        <option>Gillingham</option>
+        <option>Leyton Orient</option>
+        <option>MK Dons</option>
+        <option>Notts County</option>
+        <option>Oldham</option>
+        <option>Peterborough</option>
+        <option>Port Vale</option>
+        <option>Preston</option>
+        <option>Rotherham</option>
+        <option>Sheffield</option>
+        <option>Shrewsbury</option>
+        <option>Stevenage</option>
+        <option>Swindon</option>
+        <option>Tranmere</option>
+        <option>Walsall</option>
+        <option>Wolves</option>
+    </optgroup>
+    <optgroup label="League Two">
+        <option>Accrington</option>
+        <option>Wimbledon</option>
+        <option>Bristol Rovers</option>
+        <option>Burton</option>
+        <option>Bury</option>
+        <option>Cheltenham</option>
+        <option>Chesterfield</option>
+        <option>Dag & Red</option>
+        <option>Exeter</option>
+        <option>Fleetwood</option>
+        <option>Hartlepool</option>
+        <option>Mansfield</option>
+        <option>Morecambe</option>
+        <option>Newport</option>
+        <option>Northampton</option>
+        <option>Oxford Utd</option>
+        <option>Plymouth</option>
+        <option>Portsmouth</option>
+        <option>Rochdale</option>
+        <option>Scunthorpe</option>
+        <option>Southend</option>
+        <option>Torquay</option>
+        <option>Wycombe</option>
+        <option>York</option>
+    </optgroup>
+    <optgroup label="Scottish Premiership">
+        <option>Aberdeen</option>
+        <option>Celtic</option>
+        <option>Dundee Utd</option>
+        <option>Hearts</option>
+        <option>Hibernian</option>
+        <option>Inverness CT</option>
+        <option>Kilmarnock</option>
+        <option>Motherwell</option>
+        <option>Partick Thistle</option>
+        <option>Ross County</option>
+        <option>St Johnstone</option>
+        <option>St Mirren</option>
+    </optgroup>
+    <optgroup label="Scottish Championship">
+        <option>Dundee</option>
+        <option>Hamilton</option>
+        <option>Falkirk</option>
+        <option>Raith Rovers</option>
+        <option>Alloa</option>
+        <option>Livingston</option>
+        <option>Queen of Sth</option>
+        <option>Dumbarton</option>
+        <option>Cowdenbeath</option>
+        <option>Morton</option>
+    </optgroup>
+    <optgroup label="Scottish League One">
+        <option>Airdrieonians</option>
+        <option>Arbroath</option>
+        <option>Ayr</option>
+        <option>Brechin</option>
+        <option>Dunfermline</option>
+        <option>East Fife</option>
+        <option>Forfar</option>
+        <option>Rangers</option>
+        <option>Stenhousemuir</option>
+        <option>Stranraer</option>
+    </optgroup>
+    <optgroup label="Scottish League Two">
+        <option>Albion</option>
+        <option>Annan</option>
+        <option>Berwick</option>
+        <option>Clyde</option>
+        <option>East Stirling</option>
+        <option>Elgin</option>
+        <option>Montrose</option>
+        <option>Peterhead</option>
+        <option>Queen's Park</option>
+        <option>Stirling</option>
+    </optgroup>
+    <optgroup label="Conference">
+        <option>Luton</option>
+        <option>Cambridge</option>
+        <option>Alfreton</option>
+        <option>Grimsby</option>
+        <option>Halifax</option>
+        <option>Kidderminster</option>
+        <option>Nuneaton</option>
+        <option>Salisbury</option>
+        <option>Barnet</option>
+        <option>Braintree</option>
+        <option>Macclesfield</option>
+        <option>Gateshead</option>
+        <option>Welling</option>
+        <option>Forest Green</option>
+        <option>Wrexham</option>
+        <option>Hereford</option>
+        <option>Woking</option>
+        <option>Lincoln City</option>
+        <option>Aldershot</option>
+        <option>Southport</option>
+        <option>Chester</option>
+        <option>Tamworth</option>
+        <option>Dartford</option>
+        <option>Hyde</option>
+    </optgroup>
+    <optgroup label="La Liga">
+        <option>Barcelona</option>
+        <option>Atlético Madrid</option>
+        <option>Real Madrid</option>
+        <option>Athletic Club</option>
+        <option>Real Sociedad</option>
+        <option>Villarreal</option>
+        <option>Sevilla</option>
+        <option>Getafe</option>
+        <option>Espanyol</option>
+        <option>Málaga</option>
+        <option>Valencia CF</option>
+        <option>Granada CF</option>
+        <option>Levante</option>
+        <option>Elche</option>
+        <option>Celta de Vigo</option>
+        <option>Almería</option>
+        <option>Real Valladolid</option>
+        <option>Osasuna</option>
+        <option>Rayo Vallecano</option>
+        <option>Real Betis</option>
+    </optgroup>
+</select>
+</div>
+<div class="pure-controls">
+    <button class="pure-button" value="Post Choices">Post Choices
+    </button>
+</div>
+</fieldset>
+</form>
+</div>
+</div>
+
+<div class="table">
+
+    <div class="table">
+        <table class="pure-table pure-table-bordered">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Week</th>
+                <th>Choice One</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Two</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Three</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Four</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Default Choice</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{choice.playerName.name}}</td>
+                <td>{{selectedWeekNumber}}</td>
+                <td>{{choice.choice1}}</td>
+                <td><i data-ng-class="awesome('WAITING')"></i></td>
+                <td>0</td>
+                <td>{{choice.choice2}}</td>
+                <td><i data-ng-class="awesome('WAITING')"></i></td>
+                <td>0</td>
+                <td>{{choice.choice3}}</td>
+                <td><i data-ng-class="awesome('WAITING')"></i></td>
+                <td>0</td>
+                <td>{{choice.choice4}}</td>
+                <td><i data-ng-class="awesome('WAITING')"></i></td>
+                <td>0</td>
+                <td>False</td>
+            </tr>
+            </tbody>
+        </table>
+
+</div>
+
+</div>
+
+
+
+<div class="alert">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
+
+    </alert>
+</div>
+
+
+
+</div>

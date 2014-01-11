@@ -13,18 +13,18 @@ import java.util.logging.Logger;
 public enum PlayerEnum {
 
 
-    Bhavesh("Bhavesh","Bhavesh.Patel@hpdsoftware.com", null),
-    Charles("Charles","Charles.Fletcher@hpdsoftware.com", null),
-    Dave("Dave","Dave.Spruit@hpdsoftware.com", "07956537929"),
-    Frank("Frank","Frank.Weaver@hpdsoftware.com", "07743488945"),
-    Gerald("Gerald","Gerald.McLaughlin@hpdsoftware.com", "07963386490"),
-    Jason("Jason","Jason.King@hpdsoftware.com", "07429084210"),
-    Jonathon("Jonathon","Jonathan.Neighbour@hpdsoftware.com", null),
-    Jose("Jose","Jose.Santos@hpdsoftware.com", null),
-    Mat("Mat","mat@broughty.com","07712647785"),
-    Pia("Pia","Pia.O'Boyle@hpdsoftware.com", null),
-    Tim("Tim","Tim.Wilcox@hpdsoftware.com", "07760177037"),
-    Toby("Toby","toby.low@hpdsoftware.com", null),
+    Bhavesh("Bhavesh", "Bhavesh.Patel@hpdsoftware.com", "07760178009"),
+    Charles("Charles", "Charles.Fletcher@hpdsoftware.com", "07904026930"),
+    Dave("Dave", "Dave.Spruit@hpdsoftware.com", "07956537929"),
+    Frank("Frank", "Frank.Weaver@hpdsoftware.com", "07743488945"),
+    Gerald("Gerald", "Gerald.McLaughlin@hpdsoftware.com", "07963386490"),
+    Jason("Jason", "Jason.King@hpdsoftware.com", "07429084210"),
+    Jonathon("Jonathon", "Jonathan.Neighbour@hpdsoftware.com", null),
+    Jose("Jose", "Jose.Santos@hpdsoftware.com", null),
+    Mat("Mat", "mat@broughty.com", "07712647785"),
+    Pia("Pia", "Pia.O'Boyle@hpdsoftware.com", null),
+    Tim("Tim", "Tim.Wilcox@hpdsoftware.com", "07760177037"),
+    Toby("Toby", "toby.low@hpdsoftware.com", null),
     Star("Star", "mat@broughty.com", null);
 
     private static final Logger log = Logger.getLogger(PlayerEnum.class.getName());
@@ -36,7 +36,7 @@ public enum PlayerEnum {
     String mobile;
 
 
-    PlayerEnum(String name, String email, String mobile){
+    PlayerEnum(String name, String email, String mobile) {
         this.name = name;
         this.email = email;
         this.mobile = mobile;
@@ -66,21 +66,21 @@ public enum PlayerEnum {
         this.mobile = mobile;
     }
 
-    public InternetAddress getMailAddress() throws UnsupportedEncodingException{
-       return new InternetAddress(getEmail(), getName());
+    public InternetAddress getMailAddress() throws UnsupportedEncodingException {
+        return new InternetAddress(getEmail(), getName());
     }
 
 
-    public static InternetAddress[] getMailAddresses(){
+    public static InternetAddress[] getMailAddresses() {
 
         List<InternetAddress> internetAddresses = new ArrayList<InternetAddress>();
-        try{
-        for(PlayerEnum playerEnum : PlayerEnum.values()){
-            internetAddresses.add(playerEnum.getMailAddress());
-        }
+        try {
+            for (PlayerEnum playerEnum : PlayerEnum.values()) {
+                internetAddresses.add(playerEnum.getMailAddress());
+            }
 
-        }catch(Throwable t){
-            log.log(Level.WARNING, "Problem parsing email addresses." ,t);
+        } catch (Throwable t) {
+            log.log(Level.WARNING, "Problem parsing email addresses.", t);
         }
 
         return internetAddresses.toArray(new InternetAddress[internetAddresses.size()]);

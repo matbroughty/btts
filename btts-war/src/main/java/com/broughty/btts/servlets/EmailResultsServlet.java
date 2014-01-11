@@ -72,6 +72,7 @@ public class EmailResultsServlet extends HttpServlet {
                 "    <meta charset=\"utf-8\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://yui.yahooapis.com/pure/0.1.0/pure-min.css\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://weloveiconfonts.com/api/?family=fontawesome\">\n" +
+                "    <link href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css\" rel=\"stylesheet\">\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div class=\"pure-u-1\" id=\"main\">\n" +

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
     <modelVersion>4.0.0</modelVersion>
     <packaging>war</packaging>
@@ -9,13 +10,12 @@
 
     <repositories>
 
-    <repository>
-        <id>java-twitter-repository</id>
-        <url>http://java-twitter.googlecode.com/svn/repository/</url>
-        <name>java-twitter maven repository</name>
-    </repository>
+        <repository>
+            <id>java-twitter-repository</id>
+            <url>http://java-twitter.googlecode.com/svn/repository/</url>
+            <name>java-twitter maven repository</name>
+        </repository>
     </repositories>
-
 
 
     <parent>
@@ -123,13 +123,26 @@
             <artifactId>spring-webmvc</artifactId>
             <version>4.0.0.RELEASE</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-core</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.0.5</version>
+        </dependency>
+        <dependency>
+            <groupId>com.fasterxml.jackson.module</groupId>
+            <artifactId>jackson-module-jaxb-annotations</artifactId>
+            <version>2.0.5</version>
+        </dependency>
     </dependencies>
-      
+
     <build>
-        <outputDirectory>target/${project.artifactId}-${project.version}/WEB-INF/classes</outputDirectory> 
-                                   
+        <outputDirectory>target/${project.artifactId}-${project.version}/WEB-INF/classes</outputDirectory>
+
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

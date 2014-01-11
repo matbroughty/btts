@@ -1,14 +1,16 @@
 package com.broughty.controller;
 
 import com.broughty.model.PlayerChoicesData;
+import com.broughty.model.PlayerData;
 import com.broughty.util.BTTSHelper;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -18,7 +20,11 @@ import java.util.logging.Logger;
 @RequestMapping("/choices")
 public class ChoicesController {
 
+
+
+
     private static final Logger log = Logger.getLogger(ChoicesController.class.getName());
+
 
     @RequestMapping(value = "{week}", method = RequestMethod.GET, produces = "application/json")
     public
@@ -35,6 +41,25 @@ public class ChoicesController {
     List<PlayerChoicesData> getCurrentWeekChoicesInJSON() {
         log.info("json request choices for current week ");
         return BTTSHelper.getWeeksChoices(BTTSHelper.getCurrentWeek());
+    }
+
+    @RequestMapping(method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void postCurrentWeekChoicesInJSON(@RequestBody PlayerChoicesData choice) {
+        log.info("Anything?");
+        log.info("post json request choices for current week " + choice);
+    }
+
+    @RequestMapping(value="/newchoice", method = RequestMethod.POST)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void postCurrentWeekChoicesInString(@RequestBody String textChoice) {
+        log.info("post string request choices for current week " + textChoice);
+    }
+
+    @RequestMapping(value="/simple", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseStatus(HttpStatus.NO_CONTENT)
+    public void postSimpleJsonObject(@RequestBody PlayerData playerDataChoice) {
+        log.info("postSimpleJsonObject for player data " + playerDataChoice);
     }
 
 

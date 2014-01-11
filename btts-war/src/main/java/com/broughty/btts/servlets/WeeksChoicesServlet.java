@@ -73,9 +73,9 @@ public class WeeksChoicesServlet extends HttpServlet {
 
         if (playerChoice != null) {
 
-            if(StringUtils.equals(choice1, choice2) && StringUtils.equals(choice2, choice3)){
+            if (StringUtils.equals(choice1, choice2) && StringUtils.equals(choice2, choice3)) {
                 log.info("A delete request has come in for player " + playerName + " week number " + weekNumber);
-                TwitterHelper.updateStatus("Deleting player " + playerName + " choices for week number "  + weekNumber);
+                TwitterHelper.updateStatus("Deleting player " + playerName + " choices for week number " + weekNumber);
                 // Duplicate choices is the same as a request to delete
                 datastore.delete(playerChoice.getKey());
                 return;
@@ -136,6 +136,7 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "    <meta charset=\"utf-8\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://yui.yahooapis.com/pure/0.1.0/pure-min.css\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://weloveiconfonts.com/api/?family=fontawesome\">\n" +
+                "    <link href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css\" rel=\"stylesheet\">\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div class=\"pure-u-1\" id=\"main\">\n" +
@@ -288,9 +289,6 @@ public class WeeksChoicesServlet extends HttpServlet {
         allPlayerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
-
-
-
 
 
             String choice1 = (String) choice.getProperty("choice1");

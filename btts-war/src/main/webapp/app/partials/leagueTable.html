@@ -1,0 +1,21 @@
+<!-- take the LeagueResultsController -->
+<div class="container">
+    <br>
+    <div class="table">
+    	<table class="pure-table pure-table-bordered"><thead><th>Player</th><th>Points</th><th>Goals</th><th>Results</th></thead>
+    		<tbody>
+    			<tr data-ng-repeat="player in allScores | orderBy:'total':true" ng-class-odd="'pure-table-odd'" >
+    				<td>{{player.playerName}}</td>
+    				<td>{{player.total}}</td>
+                    <td>{{player.bttsCount}}</td>
+                    <td>{{player.points}}</td>
+    			</tr>
+    		</tbody>
+    	</table>
+
+    </div>
+    <div id="graphit" >
+    </div>
+
+
+</div>

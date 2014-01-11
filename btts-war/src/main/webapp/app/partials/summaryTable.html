@@ -1,42 +1,66 @@
+<!-- The CurrentChoicesController  -->
 <div class="container">
-    <table class="pure-table pure-table-bordered">
-        <thead>
-        <tr>
-            <th>Player</th>
-            <th>Week</th>
-            <th>Choice One</th>
-            <th>Result</th>
-            <th>Points</th>
-            <th>Choice Two</th>
-            <th>Result</th>
-            <th>Points</th>
-            <th>Choice Three</th>
-            <th>Result</th>
-            <th>Points</th>
-            <th>Choice Four</th>
-            <th>Result</th>
-            <th>Points</th>
-            <th>Default Choice</th>
-        </tr>
-        </thead>
-        <tbody>
-        <tr data-ng-repeat="choices in currentChoices | orderBy:'player'" ng-class-odd="'pure-table-odd'">
-            <td>{{choices.player}}</td>
-            <td>{{choices.week}}</td>
-            <td>{{choices.choice1}}</td>
-            <td><i data-ng-class="awesome(choices.choice1Result)"></i></td>
-            <td>{{choices.choice1Points}}</td>
-            <td>{{choices.choice2}}</td>
-            <td><i data-ng-class="awesome(choices.choice2Result)"></i></td>
-            <td>{{choices.choice2Points}}</td>
-            <td>{{choices.choice3}}</td>
-            <td><i data-ng-class="awesome(choices.choice3Result)"></i></td>
-            <td>{{choices.choice3Points}}</td>
-            <td>{{choices.choice4}}</td>
-            <td><i data-ng-class="awesome(choices.choice4Result)"></i></td>
-            <td>{{choices.choice4Points}}</td>
-            <td>{{choices.defaultChoices}}</td>
-        </tr>
-        </tbody>
-    </table>
+
+
+    <div class="week-chooser">
+
+
+        <form class="pure-form pure-form-aligned">
+            <fieldset>
+                <div class="pure-control-group">
+                    <label for="week">Week</label>
+                    <select name="week" ng-model="selectedWeekNumber" ng-selected="selectedWeekNumber" ng-options="week for week in weeks"
+                            ng-change="update()">
+
+                    </select>
+                </div>
+            </fieldset>
+        </form>
+        <h1>Week Number: {{selectedWeekNumber}} </h1>
+
+    </div>
+
+    <div class="table">
+        <table class="pure-table pure-table-bordered">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Week</th>
+                <th>Choice One</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Two</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Three</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Choice Four</th>
+                <th>Result</th>
+                <th>Points</th>
+                <th>Default Choice</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr data-ng-repeat="choices in currentChoices | orderBy:'player'" ng-class-odd="'pure-table-odd'">
+                <td>{{choices.player}}</td>
+                <td>{{choices.week}}</td>
+                <td>{{choices.choice1}}</td>
+                <td><i data-ng-class="awesome(choices.choice1Result)"></i></td>
+                <td>{{choices.choice1Points}}</td>
+                <td>{{choices.choice2}}</td>
+                <td><i data-ng-class="awesome(choices.choice2Result)"></i></td>
+                <td>{{choices.choice2Points}}</td>
+                <td>{{choices.choice3}}</td>
+                <td><i data-ng-class="awesome(choices.choice3Result)"></i></td>
+                <td>{{choices.choice3Points}}</td>
+                <td>{{choices.choice4}}</td>
+                <td><i data-ng-class="awesome(choices.choice4Result)"></i></td>
+                <td>{{choices.choice4Points}}</td>
+                <td>{{choices.defaultChoices}}</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+
 </div>

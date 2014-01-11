@@ -19,9 +19,9 @@ public class BTTSHelper {
     public static final int SCORELESS = 0;
     public static final int ONE_TEAM_SCORED = 1;
     public static final int BOTH_TEAMS_SCORED = 3;
-    public static final String SUCCESS = "&#10004;";
-    public static final String FAIL = "&#10008;";
-    public static final String WAITING = "&#9749";
+    public static final String SUCCESS = "<i class=\"fa fa-thumbs-up\"></i>";
+    public static final String FAIL = "<i class=\"fa fa-thumbs-down\"></i>";
+    public static final String WAITING = "<i class=\"fa fa-question-circle\"></i>";
     private static final Logger log = Logger.getLogger(BTTSHelper.class.getName());
     private static WeekData currentWeekData;
 
@@ -148,7 +148,7 @@ public class BTTSHelper {
 
     public static PlayerChoicesData getPlayersWeeksChoices(String week, String playerName) {
         DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-        if(StringUtils.containsIgnoreCase(playerName, "Star")){
+        if (StringUtils.containsIgnoreCase(playerName, "Star")) {
             playerName = PlayerEnum.Star.getName();
         }
         Key weekKey = KeyFactory.createKey("Week", week);
