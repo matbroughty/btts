@@ -174,6 +174,30 @@ public class BTTSHelper {
         return weeksChoices;
     }
 
+    /**
+     * Get choices for all weeks...
+     *
+     * @param playerName
+     * @return
+     */
+    public static List<PlayerChoicesData> getAllPlayersChoices(String playerName) {
+
+        DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+
+        Query query = new Query("Choices").addFilter(ChoicesEntityEnum.PLAYER.getFieldName(), Query.FilterOperator.EQUAL, playerName).addSort(ChoicesEntityEnum.DATE.getFieldName(), Query.SortDirection.DESCENDING);
+        List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(100));
+        List<PlayerChoicesData> allChoices = new ArrayList<PlayerChoicesData>();
+
+        for (Entity choice : choices) {
+            allChoices.add(createPlayerChoicesData(choice));
+        }
+        return allChoices;
+    }
+
+    private static PlayerChoicesData createPlayerChoicesData(Entity choice) {
+        return createPlayerChoicesData(choice.getKey().getParent().getName(), choice);
+    }
+
     private static PlayerChoicesData createPlayerChoicesData(String week, Entity choice) {
         PlayerChoicesData playerChoicesData = new PlayerChoicesData(week);
         playerChoicesData.setPlayer((String) choice.getProperty(ChoicesEntityEnum.PLAYER.getFieldName()));
@@ -198,6 +222,7 @@ public class BTTSHelper {
 
         playerChoicesData.setDefaultChoices(BTTSHelper.entityPropertyAsBoolean(choice.getProperty(ChoicesEntityEnum.DEFAULT.getFieldName())));
 
+        playerChoicesData.calculatePointsTotal();
 
         return playerChoicesData;
     }

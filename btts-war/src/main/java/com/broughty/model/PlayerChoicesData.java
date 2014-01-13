@@ -26,6 +26,7 @@ public class PlayerChoicesData {
     int choice2Points = 0;
     int choice3Points = 0;
     int choice4Points = 0;
+    int pointsTotal = 0;
     boolean alerted;
     boolean defaultChoices;
 
@@ -169,25 +170,20 @@ public class PlayerChoicesData {
         this.dateEntered = dateEntered;
     }
 
+    public int getPointsTotal() {
+        return pointsTotal;
+    }
+
+    public void setPointsTotal(int pointsTotal) {
+        this.pointsTotal = pointsTotal;
+    }
+
     @Override
     public String toString() {
-        return "PlayerChoicesData{" +
-                "week='" + week + '\'' +
-                ", player='" + player + '\'' +
-                ", choice1='" + choice1 + '\'' +
-                ", choice2='" + choice2 + '\'' +
-                ", choice3='" + choice3 + '\'' +
-                ", choice4='" + choice4 + '\'' +
-                ", choice1Result=" + choice1Result +
-                ", choice2Result=" + choice2Result +
-                ", choice3Result=" + choice3Result +
-                ", choice4Result=" + choice4Result +
-                ", choice1Points=" + choice1Points +
-                ", choice2Points=" + choice2Points +
-                ", choice3Points=" + choice3Points +
-                ", choice4Points=" + choice4Points +
-                ", alerted=" + alerted +
-                ", defaultChoices=" + defaultChoices +
-                '}';
+        return super.toString();    //To change body of overridden methods use File | Settings | File Templates.
+    }
+
+    public void calculatePointsTotal() {
+        setPointsTotal(getChoice1Points() + getChoice2Points() + getChoice3Points() + getChoice4Points());
     }
 }

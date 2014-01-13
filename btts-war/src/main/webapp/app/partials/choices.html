@@ -21,7 +21,7 @@
 </div>
 <div class="pure-control-group">
 <label for="choice1">Choice One</label>
-<select id="choice1" name="choice1" ng-model="choice.choice1" >
+<select id="choice1" name="choice1" ng-model="choice.choice1">
     <optgroup label="Premiership">
         <option>Arsenal</option>
         <option>Aston Villa</option>
@@ -849,18 +849,9 @@
                 <th>Player</th>
                 <th>Week</th>
                 <th>Choice One</th>
-                <th>Result</th>
-                <th>Points</th>
                 <th>Choice Two</th>
-                <th>Result</th>
-                <th>Points</th>
                 <th>Choice Three</th>
-                <th>Result</th>
-                <th>Points</th>
                 <th>Choice Four</th>
-                <th>Result</th>
-                <th>Points</th>
-                <th>Default Choice</th>
             </tr>
             </thead>
             <tbody>
@@ -868,26 +859,16 @@
                 <td>{{choice.playerName.name}}</td>
                 <td>{{selectedWeekNumber}}</td>
                 <td>{{choice.choice1}}</td>
-                <td><i data-ng-class="awesome('WAITING')"></i></td>
-                <td>0</td>
                 <td>{{choice.choice2}}</td>
-                <td><i data-ng-class="awesome('WAITING')"></i></td>
-                <td>0</td>
                 <td>{{choice.choice3}}</td>
-                <td><i data-ng-class="awesome('WAITING')"></i></td>
-                <td>0</td>
                 <td>{{choice.choice4}}</td>
-                <td><i data-ng-class="awesome('WAITING')"></i></td>
-                <td>0</td>
-                <td>False</td>
             </tr>
             </tbody>
         </table>
 
-</div>
+    </div>
 
 </div>
-
 
 
 <div class="alert">
@@ -895,7 +876,6 @@
 
     </alert>
 </div>
-
 
 
 </div>

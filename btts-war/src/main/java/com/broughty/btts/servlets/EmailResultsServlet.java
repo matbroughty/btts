@@ -60,7 +60,7 @@ public class EmailResultsServlet extends HttpServlet {
         resultsTwitter.append(weekNumber);
         resultsTwitter.append("' are in!\n. http://btts.broughty.com/summary.jsp?week=");
         resultsTwitter.append(weekNumber);
-        twitterAlert(resultsTwitter);
+        twitterAlert(resultsTwitter, null);
 
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
@@ -165,7 +165,7 @@ public class EmailResultsServlet extends HttpServlet {
                 SmsHelper.mobileAlert(twitterPlayerResult, false, PlayerEnum.valueOf(playerName));
             }
 
-            twitterAlert(twitterPlayerResult);
+            twitterAlert(twitterPlayerResult, PlayerEnum.valueOf(playerName).getTwitterName());
 
         }
 
@@ -209,9 +209,16 @@ public class EmailResultsServlet extends HttpServlet {
 
     }
 
-    private void twitterAlert(StringBuilder alertString) {
+    private void twitterAlert(StringBuilder alertString, String twitterName) {
         try {
-            TwitterHelper.updateStatus(alertString.toString());
+            if (StringUtils.isNotBlank(twitterName)) {
+
+                TwitterHelper.updateStatus(twitterName + " " + alertString);
+
+            } else {
+                TwitterHelper.updateStatus(alertString.toString());
+            }
+
         } catch (Throwable t) {
             log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
         }

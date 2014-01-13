@@ -9,8 +9,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.LogManager;
 import java.util.logging.Logger;
 
 /**
@@ -19,8 +17,6 @@ import java.util.logging.Logger;
 @Controller
 @RequestMapping("/choices")
 public class ChoicesController {
-
-
 
 
     private static final Logger log = Logger.getLogger(ChoicesController.class.getName());
@@ -50,13 +46,13 @@ public class ChoicesController {
         log.info("post json request choices for current week " + choice);
     }
 
-    @RequestMapping(value="/newchoice", method = RequestMethod.POST)
+    @RequestMapping(value = "/newchoice", method = RequestMethod.POST)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void postCurrentWeekChoicesInString(@RequestBody String textChoice) {
         log.info("post string request choices for current week " + textChoice);
     }
 
-    @RequestMapping(value="/simple", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
+    @RequestMapping(value = "/simple", method = RequestMethod.POST, consumes = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void postSimpleJsonObject(@RequestBody PlayerData playerDataChoice) {
         log.info("postSimpleJsonObject for player data " + playerDataChoice);
@@ -69,6 +65,15 @@ public class ChoicesController {
     PlayerChoicesData getPlayerWeekChoicesInJSON(@PathVariable String week, @PathVariable String name) {
         log.info("json request player choices for player " + name + " for week " + week);
         return BTTSHelper.getPlayersWeeksChoices(week, name);
+    }
+
+
+    @RequestMapping(value = "player/{name}", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    List<PlayerChoicesData> getAllPlayersChoicesInJSON(@PathVariable String name) {
+        log.info("json request for all player choices for player " + name);
+        return BTTSHelper.getAllPlayersChoices(name);
     }
 
 }

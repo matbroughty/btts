@@ -39,6 +39,24 @@ public class WeeksChoicesServlet extends HttpServlet {
             throws IOException {
 
         log.info("doPost request in WeeksChoicesServlet ");
+
+        Enumeration<String> parameterNames = req.getParameterNames();
+
+        while (parameterNames.hasMoreElements()) {
+
+            String paramName = parameterNames.nextElement();
+            log.info("Weeks choices Param name ->" + paramName);
+
+
+            String[] paramValues = req.getParameterValues(paramName);
+            for (int i = 0; i < paramValues.length; i++) {
+                String paramValue = paramValues[i];
+                log.info("Weeks choices value ->" + paramValue);
+            }
+
+
+        }
+
         Properties props = new Properties();
         Session session = Session.getDefaultInstance(props, null);
 
@@ -229,7 +247,10 @@ public class WeeksChoicesServlet extends HttpServlet {
 
             Transport.send(msg);
 
-
+            playerChoiceTwitter.append(" ");
+            if (PlayerEnum.valueOf(playerName).getTwitterName() != null) {
+                playerChoiceTwitter.append(playerName);
+            }
             TwitterHelper.updateStatus(playerChoiceTwitter.toString());
 
 

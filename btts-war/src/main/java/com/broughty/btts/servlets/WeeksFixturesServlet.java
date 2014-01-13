@@ -208,7 +208,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                 log.info("All 4 teams scored for " + alertString.toString());
                 emailAlert(alertString, weekNumber, playerName);
                 SmsHelper.mobileAlert(alertString, globalAlert, PlayerEnum.valueOf(playerName));
-                twitterAlert(alertString);
+                twitterAlert(alertString, PlayerEnum.valueOf(playerName).getTwitterName());
                 choice.setProperty("alerted", Boolean.TRUE);
                 datastore.put(choice);
             }
@@ -216,8 +216,19 @@ public class WeeksFixturesServlet extends HttpServlet {
     }
 
     private void twitterAlert(StringBuilder alertString) {
+
+        twitterAlert(alertString, null);
+
+    }
+
+    private void twitterAlert(StringBuilder alertString, String twitterName) {
         try {
-            TwitterHelper.updateStatus(alertString.toString());
+            if (StringUtils.isNotBlank(twitterName)) {
+                TwitterHelper.updateStatus(twitterName + " " + alertString.toString());
+            } else {
+                TwitterHelper.updateStatus(alertString.toString());
+            }
+
         } catch (Throwable t) {
             log.log(Level.WARNING, "Couldn't send twitter message -  " + alertString.toString(), t);
         }
@@ -267,18 +278,18 @@ public class WeeksFixturesServlet extends HttpServlet {
             for (Entity choice : pq.asIterable()) {
 
                 // if game hasn't been marked yet then show it is under way.
-                if (choice.getProperty("choice" + i + "Result") == null){
+                if (choice.getProperty("choice" + i + "Result") == null) {
                     choice.setProperty("choice" + i + "Result", Boolean.FALSE);
-                    log.info("Marking home team game " + homeTeam + " as started." );
+                    log.info("Marking home team game " + homeTeam + " as started.");
                     datastore.put(choice);
                 }
 
                 // update points
-                if(homeScore > 0 || awayScore > 0){
-                    if(homeScore > 0 && awayScore > 0){
+                if (homeScore > 0 || awayScore > 0) {
+                    if (homeScore > 0 && awayScore > 0) {
                         log.info("Updating home team with " + BTTSHelper.BOTH_TEAMS_SCORED + " points.");
                         choice.setProperty("choice" + i + "Points", BTTSHelper.BOTH_TEAMS_SCORED);
-                    }else{
+                    } else {
                         log.info("Updating home team with " + BTTSHelper.ONE_TEAM_SCORED + " points.");
                         choice.setProperty("choice" + i + "Points", BTTSHelper.ONE_TEAM_SCORED);
                     }
@@ -306,7 +317,7 @@ public class WeeksFixturesServlet extends HttpServlet {
 
 
                         log.info(bttsMessage.toString() + "choice" + i + "Result");
-                        twitterAlert(bttsMessage);
+                        twitterAlert(bttsMessage, PlayerEnum.valueOf((String) choice.getProperty("player")).getTwitterName());
 
                         if (StringUtils.equalsIgnoreCase((String) choice.getProperty("player"), PlayerEnum.Mat.getName())) {
                             SmsHelper.mobileAlert(bttsMessage, false, PlayerEnum.Mat);
@@ -364,7 +375,7 @@ public class WeeksFixturesServlet extends HttpServlet {
                         twitterPlayerResult.append(")");
                         twitterPlayerResult.append("");
 
-                        twitterAlert(twitterPlayerResult);
+                        twitterAlert(twitterPlayerResult, PlayerEnum.valueOf(playerName).getTwitterName());
 
                     }
                 }

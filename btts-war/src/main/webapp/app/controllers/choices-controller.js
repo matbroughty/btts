@@ -14,7 +14,7 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                 $log.log("Failed because status " + status + " and with data " + data);
                 $log.log("Failed because headers " + headers + " and with config " + config);
                 $scope.currentChoices = [
-                    {"dateEntered": null, "week": "unknown", "player": "Error", "choice1": "", "choice2": "", "choice3": "", "choice4": "", "choice1Result": "WAITING", "choice2Result": "FAIL", "choice3Result": "FAIL", "choice4Result": "FAIL", "choice1Points": 0, "choice2Points": 0, "choice3Points": 0, "choice4Points": 0, "alerted": false, "defaultChoices": false}
+                    {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
                 ];
                 $scope.status = status;
             });
@@ -28,7 +28,7 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                 $log.log("Failed because status " + status + " and with data " + data);
                 $log.log("Failed because headers " + headers + " and with config " + config);
                 $scope.currentWeek = [
-                    {"weekNumber":"22","startDate":1389312000000,"endDate":1389571200000}
+                    {"weekNumber":"22", "startDate":1389312000000, "endDate":1389571200000}
                 ];
                 $scope.selectedWeekNumber = "22";
                 $scope.status = status;
@@ -59,13 +59,12 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                 $log.log("Failed because status " + status + " and with data " + data);
                 $log.log("Failed because headers " + headers + " and with config " + config);
                 $scope.currentChoices = [
-                    {"dateEntered": null, "week": "unknown", "player": "Error", "choice1": "", "choice2": "", "choice3": "", "choice4": "", "choice1Result": "WAITING", "choice2Result": "FAIL", "choice3Result": "FAIL", "choice4Result": "FAIL", "choice1Points": 0, "choice2Points": 0, "choice3Points": 0, "choice4Points": 0, "alerted": false, "defaultChoices": false}
+                    {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
                 ];
                 $scope.status = status;
             });
 
     }
-
 
 
     $scope.awesome = function (choice) {
@@ -80,17 +79,53 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
 
 
     $scope.postChoices = function () {
-        $log.info($scope.choice.choice1);
-        $scope.alerts.push({ type: 'info', msg: 'Well done! You successfully posted your choices.'});
+
+        if (typeof $scope.choice.choice1 === 'undefined' || null == $scope.choice.choice2 || null == $scope.choice.choice3 || null == $scope.choice.choice4 || null == $scope.choice.playerName) {
+            $scope.alerts.push({ type:'warning', msg:'Make a full selection!  Try again you plonker.' + status});
+            return;
+        }
+
+
+        var url = 'http://btts.broughty.com/choices?player=' + String($scope.choice.playerName.name) + '&choice1=' + $scope.choice.choice1 + '&choice2=' + $scope.choice.choice2 + '&choice3=' + $scope.choice.choice3 + '&choice4=' + $scope.choice.choice4 + '&week=' + $scope.selectedWeekNumber;
+        $log.info("URL posting choices to = " + url);
+
+        $http({
+            method:'POST',
+            url:url,
+            contentType:false,
+            processData:false,
+            headers:{
+                'Content-Type':'application/x-www-form-urlencoded'
+            }
+        }).success(function (data) {
+                $scope.alerts.push({ type:'info', msg:'Well done! You successfully posted your choices for week number ' + $scope.selectedWeekNumber});
+
+            }).
+            error(function (data, status, headers, config) {
+                $log.log("Failed because status " + status + " and with data " + data);
+                $log.log("Failed because headers " + headers + " and with config " + config);
+                $scope.currentChoices = [
+                    {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
+                ];
+                $scope.status = status;
+                $scope.alerts.push({ type:'error', msg:'Uh oh Choices post failed.  Try again. Status Code = ' + status});
+
+            });
+
+
     }
 
 
-    $scope.closeAlert = function(index) {
+    $scope.closeAlert = function (index) {
         $scope.alerts.splice(index, 1);
     };
 
-    $scope.init();
+    $scope.showPlayer = function (playerName) {
+        window.location = '#/players/' + playerName;
+    };
 
+
+    $scope.init();
 
 
 });
@@ -104,7 +139,7 @@ bttsApp.controller('CurrentStarChoicesController', function ($scope, $http, $log
             $log.log("Failed because status " + status + " and with data " + data);
             $log.log("Failed because headers " + headers + " and with config " + config);
             $scope.currentChoices = [
-                {"dateEntered": null, "week": "unknown", "player": "Error", "choice1": "", "choice2": "", "choice3": "", "choice4": "", "choice1Result": "WAITING", "choice2Result": "FAIL", "choice3Result": "FAIL", "choice4Result": "FAIL", "choice1Points": 0, "choice2Points": 0, "choice3Points": 0, "choice4Points": 0, "alerted": false, "defaultChoices": false}
+                {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
             ];
             $scope.status = status;
         });

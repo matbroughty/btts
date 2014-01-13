@@ -9,7 +9,7 @@ bttsApp.config(function ($routeProvider) {
             controller:'LeagueResultsController',
             templateUrl:'app/partials/leagueTable.html'
         })
-        .when('/players',
+        .when('/players/:playerName',
         {
             controller:'PlayerResultsController',
             templateUrl:'app/partials/playerPoints.html'

@@ -9,7 +9,8 @@
             <fieldset>
                 <div class="pure-control-group">
                     <label for="week">Week</label>
-                    <select name="week" ng-model="selectedWeekNumber" ng-selected="selectedWeekNumber" ng-options="week for week in weeks"
+                    <select name="week" ng-model="selectedWeekNumber" ng-selected="selectedWeekNumber"
+                            ng-options="week for week in weeks"
                             ng-change="update()">
 
                     </select>
@@ -38,11 +39,13 @@
                 <th>Choice Four</th>
                 <th>Result</th>
                 <th>Points</th>
+                <th>Points Total</th>
                 <th>Default Choice</th>
             </tr>
             </thead>
             <tbody>
-            <tr data-ng-repeat="choices in currentChoices | orderBy:'player'" ng-class-odd="'pure-table-odd'">
+            <tr data-ng-repeat="choices in currentChoices | orderBy:'pointsTotal':true" ng-class-odd="'pure-table-odd'"
+                ng-click="showPlayer(choices.player)">
                 <td>{{choices.player}}</td>
                 <td>{{choices.week}}</td>
                 <td>{{choices.choice1}}</td>
@@ -57,6 +60,7 @@
                 <td>{{choices.choice4}}</td>
                 <td><i data-ng-class="awesome(choices.choice4Result)"></i></td>
                 <td>{{choices.choice4Points}}</td>
+                <td>{{choices.pointsTotal}}</td>
                 <td>{{choices.defaultChoices}}</td>
             </tr>
             </tbody>

@@ -7,11 +7,15 @@ bttsApp.controller('LeagueResultsController', function ($scope, $http, $log) {
 
     }
 
+    $scope.showPlayer = function (playerName) {
+        window.location = '#/players/' + playerName;
+    };
+
     $scope.init = function () {
         $http.get('http://btts.broughty.com/api/league').
             success(function (data) {
                 $scope.allScores = data;
-                if($scope.allScores != null){
+                if ($scope.allScores != null) {
                     var svg = dimple.newSvg("#graphit", 800, 600);
                     var data = $scope.allScores;
                     var myChart = new dimple.chart(svg, data);
@@ -29,11 +33,10 @@ bttsApp.controller('LeagueResultsController', function ($scope, $http, $log) {
                 $log.log("Failed because status " + status + " and with data " + data);
                 $log.log("Failed because headers " + headers + " and with config " + config);
                 $scope.allScores = [
-                    {'playerName': 'Error', 'points': [0], 'total': 0}
+                    {'playerName':'Error', 'points':[0], 'total':0}
                 ];
                 $scope.status = status;
             });
-
 
 
     }
@@ -42,13 +45,36 @@ bttsApp.controller('LeagueResultsController', function ($scope, $http, $log) {
 
 });
 
-bttsApp.controller('PlayerResultsController', function ($scope, $http) {
+bttsApp.controller('PlayerResultsController', function ($scope, $http, $routeParams) {
 
-    delete $http.defaults.headers.common['X-Requested-With'];
-    $http.get('http://btts.broughty.com/api/league/Mat').
-        success(function (data) {
-            $scope.playerScores = data;
-        });
 
-    //$scope.playerScores=leagueResultsFactory.getIndividualResults();
-});
+    $scope.awesome = function (choice) {
+        if (choice === 'WAITING'.valueOf()) {
+            return 'fa fa-question-circle'.valueOf();
+        }
+        if (choice === 'FAIL'.valueOf()) {
+            return 'fa fa-thumbs-down'.valueOf();
+        }
+        return 'fa fa-thumbs-up'.valueOf();
+    }
+
+
+    $scope.playerName = $routeParams.playerName;
+
+
+    if ($scope.playerName != null) {
+
+        $http.get('http://btts.broughty.com/api/choices/player/' + $scope.playerName).
+            success(function (data) {
+                $scope.playerChoices = data;
+            }).
+            error(function (data, status, headers, config) {
+                $scope.playerChoices = [
+                    {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
+                ];
+                $scope.status = status;
+            });
+    }
+
+})
+;
