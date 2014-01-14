@@ -80,7 +80,7 @@ public class EmailResultsServlet extends HttpServlet {
                 "    <div class=\"pure-g \">\n" +
                 "        <div class=\"pure-u-1\">");
 
-        playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " player choices </h2></a>");
+        playerTable.append("<a href=\"http://btts.broughty.com\"><h2 class=\"content-subhead\">Week " + weekNumber + " Results </h2></a>");
         playerTable.append("<table class=\"pure-table pure-table-bordered\">");
         playerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th><th>Choice One</th><th>Result</th><th>Points</th><th>Choice Two</th><th>Result</th><th>Points</th><th>Choice Three</th><th>Result</th><th>Points</th><th>Choice Four</th><th>Result</th><th>Points</th></tr> </thead> ");
         playerTable.append("<tbody>");
