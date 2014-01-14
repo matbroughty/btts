@@ -81,7 +81,7 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
     $scope.postChoices = function () {
 
         if (typeof $scope.choice.choice1 === 'undefined' || null == $scope.choice.choice2 || null == $scope.choice.choice3 || null == $scope.choice.choice4 || null == $scope.choice.playerName) {
-            $scope.alerts.push({ type:'warning', msg:'Make a full selection!  Try again you plonker.' + status});
+            $scope.alerts.push({ type:'danger', msg:'Make a full selection!  Try again you plonker.' + status});
             return;
         }
 
@@ -98,7 +98,7 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                 'Content-Type':'application/x-www-form-urlencoded'
             }
         }).success(function (data) {
-                $scope.alerts.push({ type:'info', msg:'Well done! You successfully posted your choices for week number ' + $scope.selectedWeekNumber});
+                $scope.alerts.push({ type:'success', msg:'Well done! You successfully posted your choices for week number ' + $scope.selectedWeekNumber});
 
             }).
             error(function (data, status, headers, config) {
@@ -108,11 +108,9 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                     {"dateEntered":null, "week":"unknown", "player":"Error", "choice1":"", "choice2":"", "choice3":"", "choice4":"", "choice1Result":"WAITING", "choice2Result":"FAIL", "choice3Result":"FAIL", "choice4Result":"FAIL", "choice1Points":0, "choice2Points":0, "choice3Points":0, "choice4Points":0, "alerted":false, "defaultChoices":false}
                 ];
                 $scope.status = status;
-                $scope.alerts.push({ type:'error', msg:'Uh oh Choices post failed.  Try again. Status Code = ' + status});
+                $scope.alerts.push({ type:'danger', msg:'Uh oh Choices post failed.  Try again. Status Code = ' + status});
 
             });
-
-
     }
 
 

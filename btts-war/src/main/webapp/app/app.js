@@ -24,5 +24,10 @@ bttsApp.config(function ($routeProvider) {
             controller:'CurrentChoicesController',
             templateUrl:'app/partials/summaryTable.html'
         })
+        .when('/maintenance',
+        {
+            controller:'MaintenanceController',
+            templateUrl:'app/partials/maintenance.html'
+        })
         .otherwise({ redirectTo:'/' });
 });

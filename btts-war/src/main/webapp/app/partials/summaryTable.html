@@ -27,6 +27,7 @@
             <tr>
                 <th>Player</th>
                 <th>Week</th>
+                <th>Points Total</th>
                 <th>Choice One</th>
                 <th>Result</th>
                 <th>Points</th>
@@ -39,7 +40,6 @@
                 <th>Choice Four</th>
                 <th>Result</th>
                 <th>Points</th>
-                <th>Points Total</th>
                 <th>Default Choice</th>
             </tr>
             </thead>
@@ -48,6 +48,7 @@
                 ng-click="showPlayer(choices.player)">
                 <td>{{choices.player}}</td>
                 <td>{{choices.week}}</td>
+                <td>{{choices.pointsTotal}}</td>
                 <td>{{choices.choice1}}</td>
                 <td><i data-ng-class="awesome(choices.choice1Result)"></i></td>
                 <td>{{choices.choice1Points}}</td>
@@ -60,7 +61,6 @@
                 <td>{{choices.choice4}}</td>
                 <td><i data-ng-class="awesome(choices.choice4Result)"></i></td>
                 <td>{{choices.choice4Points}}</td>
-                <td>{{choices.pointsTotal}}</td>
                 <td>{{choices.defaultChoices}}</td>
             </tr>
             </tbody>

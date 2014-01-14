@@ -11,7 +11,6 @@
             <th>Results</th>
             </thead>
             <tbody>
-            <a ng-href="#/user/{{client.tagid}}">
                 <tr data-ng-repeat="player in allScores | orderBy:'total':true" ng-class-odd="'pure-table-odd'"
                     ng-click="showPlayer(player.playerName)">
                     <td>{{player.playerName}}</td>
@@ -25,6 +24,22 @@
     </div>
     <br>
 
+    <div id="refresh-tables">
+
+    <form class="pure-form pure-form-aligned" ng-submit="refreshResults()">
+    <fieldset>
+    <div class="pure-controls">
+        <button class="pure-button" value="Scan scores">Scan scores</button>
+    </div>
+    </fieldset>
+    </form>
+
+    </div>
+    <div class="alert">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
+
+        </alert>
+    </div>
     <div id="graphit">
     </div>
     <br>

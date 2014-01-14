@@ -10,6 +10,7 @@
             <tr>
                 <th>Player</th>
                 <th>Week</th>
+                <th>Total Points</th>
                 <th>Choice One</th>
                 <th>Result</th>
                 <th>Points</th>
@@ -22,7 +23,6 @@
                 <th>Choice Four</th>
                 <th>Result</th>
                 <th>Points</th>
-                <th>Total Points</th>
                 <th>Default Choice</th>
             </tr>
             </thead>
@@ -30,6 +30,7 @@
             <tr data-ng-repeat="choices in playerChoices | orderBy:'player'" ng-class-odd="'pure-table-odd'">
                 <td>{{choices.player}}</td>
                 <td>{{choices.week}}</td>
+                <td>{{choices.pointsTotal}}</td>
                 <td>{{choices.choice1}}</td>
                 <td><i data-ng-class="awesome(choices.choice1Result)"></i></td>
                 <td>{{choices.choice1Points}}</td>
@@ -42,7 +43,6 @@
                 <td>{{choices.choice4}}</td>
                 <td><i data-ng-class="awesome(choices.choice4Result)"></i></td>
                 <td>{{choices.choice4Points}}</td>
-                <td>{{choices.pointsTotal}}</td>
                 <td>{{choices.defaultChoices}}</td>
             </tr>
             </tbody>

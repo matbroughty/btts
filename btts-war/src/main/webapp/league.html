@@ -16,20 +16,49 @@
     <script src="app/controllers/league-results-controller.js"></script>
     <script src="app/controllers/choices-controller.js"></script>
     <script src="app/controllers/post-choices-controller.js"></script>
+    <script src="app/controllers/maintenance-controller.js"></script>
     <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.1.0/pure-min.css">
     <link rel="stylesheet" href="css/main.css">
     <link href="//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
 </head>
-<div class="pure-u-1" id="main">
-    <div id="demo-horizontal-menu" class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">
-        <a class="pure-menu-heading" href="http://btts.broughty.com/summary.jsp">Old System</a>
-        <ul id="std-menu-items">
-            <li><a href="#/">League</a></li>
-            <li><a href="#/summary">Current Week</a></li>
-            <li><a href="#/choices">Choices</a></li>
-        </ul>
+
+<nav class="navbar navbar-inverse" role="navigation">
+    <!-- Brand and toggle get grouped for better mobile display -->
+    <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+            <span class="sr-only">Toggle navigation</span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+        </button>
+        <a class="navbar-brand" href="#/choices">BTTS Choices</a>
     </div>
-</div>
+
+    <!-- Collect the nav links, forms, and other content for toggling -->
+    <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+        <ul class="nav navbar-nav">
+            <li class="active"><a href="#/">League</a></li>
+            <li><a href="#/summary">Current Week</a></li>
+            <li><a href="#/maintenance">Maintenance</a></li>
+        </ul>
+        <ul class="nav navbar-nav navbar-right">
+            <li><a href="http://btts.broughty.com/summary.jsp">Old Site</a></li>
+        </ul>
+    </div><!-- /.navbar-collapse -->
+</nav>
+
+
+<!--<div class="pure-u-1" id="main">-->
+    <!--<div id="demo-horizontal-menu" class="pure-menu pure-menu-open pure-menu-horizontal pure-menu-blackbg">-->
+        <!--<a class="pure-menu-heading" href="http://btts.broughty.com/summary.jsp">Old System</a>-->
+        <!--<ul id="std-menu-items">-->
+            <!--<li><a href="#/">League</a></li>-->
+            <!--<li><a href="#/summary">Current Week</a></li>-->
+            <!--<li><a href="#/choices">Choices</a></li>-->
+            <!--<li><a href="#/maintenance">Maintenance</a></li>-->
+        <!--</ul>-->
+    <!--</div>-->
+<!--</div>-->
 
 <body>
 <div class="container">

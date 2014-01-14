@@ -1,0 +1,81 @@
+<div class="container">
+
+
+    <div id="update-next-week">
+        <form class="pure-form pure-form-aligned" ng-submit="updateWeek()">
+            <fieldset>
+                <div class="pure-control-group">
+                    <label for="current_week">Current Week</label>
+                    <input id="current_week" name="current_week" type="text" ng-model="newWeek" placeholder="Current week = {{selectedWeekNumber}} ">
+                </div>
+                <div class="pure-control-group">
+                    <label for="start_date">Start Date</label>
+                    <input id="start_date" name="start_date" type="datetime" placeholder="Date Format = dd/mm/yy" ng-model="newStartDate" >
+                </div>
+                <div class="pure-control-group">
+                    <label for="end_date">End Date</label>
+                    <input id="end_date" name="end_date" type="datetime"  placeholder="Date Format = dd/mm/yy" ng-model="newEndDate">
+                </div>
+                <div class="pure-controls">
+                    <button type="submit" class="pure-button" value="Get selections">Set Current week</button>
+                </div>
+            </fieldset>
+        </form>
+    </div>
+
+    <div id="refresh-tables">
+
+        <form class="pure-form pure-form-aligned" ng-submit="refreshResults()">
+            <fieldset>
+                <div class="pure-controls">
+                    <button class="pure-button" value="Scan scores">Scan scores</button>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+    <div id="refresh-reminder">
+
+        <form class="pure-form pure-form-aligned" ng-submit="refreshReminder()">
+            <fieldset>
+                <div class="pure-controls">
+                    <button class="pure-button" value="Reminder">Reminder</button>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+
+    <div id="refresh-final">
+        <form class="pure-form pure-form-aligned" ng-submit="refreshFinalSelections()">
+            <fieldset>
+                <div class="pure-controls">
+                    <button class="pure-button" value="Email Final Selections">Email Final Choices</button>
+                </div>
+            </fieldset>
+        </form>
+
+    </div>
+
+    <div id="refresh-results">
+
+        <form class="pure-form pure-form-aligned" ng-submit="refreshResults()">
+            <fieldset>
+                <div class="pure-controls">
+                    <button class="pure-button" value="Email Results">Email Results</button>
+                </div>
+            </fieldset>
+        </form>
+
+
+    </div>
+
+
+
+    <div class="alert">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
+
+        </alert>
+    </div>
+
+</div>
