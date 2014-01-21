@@ -1,0 +1,41 @@
+<!-- take the FixturesController -->
+<div class="container">
+
+    <h1>Fixtures for week : {{selectedWeekNumber}} </h1>
+    <br>
+
+
+    <div class="table">
+        <table class="pure-table pure-table-bordered">
+            <thead>
+            <th>League</th>
+            <th>Home</th>
+            <th>Away</th>
+            <th>Date</th>
+            <th>BBC ID</th>
+            </thead>
+            <tbody>
+                <tr data-ng-repeat="fixture in fixtures | orderBy:['type','date','homeTeam']:true" ng-class-odd="'pure-table-odd'">
+                    <td>{{fixture.type}}</td>
+                    <td>{{fixture.homeTeam}}</td>
+                    <td>{{fixture.awayTeam}}</td>
+                    <td>{{fixture.date | date:'yyyy-MM-dd hh:mm'}}</td>
+                    <td>{{fixture.id}}</td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+    <br>
+
+    <div class="alert">
+        <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
+
+        </alert>
+    </div>
+    <div id="graphit">
+    </div>
+    <br>
+
+
+</div>

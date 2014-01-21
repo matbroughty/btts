@@ -82,7 +82,7 @@ public class WeeksFixturesServlet extends HttpServlet {
             try {
                 log.info("Processing page " + resultPage.getPage());
                 Connection connection = Jsoup.connect(resultPage.getPage());
-                connection.timeout(30000);
+                connection.timeout(BTTSHelper.PAGE_READ_TIMEOUT);
 
                 Document doc = connection.get();
                 response.setContentType("text/plain");
@@ -119,7 +119,7 @@ public class WeeksFixturesServlet extends HttpServlet {
 
                             // no point in processing any more data
                             if (fixtureDate.toDateMidnight().isBefore(startDate.toDateMidnight()) || fixtureDate.toDateMidnight().isAfter(endDate.toDateMidnight())) {
-                                log.log(Level.FINE, "Fixture date  " + fixtureDate.toString() + " is before or after the cut off date.");
+                                log.log(Level.FINE, "FixtureData date  " + fixtureDate.toString() + " is before or after the cut off date.");
                                 break;
                             }
 

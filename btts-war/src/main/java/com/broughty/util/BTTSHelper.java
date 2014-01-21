@@ -1,14 +1,19 @@
 package com.broughty.util;
 
+import com.broughty.model.FixtureData;
 import com.broughty.model.PlayerChoicesData;
 import com.broughty.model.PlayerData;
 import com.broughty.model.WeekData;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.*;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -23,6 +28,12 @@ public class BTTSHelper {
     public static final String FAIL = "<i class=\"fa fa-thumbs-down\"></i>";
     public static final String WAITING = "<i class=\"fa fa-question-circle\"></i>";
     private static final Logger log = Logger.getLogger(BTTSHelper.class.getName());
+
+    /**
+     * 10 seconds timeout...
+     */
+    public static int PAGE_READ_TIMEOUT = 30000;
+
     private static WeekData currentWeekData;
 
     public static String bothTeamsScored(Object choiceResult) {
@@ -112,6 +123,7 @@ public class BTTSHelper {
         }
 
         log.info("player count btts for " + playerName + " = " + bttsCount);
+
         return bttsCount;
 
     }
@@ -256,4 +268,150 @@ public class BTTSHelper {
         }
         return weekData;
     }
+
+    /**
+     * Method to get the fixtures for a specified set of competitions and a date range
+     * @param fromDate
+     * @param toDate
+     * @return Collection<FixtureData>
+     */
+    public static Collection<FixtureData> getFixtures(String url, Date fromDate, Date toDate) {
+        log.info("Getting fixtures for URL '" + url + "' from '" + fromDate + "' to  '" + toDate + "'.");
+        Collection<FixtureData> fixtureDataList = new ArrayList<FixtureData>();
+        try {
+            fixtureDataList.addAll(getFixtures(Jsoup.connect(url).timeout(PAGE_READ_TIMEOUT).get(),fromDate, toDate));
+        } catch (IOException e) {
+            log.log(Level.WARNING, "problem with getFixtures .", e);
+        }
+        return fixtureDataList;
+    }
+
+    /**
+     * Method to get the fixtures for a specified competition and date range
+     * @param document
+     * @param fromDate
+     * @param toDate
+     * @return Collection<FixtureData>
+     */
+    private static Collection<FixtureData> getFixtures(Document document, Date fromDate, Date toDate) {
+        Collection<FixtureData> fixtureDataList = new ArrayList<FixtureData>();
+        int i = 0;
+        // Get the fixtures-data section
+        Element fixturesData = document.getElementById("fixtures-data");
+        // Iterate through each table-stats section
+        Elements tableStats = fixturesData.getElementsByClass("table-stats");
+        for (Element table : tableStats) {
+            // Get the fixture date (each table-stats has a corresponding table-header)
+            String fixtureDate = null;
+            if (document.getElementsByClass("table-header") != null && document.getElementsByClass("table-header").size() >= i) {
+                fixtureDate = document.getElementsByClass("table-header").get(i).text().toString().trim();
+            }
+            // Get the competition title (each table has a competition title)
+            String competitionTitle = "";
+            if (table.getElementsByClass("competition-title") != null && table.getElementsByClass("competition-title").size() >= 1) {
+                competitionTitle = table.getElementsByClass("competition-title").get(1).text().toString().trim();
+            }
+            // Only include fixtures on this date if within range
+            if (includeFixture(getFixtureDate(fixtureDate),fromDate,toDate))	{
+                // Iterate through each preview section
+                Elements previews = table.getElementsByClass("preview");
+                for (Element preview : previews) {
+                    // Iterate through each fixture
+                    Elements fixtures = preview.getElementsByClass("match-details");
+                    for (Element fixture : fixtures) {
+                        // Get the kick off time (each fixture has a corresponding kickoff section - unless postponed!)
+                        String kickOffTime = "15:00";
+                        if (preview.getElementsByClass("kickoff") != null && !preview.getElementsByClass("kickoff").isEmpty())	{
+                            kickOffTime = preview.getElementsByClass("kickoff").get(0).text().toString().trim();
+                        }
+                        // Get the fixture Id
+                        Elements teams = fixture.getElementsByTag("a");
+                        if (teams != null & teams.size() == 2) {
+                            // Add fixture to collection
+                            fixtureDataList.add(new FixtureData(
+                                    teams.get(0).getElementsByTag("a").text().trim(),
+                                    teams.get(1).getElementsByTag("a").text().trim(),
+                                    getFixtureDateTime(fixtureDate + " " + kickOffTime),
+                                    preview.attributes().get("id").trim(),
+                                    competitionTitle));
+                        }
+                    }
+                }
+            }
+            i++;
+        }
+        return fixtureDataList;
+    }
+
+    /**
+     * Method to convert fixture date string into a Date
+     * @param fixtureDate (e.g. Saturday 18th January 2014)
+     * @return Date
+     */
+    private static Date getFixtureDate(String fixtureDate) {
+        fixtureDate = fixtureDate.replaceAll("(.*[0-9]{1,2})(st|nd|rd|th)(.*)","$1$3");
+        try {
+            return new SimpleDateFormat("EEEE dd MMMM yyyy", Locale.ENGLISH).parse(fixtureDate);
+        } catch (Exception e) {
+            log.log(Level.WARNING, "problem parsing fixture date.", e);
+            return null;
+        }
+    }
+
+    /**
+     * Method to convert fixture date/time string into a Date
+     * @param fixtureDate (e.g. Saturday 18th January 2014 15:00)
+     * @return Date
+     */
+    private static Date getFixtureDateTime(String fixtureDate) {
+        fixtureDate = fixtureDate.replaceAll("(.*[0-9]{1,2})(st|nd|rd|th)(.*)","$1$3");
+        try {
+            return new SimpleDateFormat("EEEE dd MMMM yyyy HH:mm", Locale.ENGLISH).parse(fixtureDate);
+        } catch (Exception e) {
+            log.log(Level.WARNING, "problem parsing fixture date.", e);
+            return null;
+        }
+    }
+
+    /**
+     * Method to determine whether or not to include this fixture
+     * @param fixtureDate
+     * @param fromDate
+     * @param toDate
+     * @return boolean
+     */
+    private static boolean includeFixture(Date fixtureDate, Date fromDate, Date toDate) {
+        if (fixtureDate != null && fromDate != null
+                && fixtureDate.compareTo(fromDate) < 0) {
+            return false;
+        }
+        if (fixtureDate != null && toDate != null
+                && fixtureDate.compareTo(toDate) > 0) {
+            return false;
+        }
+        return true;
+    }
+
+    private static boolean haveBothTeamsScored(String url, String fixtureId)	{
+        try {
+            Element matchRow = Jsoup.connect(url).timeout(PAGE_READ_TIMEOUT).get().getElementById(fixtureId);
+            if (matchRow != null && matchRow.getElementsByClass("match-details") != null)	{
+                Element matchDetails = matchRow.getElementsByClass("match-details").get(0);
+                if (matchDetails != null && matchDetails.getElementsByTag("abbr") != null)	{
+                    String[] scores = matchDetails.getElementsByTag("abbr").get(0).text().trim().split("-");
+                    if (scores != null && scores.length > 1)	{
+                        if (Integer.parseInt(scores[0]) > 0 && Integer.parseInt(scores[1]) > 0) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        } catch (IOException e) {
+            return false;
+        }
+        return false;
+    }
+
+
+
 }

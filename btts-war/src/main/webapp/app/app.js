@@ -29,5 +29,10 @@ bttsApp.config(function ($routeProvider) {
             controller:'MaintenanceController',
             templateUrl:'app/partials/maintenance.html'
         })
+        .when('/fixtures',
+        {
+            controller:'FixturesController',
+            templateUrl:'app/partials/fixtures.html'
+        })
         .otherwise({ redirectTo:'/' });
 });

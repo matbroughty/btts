@@ -147,6 +147,7 @@ bttsApp.controller('MaintenanceController', function ($scope, $http, $log) {
 
         if($scope.newWeek == null || $scope.newStartDate || $scope.newStartDate){
             $scope.alerts.push({ type: 'danger', msg: 'What madness are you trying to inflict?'});
+            return;
         }
 
         $http({
@@ -167,8 +168,6 @@ bttsApp.controller('MaintenanceController', function ($scope, $http, $log) {
                 $scope.status = status;
                 $scope.alerts.push({ type: 'danger', msg: 'Uh oh update of week failed.  Try again. Status Code = ' + status});
             });
-
-        $scope.alerts.push({ type: 'success', msg: 'You successfully updated the current week.'});
 
     }
 
