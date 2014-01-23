@@ -3,12 +3,13 @@ package com.broughty.model;
 import com.broughty.util.PlayerEnum;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by matbroughty on 27/12/13.
  */
-public class LeagueTableData {
+public class LeagueTableData implements Serializable {
 
     String playerName;
     Integer total;

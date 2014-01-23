@@ -1,9 +1,11 @@
 package com.broughty.model;
 
+import java.io.Serializable;
+
 /**
  * Created by matbroughty on 04/01/14.
  */
-public class PlayerData {
+public class PlayerData implements Serializable {
 
     String name;
     String emailAddress;

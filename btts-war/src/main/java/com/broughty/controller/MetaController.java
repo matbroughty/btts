@@ -2,6 +2,7 @@ package com.broughty.controller;
 
 import com.broughty.model.WeekData;
 import com.broughty.util.BTTSHelper;
+import com.broughty.util.CacheHelper;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -23,7 +24,19 @@ public class MetaController {
     @ResponseBody
     WeekData getWeekDataInJSON() {
         log.info("json request current week data");
-        return BTTSHelper.getCurrentWeekData();
+        WeekData weekData;
+        if (CacheHelper.getCache() != null) {
+            if (!CacheHelper.getCache().containsKey(CacheHelper.CURRENT_WEEK_WEEKDATA)) {
+                log.info("WeekData not in map.....");
+                weekData = (WeekData) CacheHelper.getCache().put(CacheHelper.CURRENT_WEEK_WEEKDATA, BTTSHelper.getCurrentWeekData());
+            }
+            weekData = (WeekData) CacheHelper.getCache().get(CacheHelper.CURRENT_WEEK_WEEKDATA);
+        } else {
+            log.info("Cache not available for WeekData");
+            weekData = BTTSHelper.getCurrentWeekData();
+        }
+
+        return weekData;
     }
 
 }

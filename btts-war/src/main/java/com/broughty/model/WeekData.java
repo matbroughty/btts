@@ -1,11 +1,12 @@
 package com.broughty.model;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by matbroughty on 05/01/14.
  */
-public class WeekData {
+public class WeekData implements Serializable {
 
     String weekNumber;
 

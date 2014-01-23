@@ -3,6 +3,45 @@
 
 <div class="pure-g">
 <div class="pure-u-1">
+
+<div class="table">
+
+    <div class="table">
+        <table class="pure-table pure-table-bordered">
+            <thead>
+            <tr>
+                <th>Player</th>
+                <th>Week</th>
+                <th>Choice One</th>
+                <th>Choice Two</th>
+                <th>Choice Three</th>
+                <th>Choice Four</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>{{choice.playerName.name}}</td>
+                <td>{{selectedWeekNumber}}</td>
+                <td>{{choice.choice1}}</td>
+                <td>{{choice.choice2}}</td>
+                <td>{{choice.choice3}}</td>
+                <td>{{choice.choice4}}</td>
+            </tr>
+            </tbody>
+        </table>
+
+    </div>
+
+</div>
+
+
+<div class="alert">
+    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
+
+    </alert>
+</div>
+
+
 <form class="pure-form pure-form-aligned" ng-submit="postChoices()">
 <fieldset>
 <div class="pure-control-group">
@@ -840,42 +879,30 @@
 </div>
 </div>
 
-<div class="table">
 
-    <div class="table">
-        <table class="pure-table pure-table-bordered">
-            <thead>
-            <tr>
-                <th>Player</th>
-                <th>Week</th>
-                <th>Choice One</th>
-                <th>Choice Two</th>
-                <th>Choice Three</th>
-                <th>Choice Four</th>
-            </tr>
-            </thead>
-            <tbody>
-            <tr>
-                <td>{{choice.playerName.name}}</td>
-                <td>{{selectedWeekNumber}}</td>
-                <td>{{choice.choice1}}</td>
-                <td>{{choice.choice2}}</td>
-                <td>{{choice.choice3}}</td>
-                <td>{{choice.choice4}}</td>
-            </tr>
-            </tbody>
-        </table>
+<div class="pure-g">
+    <div class="pure-u-1">
+        <div class="table">
+            <table class="pure-table pure-table-bordered">
+                <thead>
+                <th>League</th>
+                <th>Home</th>
+                <th>Away</th>
+                <th>Date</th>
+                </thead>
+                <tbody>
+                <tr data-ng-repeat="fixture in fixtures | orderBy:['type','date','homeTeam']:true"
+                    ng-class-odd="'pure-table-odd'">
+                    <td>{{fixture.type}}</td>
+                    <td>{{fixture.homeTeam}}</td>
+                    <td>{{fixture.awayTeam}}</td>
+                    <td>{{fixture.date | date:'yyyy-MM-dd HH:mm'}}</td>
+                </tr>
+                </tbody>
+            </table>
 
+        </div>
     </div>
-
 </div>
-
-
-<div class="alert">
-    <alert ng-repeat="alert in alerts" type="alert.type" close="closeAlert($index)">{{alert.msg}}
-
-    </alert>
-</div>
-
 
 </div>

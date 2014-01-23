@@ -4,12 +4,13 @@ import com.broughty.util.PlayerEnum;
 import com.broughty.util.ResultEnum;
 import org.apache.commons.lang.StringUtils;
 
+import java.io.Serializable;
 import java.util.Date;
 
 /**
  * Created by matbroughty on 04/01/14.
  */
-public class PlayerChoicesData {
+public class PlayerChoicesData implements Serializable {
 
     Date dateEntered;
     String week;

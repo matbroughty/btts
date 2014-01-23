@@ -6,6 +6,18 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
 
         $scope.alerts = [];
 
+        $http.get('http://btts.broughty.com/api/fixtures/').
+            success(function (data) {
+                $scope.fixtures = data;
+            }).
+            error(function (data, status, headers, config) {
+                $log.log("Failed because status " + status + " and with data " + data);
+                $log.log("Failed because headers " + headers + " and with config " + config);
+                $scope.status = status;
+                $scope.alerts.push({ type:'danger', msg:'Balls!!! Could not get fixtures.  Try again. Status Code = ' + status});
+            });
+
+
         $http.get('http://btts.broughty.com/api/choices').
             success(function (data) {
                 $scope.currentChoices = data;
@@ -45,8 +57,6 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
             });
 
 
-
-
         $scope.weeks = ["18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30"];
 
     }
@@ -69,15 +79,15 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
     }
 
     $scope.getFixtures = function () {
-    $http.get('http://btts.broughty.com/api/fixtures/').
-        success(function (data) {
-            $scope.fixtures = data;
-        }).
-        error(function (data, status, headers, config) {
-            $log.log("Failed because status " + status + " and with data " + data);
-            $log.log("Failed because headers " + headers + " and with config " + config);
-            $scope.status = status;
-        });
+        $http.get('http://btts.broughty.com/api/fixtures/').
+            success(function (data) {
+                $scope.fixtures = data;
+            }).
+            error(function (data, status, headers, config) {
+                $log.log("Failed because status " + status + " and with data " + data);
+                $log.log("Failed because headers " + headers + " and with config " + config);
+                $scope.status = status;
+            });
     }
 
     $scope.awesome = function (choice) {
