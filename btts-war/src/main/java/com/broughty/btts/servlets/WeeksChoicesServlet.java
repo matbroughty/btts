@@ -162,7 +162,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
         playerChoiceTable.append("<a href=\"http://btts.broughty.com/#/summary\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
         playerChoiceTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th>th>Choice Four</th></tr> </thead> ");
+        playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th><th>Choice Four</th></tr> </thead> ");
         playerChoiceTable.append("<tbody>");
 
 
@@ -242,7 +242,7 @@ public class WeeksChoicesServlet extends HttpServlet {
 
             playerChoiceTwitter.append(" ");
             if (PlayerEnum.valueOf(playerName).getTwitterName() != null) {
-                playerChoiceTwitter.append(playerName);
+                playerChoiceTwitter.append(PlayerEnum.valueOf(playerName).getTwitterName());
             }
             TwitterHelper.updateStatus(playerChoiceTwitter.toString());
 
@@ -269,7 +269,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         graphTable.append("<h2 class=\"content-subhead\">Star Player</h2>");
 
         graphTable.append("<table class=\"pure-table pure-table-bordered\">");
-        graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th><<th>Choice Four</th></tr> </thead> ");
+        graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th><th>Choice Four</th></tr> </thead> ");
         graphTable.append("<tbody>");
 
         int i = 1;
