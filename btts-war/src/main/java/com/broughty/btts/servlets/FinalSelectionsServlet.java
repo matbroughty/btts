@@ -261,8 +261,7 @@ public class FinalSelectionsServlet extends HttpServlet {
         starPlayerTwitter.append(starPlayerChoice.getProperty("choice3"));
         starPlayerTwitter.append(":");
         starPlayerTwitter.append(starPlayerChoice.getProperty("choice4"));
-        starPlayerTwitter.append("\n. http://btts.broughty.com/summary.jsp?week=");
-        starPlayerTwitter.append(weekNumber);
+        starPlayerTwitter.append("\n. http://btts.broughty.com/#/summary");
 
 
         try {

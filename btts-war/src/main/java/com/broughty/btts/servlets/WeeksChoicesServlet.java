@@ -153,8 +153,6 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "<head>\n" +
                 "    <meta charset=\"utf-8\">\n" +
                 "    <link rel=\"stylesheet\" href=\"http://yui.yahooapis.com/pure/0.1.0/pure-min.css\">\n" +
-                "    <link rel=\"stylesheet\" href=\"http://weloveiconfonts.com/api/?family=fontawesome\">\n" +
-                "    <link href=\"//netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css\" rel=\"stylesheet\">\n" +
                 "</head>\n" +
                 "<body>\n" +
                 "<div class=\"pure-u-1\" id=\"main\">\n" +
@@ -162,9 +160,9 @@ public class WeeksChoicesServlet extends HttpServlet {
                 "    <div class=\"pure-g \">\n" +
                 "        <div class=\"pure-u-1\">");
 
-        playerChoiceTable.append("<a href=\"http://btts.broughty.com/summary.jsp?week=" + weekNumber + "\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
+        playerChoiceTable.append("<a href=\"http://btts.broughty.com/#/summary\"><h2 class=\"content-subhead\">Week " + weekNumber + " player " + playerName + " choices </h2></a>");
         playerChoiceTable.append("<table class=\"pure-table pure-table-bordered\">");
-        playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        playerChoiceTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th>th>Choice Four</th></tr> </thead> ");
         playerChoiceTable.append("<tbody>");
 
 
@@ -173,13 +171,9 @@ public class WeeksChoicesServlet extends HttpServlet {
         playerChoiceTable.append("<td>").append((String) playerChoice.getProperty("player")).append("</td>");
         playerChoiceTable.append("<td>").append(simpleDateFormat.format(playerChoice.getProperty("date"))).append("</td>");
         playerChoiceTable.append("<td>").append(choice1).append("</td>");
-        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice2).append("</td>");
-        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice3).append("</td>");
-        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("<td>").append(choice4).append("</td>");
-        playerChoiceTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
         playerChoiceTable.append("</tr>");
 
         playerChoiceTable.append("</tbody></table>");
@@ -220,8 +214,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         playerChoiceTwitter.append(choice3);
         playerChoiceTwitter.append(":");
         playerChoiceTwitter.append(choice4);
-        playerChoiceTwitter.append("\n. http://btts.broughty.com/summary.jsp?week=");
-        playerChoiceTwitter.append(weekNumber);
+        playerChoiceTwitter.append("\n. http://btts.broughty.com/#/summary");
 
 
         log.info("Emailing\\Twittering Choices for player : \n" + playerChoiceTable.toString());
@@ -276,7 +269,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         graphTable.append("<h2 class=\"content-subhead\">Star Player</h2>");
 
         graphTable.append("<table class=\"pure-table pure-table-bordered\">");
-        graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        graphTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th><<th>Choice Four</th></tr> </thead> ");
         graphTable.append("<tbody>");
 
         int i = 1;
@@ -289,7 +282,6 @@ public class WeeksChoicesServlet extends HttpServlet {
                 break;
             }
             graphTable.append("<td>").append(team).append("(").append(teamCount.get(team)).append(")").append("</td>");
-            graphTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
 
             i++;
         }
@@ -306,7 +298,7 @@ public class WeeksChoicesServlet extends HttpServlet {
         StringBuilder allPlayerTable = new StringBuilder();
         allPlayerTable.append("<h2 class=\"content-subhead\">Week " + weekNumber + " choices so far </h2>");
         allPlayerTable.append("<table class=\"pure-table pure-table-bordered\">");
-        allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Result</th><th>Choice Two</th><th>Result</th><th>Choice Three</th><th>Result</th><th>Choice Four</th><th>Result</th></tr> </thead> ");
+        allPlayerTable.append("<thead><tr><th>Player</th> <th>Date Entered</th> <th>Choice One</th><th>Choice Two</th><th>Choice Three</th><th>Choice Four</th></tr> </thead> ");
         allPlayerTable.append("<tbody>");
         int i = 1;
         for (Entity choice : choices) {
@@ -358,13 +350,9 @@ public class WeeksChoicesServlet extends HttpServlet {
             allPlayerTable.append("<td>").append((String) choice.getProperty("player")).append("</td>");
             allPlayerTable.append("<td>").append(simpleDateFormat.format(choice.getProperty("date"))).append("</td>");
             allPlayerTable.append("<td>").append(choice1).append("</td>");
-            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice2).append("</td>");
-            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice3).append("</td>");
-            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("<td>").append(choice4).append("</td>");
-            allPlayerTable.append("<td>").append(BTTSHelper.WAITING).append("</td>");
             allPlayerTable.append("</tr>");
 
             i++;
