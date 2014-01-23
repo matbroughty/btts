@@ -11,7 +11,7 @@
             <th>Results</th>
             </thead>
             <tbody>
-                <tr data-ng-repeat="player in allScores | orderBy:'total':true" ng-class-odd="'pure-table-odd'"
+                <tr data-ng-repeat="player in allScores | orderBy:['total','bttsCount', 'playerName']:true" ng-class-odd="'pure-table-odd'"
                     ng-click="showPlayer(player.playerName)">
                     <td>{{player.playerName}}</td>
                     <td>{{player.total}}</td>
