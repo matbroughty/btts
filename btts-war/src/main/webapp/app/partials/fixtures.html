@@ -15,7 +15,7 @@
             <th>BBC ID</th>
             </thead>
             <tbody>
-                <tr data-ng-repeat="fixture in fixtures | orderBy:['id']:true" ng-class-odd="'pure-table-odd'">
+                <tr data-ng-repeat="fixture in fixtures | orderBy:['id']:false" ng-class-odd="'pure-table-odd'">
                     <td>{{fixture.type}}</td>
                     <td>{{fixture.homeTeam}}</td>
                     <td>{{fixture.awayTeam}}</td>

@@ -101,7 +101,7 @@
                 <th>Date</th>
                 </thead>
                 <tbody>
-                <tr data-ng-repeat="fixture in fixtures | orderBy:['id']:true"
+                <tr data-ng-repeat="fixture in fixtures | orderBy:['id']:false"
                     ng-class-odd="'pure-table-odd'">
                     <td>{{fixture.homeTeam}}</td>
                     <td>{{fixture.awayTeam}}</td>

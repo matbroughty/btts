@@ -128,10 +128,6 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
             return;
         }
 
-        if($scope.choice1 == null){
-            return;
-        }
-
         var url = 'http://btts.broughty.com/api/choices/' + String($scope.selectedWeekNumber) + '/' + String($scope.choice.playerName.name);
         $log.info("URL getting player choices from = " + url);
 
@@ -147,43 +143,14 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
             error(function (data, status, headers, config) {
                 $log.log("Failed because status " + status + " and with data " + data);
                 $log.log("Failed because headers " + headers + " and with config " + config);
-                $scope.alerts.push({ type:'danger', msg:'Problem getting existing player choices.  Try to carry on!' + status});
+                $scope.alerts.push({ type:'info', msg:'Problem getting player choices (have you made a choice yet?). Status = ' + status});
                 $scope.status = status;
+                $scope.choice1 = null;
+                $scope.choice2 = null;
+                $scope.choice3 = null;
+                $scope.choice4 = null;
             });
 
-
-    }
-
-
-    $scope.isChoice1Selected = function () {
-        if($scope.choice1 == null || $scope.existingChoices == null){
-            return false;
-        }
-        return $scope.choice1.homeTeam == $scope.existingChoices.choice1;
-
-    }
-
-    $scope.isChoice2Selected = function () {
-        if($scope.choice2 == null || $scope.existingChoices == null){
-            return false;
-        }
-        return $scope.choice2.homeTeam == $scope.existingChoices.choice2;
-
-    }
-
-    $scope.isChoice3Selected = function () {
-        if($scope.choice3 == null || $scope.existingChoices == null){
-            return false;
-        }
-        return $scope.choice3.homeTeam == $scope.existingChoices.choice3;
-
-    }
-
-    $scope.isChoice4Selected = function () {
-        if($scope.choice4 == null || $scope.existingChoices == null){
-            return false;
-        }
-        return $scope.choice4.homeTeam == $scope.existingChoices.choice4;
 
     }
 
