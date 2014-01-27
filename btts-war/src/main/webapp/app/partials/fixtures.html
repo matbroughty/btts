@@ -1,7 +1,7 @@
 <!-- take the FixturesController -->
 <div class="container">
 
-    <h1>Fixtures for week : {{selectedWeekNumber}} </h1>
+    <h1>Fixtures for week : {{selectedWeekNumber}} and dates between {{currentWeek.startDate | date:'dd-MM-yy'}} and {{currentWeek.endDate | date:'dd-MM-yy'}}</h1>
     <br>
 
 
@@ -15,7 +15,7 @@
             <th>BBC ID</th>
             </thead>
             <tbody>
-                <tr data-ng-repeat="fixture in fixtures | orderBy:['type','date','homeTeam']:true" ng-class-odd="'pure-table-odd'">
+                <tr data-ng-repeat="fixture in fixtures | orderBy:['id']:true" ng-class-odd="'pure-table-odd'">
                     <td>{{fixture.type}}</td>
                     <td>{{fixture.homeTeam}}</td>
                     <td>{{fixture.awayTeam}}</td>

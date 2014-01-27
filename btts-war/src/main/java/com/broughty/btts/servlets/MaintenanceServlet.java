@@ -1,5 +1,6 @@
 package com.broughty.btts.servlets;
 
+import com.broughty.util.CacheHelper;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
@@ -82,6 +83,12 @@ public class MaintenanceServlet extends HttpServlet {
             }
 
             datastore.put(currentWeekEntity);
+
+            if(CacheHelper.getCache() != null){
+                CacheHelper.getCache().remove(CacheHelper.CURRENT_WEEK_WEEKDATA);
+                CacheHelper.getCache().remove(CacheHelper.CURRENT_WEEK_STR);
+                CacheHelper.getCache().remove(CacheHelper.CURRENT_FIXTURES_LST);
+            }
 
         }
 

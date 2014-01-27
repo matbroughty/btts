@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -67,6 +68,24 @@ public class FixturesController {
 
         return fixtureDataList;
 
+    }
+
+
+    @RequestMapping(value = "simple", method = RequestMethod.GET, produces = "application/json")
+    public
+    @ResponseBody
+    List<String> getBasicFixturesInJSON() {
+        log.info("json getBasicFixturesInJSON");
+        List<String> fixtureStrList = new ArrayList<String>();
+
+
+        for(FixtureData fixtureData : getFixturesInJSON()){
+            fixtureStrList.add(fixtureData.getHomeTeam());
+        }
+
+        Collections.sort(fixtureStrList);
+
+        return fixtureStrList;
     }
 
 

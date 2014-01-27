@@ -1,9 +1,6 @@
 package com.broughty.btts.servlets;
 
-import com.broughty.util.BTTSHelper;
-import com.broughty.util.PlayerEnum;
-import com.broughty.util.SmsHelper;
-import com.broughty.util.TwitterHelper;
+import com.broughty.util.*;
 import com.google.appengine.api.datastore.*;
 import org.apache.commons.lang3.StringUtils;
 
@@ -64,7 +61,7 @@ public class EmailResultsServlet extends HttpServlet {
 
 
         Key weekKey = KeyFactory.createKey("Week", weekNumber);
-        Query query = new Query("Choices", weekKey).addSort("date", Query.SortDirection.DESCENDING);
+        Query query = new Query("Choices", weekKey).addSort(ChoicesEntityEnum.PLAYER.getFieldName(), Query.SortDirection.DESCENDING);
         List<Entity> choices = datastore.prepare(query).asList(FetchOptions.Builder.withLimit(50));
 
         StringBuilder playerTable = new StringBuilder("<html>\n" +

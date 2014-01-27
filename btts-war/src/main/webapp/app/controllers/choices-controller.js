@@ -1,9 +1,12 @@
 bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
     $scope.$log = $log;
 
-    $scope.choice;
     $scope.init = function () {
-
+        $scope.choice;
+        $scope.choice1;
+        $scope.choice2;
+        $scope.choice3;
+        $scope.choice4;
         $scope.alerts = [];
 
         $http.get('http://btts.broughty.com/api/fixtures/').
@@ -17,6 +20,17 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
                 $scope.alerts.push({ type:'danger', msg:'Balls!!! Could not get fixtures.  Try again. Status Code = ' + status});
             });
 
+        $http.get('http://btts.broughty.com/api/fixtures/simple').
+            success(function (data) {
+                $scope.fixturesSimple = data;
+            }).
+            error(function (data, status, headers, config) {
+                $log.log("Failed because status " + status + " and with data " + data);
+                $log.log("Failed because headers " + headers + " and with config " + config);
+                $scope.fixturesSimple = ['Arsenal', 'Arsenal', 'Arsenal', 'Arsenal'];
+                $scope.status = status;
+                $scope.alerts.push({ type:'danger', msg:'Balls!!! Could not get fixtures.  Try again. Status Code = ' + status});
+            });
 
         $http.get('http://btts.broughty.com/api/choices').
             success(function (data) {
@@ -104,15 +118,85 @@ bttsApp.controller('CurrentChoicesController', function ($scope, $http, $log) {
     }
 
 
+    $scope.getPlayerChoices = function () {
+
+        if($scope.selectedWeekNumber == null){
+            return;
+        }
+
+        if($scope.choice == null || $scope.choice.playerName == null){
+            return;
+        }
+
+        if($scope.choice1 == null){
+            return;
+        }
+
+        var url = 'http://btts.broughty.com/api/choices/' + String($scope.selectedWeekNumber) + '/' + String($scope.choice.playerName.name);
+        $log.info("URL getting player choices from = " + url);
+
+
+        $http.get(url).
+            success(function (data) {
+                $scope.existingChoices = data;
+                $scope.choice1 = $scope.existingChoices.choice1;
+                $scope.choice2 = $scope.existingChoices.choice2;
+                $scope.choice3 = $scope.existingChoices.choice3;
+                $scope.choice4 = $scope.existingChoices.choice4;
+            }).
+            error(function (data, status, headers, config) {
+                $log.log("Failed because status " + status + " and with data " + data);
+                $log.log("Failed because headers " + headers + " and with config " + config);
+                $scope.alerts.push({ type:'danger', msg:'Problem getting existing player choices.  Try to carry on!' + status});
+                $scope.status = status;
+            });
+
+
+    }
+
+
+    $scope.isChoice1Selected = function () {
+        if($scope.choice1 == null || $scope.existingChoices == null){
+            return false;
+        }
+        return $scope.choice1.homeTeam == $scope.existingChoices.choice1;
+
+    }
+
+    $scope.isChoice2Selected = function () {
+        if($scope.choice2 == null || $scope.existingChoices == null){
+            return false;
+        }
+        return $scope.choice2.homeTeam == $scope.existingChoices.choice2;
+
+    }
+
+    $scope.isChoice3Selected = function () {
+        if($scope.choice3 == null || $scope.existingChoices == null){
+            return false;
+        }
+        return $scope.choice3.homeTeam == $scope.existingChoices.choice3;
+
+    }
+
+    $scope.isChoice4Selected = function () {
+        if($scope.choice4 == null || $scope.existingChoices == null){
+            return false;
+        }
+        return $scope.choice4.homeTeam == $scope.existingChoices.choice4;
+
+    }
+
+
     $scope.postChoices = function () {
 
-        if (typeof $scope.choice.choice1 === 'undefined' || null == $scope.choice.choice2 || null == $scope.choice.choice3 || null == $scope.choice.choice4 || null == $scope.choice.playerName) {
+        if (typeof $scope.choice1 === 'undefined' || null == $scope.choice2 || null == $scope.choice3 || null == $scope.choice4 || null == $scope.choice.playerName) {
             $scope.alerts.push({ type:'danger', msg:'Make a full selection!  Try again you plonker.' + status});
             return;
         }
 
 
-        var url = 'http://btts.broughty.com/choices?player=' + String($scope.choice.playerName.name) + '&choice1=' + $scope.choice.choice1 + '&choice2=' + $scope.choice.choice2 + '&choice3=' + $scope.choice.choice3 + '&choice4=' + $scope.choice.choice4 + '&week=' + $scope.selectedWeekNumber;
+        var url = 'http://btts.broughty.com/choices?player=' + String($scope.choice.playerName.name) + '&choice1=' + $scope.choice1 + '&choice2=' + $scope.choice2 + '&choice3=' + $scope.choice3 + '&choice4=' + $scope.choice4 + '&week=' + $scope.selectedWeekNumber;
         $log.info("URL posting choices to = " + url);
 
         $http({

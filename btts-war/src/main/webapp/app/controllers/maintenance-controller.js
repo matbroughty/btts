@@ -145,7 +145,7 @@ bttsApp.controller('MaintenanceController', function ($scope, $http, $log) {
         var url = 'http://btts.broughty.com/maintenance?current_week=' + $scope.newWeek + "&start_date=" + $scope.newStartDate + "&end_date=" + $scope.newEndDate;
         $log.info("URL posting updateWeek to = " + url);
 
-        if($scope.newWeek == null || $scope.newStartDate || $scope.newStartDate){
+        if($scope.newWeek == null || $scope.newStartDate == null || $scope.newStartDate == null){
             $scope.alerts.push({ type: 'danger', msg: 'What madness are you trying to inflict?'});
             return;
         }

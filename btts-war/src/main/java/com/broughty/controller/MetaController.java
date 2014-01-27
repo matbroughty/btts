@@ -28,7 +28,7 @@ public class MetaController {
         if (CacheHelper.getCache() != null) {
             if (!CacheHelper.getCache().containsKey(CacheHelper.CURRENT_WEEK_WEEKDATA)) {
                 log.info("WeekData not in map.....");
-                weekData = (WeekData) CacheHelper.getCache().put(CacheHelper.CURRENT_WEEK_WEEKDATA, BTTSHelper.getCurrentWeekData());
+                CacheHelper.getCache().put(CacheHelper.CURRENT_WEEK_WEEKDATA, BTTSHelper.getCurrentWeekData());
             }
             weekData = (WeekData) CacheHelper.getCache().get(CacheHelper.CURRENT_WEEK_WEEKDATA);
         } else {
